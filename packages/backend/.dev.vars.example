@@ -1,0 +1,7 @@
+# Copy this file to .dev.vars for local development.
+# .dev.vars is loaded by `wrangler dev` and is gitignored — never commit real values.
+# D1 and KV bindings are configured in wrangler.jsonc and do not need entries here.
+# Add any plain-text secrets your Worker reads from env below:
+
+# Example:
+# MY_SECRET=replace-with-real-value

@@ -3,6 +3,14 @@ node_modules/
 .pnp
 .pnp.js
 
+# pnpm / npm auth — never commit auth tokens
+.npmrc
+
+# Wrangler local state and generated types
+.wrangler/
+.dev.vars
+worker-configuration.d.ts
+
 # Build outputs
 dist/
 build/
