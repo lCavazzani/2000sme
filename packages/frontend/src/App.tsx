@@ -1,25 +1,38 @@
-import { useState } from 'react'
+import { useEffect } from 'react'
 import { Window } from './components/Window'
+import { WindowsProvider, useWindows } from './store/windows'
 import './App.css'
 
-function App() {
-  const [open, setOpen] = useState(true)
-  const [minimized, setMinimized] = useState(false)
+function Desktop() {
+  const { windows, openWindow } = useWindows()
 
-  if (!open) return null
+  useEffect(() => {
+    openWindow({ // open a default one for test
+      id: 'portfolio',
+      title: 'My Portfolio',
+      x: 64,
+      y: 64,
+      width: 480,
+      height: 320,
+    })
+  }, [openWindow])
 
   return (
     <div className="desktop">
-      {!minimized && (
-        <Window
-          title="My Portfolio"
-          onClose={() => setOpen(false)}
-          onMinimize={() => setMinimized(true)}
-        >
+      {windows.map((win) => ( //map over windows array to render all windows
+        <Window key={win.id} id={win.id}>
           <p>Welcome to my portfolio.</p>
         </Window>
-      )}
+      ))}
     </div>
+  )
+}
+
+function App() {
+  return (
+    <WindowsProvider>
+      <Desktop />
+    </WindowsProvider>
   )
 }
 
