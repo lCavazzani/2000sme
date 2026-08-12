@@ -1,5 +1,7 @@
 # 2000sme
 
+[![Deploy](https://github.com/lCavazzani/2000sme/actions/workflows/deploy.yml/badge.svg)](https://github.com/lCavazzani/2000sme/actions/workflows/deploy.yml)
+
 A personal portfolio project.
 
 ## Structure
