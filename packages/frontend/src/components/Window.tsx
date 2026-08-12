@@ -7,6 +7,7 @@ type WindowProps = {
   children: ReactNode
   onClose: () => void
   onMinimize: () => void
+  isFocused?: boolean;
 }
 
 export function Window({ title, icon, children, onClose, onMinimize }: WindowProps) {
