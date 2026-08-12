@@ -1,11 +1,15 @@
 {
-  "name": "@sportifolio/backend",
-  "private": true,
-  "version": "0.0.0",
+  "name": "backend",
+  "type": "module",
   "scripts": {
-    "dev": "echo \"No dev script configured yet\"",
-    "build": "echo \"No build script configured yet\"",
-    "test": "echo \"No test script configured yet\"",
-    "lint": "echo \"No lint script configured yet\""
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy --minify",
+    "cf-typegen": "wrangler types --env-interface CloudflareBindings"
+  },
+  "dependencies": {
+    "hono": "^4.13.1"
+  },
+  "devDependencies": {
+    "wrangler": "^4.110.0"
   }
 }
