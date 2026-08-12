@@ -9,6 +9,12 @@
 			"database_name": "portfolio-db",
 			"database_id": "d720b490-f7d2-49e9-8e75-3acf2bbfe4a6"
 		}
+	],
+	"kv_namespaces": [
+		{
+			"binding": "RATE_LIMIT",
+			"id": "61767027715b4cc582d1a6899ac40052"
+		}
 	]
 	// "compatibility_flags": [
 	//   "nodejs_compat"
