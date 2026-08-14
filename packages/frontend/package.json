@@ -10,10 +10,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "7.css": "0.21.1",
     "98.css": "^0.1.21",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
-    "react-rnd": "^10.5.3"
+    "react-rnd": "^10.5.3",
+    "xp.css": "0.2.6"
   },
   "devDependencies": {
     "@types/node": "^24.13.3",
