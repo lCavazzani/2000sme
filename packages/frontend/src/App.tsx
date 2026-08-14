@@ -1,43 +1,29 @@
-import { useEffect } from 'react'
+import { useState } from 'react'
 import { Taskbar } from './components/Taskbar'
+import { DesktopIcon } from './components/DesktopIcon'
 import { Window } from './components/Window'
+import { desktopApps } from './config/desktopApps'
 import { WindowsProvider, useWindows } from './store/windows'
 import './App.css'
 
-const portfolioWindow = {
-  id: 'portfolio',
-  title: 'My Portfolio',
-  x: 64,
-  y: 64,
-  width: 480,
-  height: 320,
-}
-
 function Desktop() {
-  const { windows, openWindow } = useWindows()
-
-  useEffect(() => {
-    openWindow(portfolioWindow)
-  }, [openWindow])
+  const { windows } = useWindows()
+  const [selectedWindowId, setSelectedWindowId] = useState<string | null>(null)
 
   return (
-    <div className="desktop">
+    <main className="desktop" aria-label="Desktop">
+      <section className="desktopIcons" aria-label="Desktop applications">
+        {desktopApps.map((app) => (
+          <DesktopIcon key={app.id} label={app.label} icon={app.icon} windowId={app.id} isSelected={selectedWindowId === app.id} onSelect={setSelectedWindowId} />
+        ))}
+      </section>
       {windows.map((windowState) => (
-        <Window key={windowState.id} id={windowState.id}>
-          <p>Welcome to my portfolio.</p>
-        </Window>
+        <Window key={windowState.id} id={windowState.id}><p>Welcome to {windowState.title}.</p></Window>
       ))}
       <Taskbar />
-    </div>
+    </main>
   )
 }
 
-function App() {
-  return (
-    <WindowsProvider>
-      <Desktop />
-    </WindowsProvider>
-  )
-}
-
+function App() { return <WindowsProvider><Desktop /></WindowsProvider> }
 export default App

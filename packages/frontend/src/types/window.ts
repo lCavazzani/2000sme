@@ -28,6 +28,7 @@ export type Action =
 export type WindowsContextValue = {
   windows: WindowState[]
   openWindow: (config: WindowConfig) => void
+  openWindowById: (id: string) => void
   closeWindow: (id: string) => void
   focusWindow: (id: string) => void
   minimizeWindow: (id: string) => void

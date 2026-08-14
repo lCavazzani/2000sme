@@ -1,0 +1,45 @@
+.desktopIcon {
+  width: 76px;
+  min-height: 76px;
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  gap: 4px;
+  padding: 5px 3px;
+  color: #fff;
+  font: inherit;
+  line-height: 1.2;
+  text-shadow: 1px 1px #000;
+  border: 1px solid transparent;
+  background: transparent;
+  cursor: pointer;
+}
+
+.desktopIcon img {
+  width: 32px;
+  height: 32px;
+  image-rendering: pixelated;
+}
+
+.desktopIcon span {
+  max-width: 70px;
+  padding: 1px 2px;
+  overflow-wrap: anywhere;
+}
+
+.desktopIcon:hover,
+.desktopIcon:focus-visible,
+.selected {
+  outline: 1px dotted #fff;
+  outline-offset: -3px;
+}
+
+.selected img {
+  filter: drop-shadow(1px 0 #000080) drop-shadow(-1px 0 #000080)
+    drop-shadow(0 1px #000080) drop-shadow(0 -1px #000080);
+}
+
+.selected span {
+  color: #fff;
+  background: #000080;
+}
