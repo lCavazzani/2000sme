@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { AppearanceThemesWindow } from "./components/AppearanceThemesWindow";
 import { DesktopIcon } from "./components/DesktopIcon";
 import { Taskbar } from "./components/Taskbar";
 import { Window } from "./components/Window";
@@ -15,9 +16,12 @@ const portfolioWindow = {
   height: 320,
 };
 
+function WindowContent({ windowId, title }: { windowId: string; title: string }) {
+  return windowId === "appearance-themes" ? <AppearanceThemesWindow /> : <p>Welcome to {title}.</p>;
+}
+
 function Desktop() {
   const { windows, openWindow } = useWindows();
-
   useEffect(() => {
     openWindow(portfolioWindow);
   }, [openWindow]);
@@ -40,7 +44,7 @@ function Desktop() {
       </section>
       {windows.map((windowState) => (
         <Window key={windowState.id} id={windowState.id}>
-          <p>Welcome to {windowState.title}.</p>
+          <WindowContent windowId={windowState.id} title={windowState.title} />
         </Window>
       ))}
       <Taskbar />
