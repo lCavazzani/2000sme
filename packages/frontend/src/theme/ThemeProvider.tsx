@@ -10,7 +10,7 @@ import {
 
 export type ThemeId = 'win98' | 'winxp' | 'win7'
 
-const DEFAULT_THEME: ThemeId = 'win98'
+const DEFAULT_THEME: ThemeId = 'winxp'
 const STORAGE_KEY = '2000sme:theme'
 const stylesheets: Record<ThemeId, string> = {
   win98: '/themes/98.css',
