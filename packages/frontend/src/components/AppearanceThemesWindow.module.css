@@ -1,0 +1,10 @@
+.appearance, .options, .copy { display: grid; gap: 12px; }
+.option { display: grid; grid-template-columns: auto 80px minmax(0, 1fr); align-items: center; gap: 8px; padding: 5px; cursor: pointer; }
+.option:focus-within { outline: 1px dotted currentColor; outline-offset: 2px; }
+.copy { gap: 2px; }
+.preview { position: relative; display: block; height: 48px; overflow: hidden; border: 1px solid #000; transition: background-color 160ms ease, border-radius 160ms ease; }
+.preview span { position: absolute; right: 7px; bottom: 7px; left: 7px; height: 11px; }
+.win98 { background: #008080; }.win98 span { background: #c0c0c0; border-top: 1px solid #fff; }
+.winxp { background: linear-gradient(#7fb3ec, #3a6ea5); border-radius: 4px; }.winxp span { background: #3f79c8; border-radius: 6px 6px 2px 2px; }
+.win7 { background: linear-gradient(#72acd8, #1f609c); border-radius: 5px; }.win7 span { background: linear-gradient(#79bff4, #377cae); border: 1px solid #b8e2ff; border-radius: 4px 4px 2px 2px; }
+@media (prefers-reduced-motion: reduce) { .preview { transition: none; } }
