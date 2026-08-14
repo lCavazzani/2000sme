@@ -1,29 +1,33 @@
 import { useEffect } from 'react'
+import { Taskbar } from './components/Taskbar'
 import { Window } from './components/Window'
 import { WindowsProvider, useWindows } from './store/windows'
 import './App.css'
+
+const portfolioWindow = {
+  id: 'portfolio',
+  title: 'My Portfolio',
+  x: 64,
+  y: 64,
+  width: 480,
+  height: 320,
+}
 
 function Desktop() {
   const { windows, openWindow } = useWindows()
 
   useEffect(() => {
-    openWindow({ // open a default one for test
-      id: 'portfolio',
-      title: 'My Portfolio',
-      x: 64,
-      y: 64,
-      width: 480,
-      height: 320,
-    })
+    openWindow(portfolioWindow)
   }, [openWindow])
 
   return (
     <div className="desktop">
-      {windows.map((win) => ( //map over windows array to render all windows
-        <Window key={win.id} id={win.id}>
+      {windows.map((windowState) => (
+        <Window key={windowState.id} id={windowState.id}>
           <p>Welcome to my portfolio.</p>
         </Window>
       ))}
+      <Taskbar />
     </div>
   )
 }
