@@ -42,15 +42,13 @@ Use the remote seed command only when the site owner has reviewed the content an
 pnpm --filter backend db:seed:remote
 ```
 
-Inspect the API-ready published catalog and its normalized child records:
+## Public Guestbook contract
 
-```bash
-pnpm --filter backend exec wrangler d1 execute portfolio-db --local --command "SELECT slug, name, project_year, thumbnail_ref FROM published_projects ORDER BY sort_order"
-pnpm --filter backend exec wrangler d1 execute portfolio-db --local --command "SELECT project_id, technology, sort_order FROM project_technologies ORDER BY project_id, sort_order"
-pnpm --filter backend exec wrangler d1 execute portfolio-db --local --command "SELECT project_id, label, url, sort_order FROM project_links ORDER BY project_id, sort_order"
-```
+The public guestbook is immediately published after server-side validation. It accepts **plain-text `name` and `message` fields only**; HTML, CSS, fonts, image URLs, card decoration, rich text, uploads, and other presentation metadata are rejected or ignored by the contract. Clients must render returned fields as text, never as HTML.
 
-Do not store project image bytes in D1. `thumbnail_ref` holds a validated relative media reference or a future storage key; public project APIs must read from `published_projects` so draft records are never returned.
+`GET /api/guestbook` returns a newest-first page with `entries` and an opaque `page.next_cursor`. Clients may set `limit` from 1 through 50 and must use the returned cursor for continuation rather than guessing offsets. Errors always return a JSON object with an `error` message and machine-readable `code`; a `rate_limited` response also includes `Retry-After` and `retry_after_seconds`.
+
+There is no moderation dashboard in this release. Abuse reports must be escalated to the site owner through the project’s established contact channel. The owner may review and remove an entry through an approved D1 maintenance procedure, then record the action. Do not expose deletion or moderation endpoints publicly without a separate authenticated moderation ticket.
 
 ## Worker types
 
