@@ -1,6 +1,6 @@
 # Your Name
 
-**Software Engineer**  
+**Software Engineer**<br />
 your@email.com &nbsp;·&nbsp; [github.com/username](https://github.com) &nbsp;·&nbsp; [linkedin.com/in/username](#) &nbsp;·&nbsp; City, Country
 
 ---
@@ -59,7 +59,7 @@ Relevant coursework: Algorithms & Data Structures, Operating Systems, Distribute
 ## Projects
 
 ### 00sportifolio
-Personal portfolio built as a Windows 98 desktop simulation. Draggable/resizable windows, multi-theme support (Win98/XP/7), guestbook backed by Cloudflare Workers + D1, pnpm monorepo with CI/CD.  
+Personal portfolio built as a Windows 98 desktop simulation. Draggable/resizable windows, multi-theme support (Win98/XP/7), guestbook backed by Cloudflare Workers + D1, pnpm monorepo with CI/CD.<br />
 [github.com/lCavazzani/2000sme](https://github.com/lCavazzani/2000sme) · [Live demo](https://2000sme.cavazzanileonardo.workers.dev)
 
 ---
