@@ -1,2 +1,19 @@
-.desktop { position: relative; width: 100%; min-height: 100vh; overflow: hidden; background: var(--bg-primary); padding-bottom: 52px; }
-.desktopIcons { display: grid; grid-template-columns: repeat(auto-fill, 76px); grid-auto-rows: 82px; gap: 8px 12px; align-content: start; padding: 16px; }
+.desktop {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  overflow: hidden;
+  background: var(--bg-primary);
+  padding: 16px 16px 52px;
+  box-sizing: border-box;
+}
+
+.desktopIcons {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 76px);
+  grid-auto-rows: 82px;
+  gap: 8px 12px;
+  align-content: start;
+  width: 100%;
+  padding: 16px;
+}

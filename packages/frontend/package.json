@@ -12,6 +12,7 @@
   "dependencies": {
     "7.css": "0.21.1",
     "98.css": "^0.1.21",
+    "marked": "^18.0.9",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "react-rnd": "^10.5.3",
@@ -24,6 +25,7 @@
     "@vitejs/plugin-react": "^6.0.4",
     "oxlint": "^1.75.0",
     "typescript": "~6.0.2",
-    "vite": "^8.2.0"
+    "vite": "^8.2.0",
+    "wrangler": "^4.110.0"
   }
 }
