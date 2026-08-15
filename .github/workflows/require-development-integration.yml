@@ -1,0 +1,41 @@
+name: Require Development Integration
+
+on:
+  pull_request:
+    branches:
+      - master
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - ready_for_review
+
+permissions:
+  contents: read
+
+jobs:
+  require-development-integration:
+    name: Require development integration
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out pull request head
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+
+      - name: Fetch shared development branch
+        run: git fetch --no-tags origin development:refs/remotes/origin/development
+
+      - name: Require pull request head in development
+        env:
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          if git merge-base --is-ancestor "$PR_HEAD_SHA" origin/development; then
+            echo "The pull request head is already integrated into development."
+            exit 0
+          fi
+
+          echo "::error::This pull request cannot be promoted to master until its head commit is merged into and pushed to development."
+          echo "Merge the feature branch into development, push development, then update this pull request from development or rebase it onto the integrated development history."
+          exit 1
