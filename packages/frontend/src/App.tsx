@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { AppearanceThemesWindow } from "./components/AppearanceThemesWindow";
 import { DesktopIcon } from "./components/DesktopIcon";
 import { FileExplorer } from "./components/FileExplorer";
+import { Guestbook } from "./components/Guestbook";
 import { ProjectDetail } from "./components/ProjectDetail";
 import { Taskbar } from "./components/Taskbar";
 import { WordPad } from "./components/WordPad";
@@ -22,6 +23,7 @@ const portfolioWindow = {
 function WindowContent({ windowId, title }: { windowId: string; title: string }) {
   if (windowId === "my-computer") return <FileExplorer />;
   if (windowId === "resume") return <WordPad />;
+  if (windowId === "guestbook") return <Guestbook />;
   if (windowId === "appearance-themes") return <AppearanceThemesWindow />;
   if (windowId.startsWith("project-detail-")) {
     return <ProjectDetail projectId={windowId.replace("project-detail-", "")} />;
