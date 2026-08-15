@@ -31,7 +31,7 @@ function WindowsLogo() {
 }
 
 export function Taskbar() {
-  const { windows, focusWindow, minimizeWindow, openWindow } = useWindows()
+  const { windows, focusWindow, minimizeWindow, restoreWindow, openWindow } = useWindows()
   const [isStartMenuOpen, setIsStartMenuOpen] = useState(false)
   const [now, setNow] = useState(() => new Date())
 
@@ -52,10 +52,17 @@ export function Taskbar() {
     )?.id
 
   function toggleWindow(windowState: WindowState) {
-    minimizeWindow(windowState.id)
     if (windowState.isMinimized) {
-      focusWindow(windowState.id)
+      restoreWindow(windowState.id)
+      return
     }
+
+    if (windowState.id === activeWindowId) {
+      minimizeWindow(windowState.id)
+      return
+    }
+
+    focusWindow(windowState.id)
   }
 
   function openPortfolio() {
@@ -68,7 +75,7 @@ export function Taskbar() {
       {isStartMenuOpen && (
         <div id="start-menu" className={styles.startMenu} role="menu" aria-label="Start menu">
           <div className={styles.startMenuBanner}>2000sme</div>
-          <button className={styles.startMenuItem} role="menuitem" onClick={openPortfolio}>
+          <button className={styles.startMenuItem} role="menuitem" data-window-launcher="portfolio" onClick={openPortfolio}>
             <span aria-hidden="true">📁</span>
             My Portfolio
           </button>
@@ -92,6 +99,7 @@ export function Taskbar() {
                 className={`${styles.windowButton} ${isActive ? styles.activeWindowButton : ''}`}
                 key={windowState.id}
                 aria-pressed={isActive}
+                data-window-taskbar={windowState.id}
                 onClick={() => toggleWindow(windowState)}
               >
                 {windowState.icon && <img src={windowState.icon} alt="" width={16} height={16} />}

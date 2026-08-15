@@ -39,6 +39,7 @@ export function DesktopIcon({
       onFocus={() => onSelect(windowId)}
       onKeyDown={handleKeyDown}
       aria-label={`Open ${label}`}
+      data-window-launcher={windowId}
     >
       <img src={icon} alt="" width={32} height={32} draggable={false} />
       <span>{label}</span>

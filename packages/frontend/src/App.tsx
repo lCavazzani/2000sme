@@ -40,7 +40,7 @@ function Desktop() {
   const [selectedWindowId, setSelectedWindowId] = useState<string | null>(null);
 
   return (
-    <main className="desktop" aria-label="Desktop">
+    <main className="desktop" aria-label="Desktop" data-desktop-root tabIndex={-1}>
       <section className="desktopIcons" aria-label="Desktop applications">
         {desktopApps.map((app) => (
           <DesktopIcon
