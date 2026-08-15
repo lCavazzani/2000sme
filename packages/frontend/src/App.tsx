@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { AppearanceThemesWindow } from "./components/AppearanceThemesWindow";
 import { DesktopIcon } from "./components/DesktopIcon";
+import { FileExplorer } from "./components/FileExplorer";
+import { ProjectDetail } from "./components/ProjectDetail";
 import { Taskbar } from "./components/Taskbar";
 import { Window } from "./components/Window";
 import { desktopApps } from "./config/desktopApps";
@@ -17,7 +19,12 @@ const portfolioWindow = {
 };
 
 function WindowContent({ windowId, title }: { windowId: string; title: string }) {
-  return windowId === "appearance-themes" ? <AppearanceThemesWindow /> : <p>Welcome to {title}.</p>;
+  if (windowId === "my-computer") return <FileExplorer />;
+  if (windowId === "appearance-themes") return <AppearanceThemesWindow />;
+  if (windowId.startsWith("project-detail-")) {
+    return <ProjectDetail projectId={windowId.replace("project-detail-", "")} />;
+  }
+  return <p>Welcome to {title}.</p>;
 }
 
 function Desktop() {

@@ -1,0 +1,233 @@
+/* Fill window-body, removing the 8px margin 98.css applies */
+.root {
+  margin: -8px;
+  height: calc(100% + 16px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--w98-silver, #c0c0c0);
+  font-family: var(--sans, 'MS Sans Serif', Arial, sans-serif);
+  font-size: 11px;
+}
+
+/* ── Toolbar ─────────────────────────────────────────────── */
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 4px;
+  border-bottom: 1px solid var(--border-dark, #808080);
+  flex-shrink: 0;
+  background: var(--w98-silver, #c0c0c0);
+}
+
+.navBtn {
+  width: 24px;
+  height: 22px;
+  padding: 0;
+  font-size: 10px;
+  flex-shrink: 0;
+  cursor: url('/arrow.cur'), auto;
+}
+
+.address {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+}
+
+.addressLabel {
+  white-space: nowrap;
+  font-size: 11px;
+}
+
+.addressInput {
+  flex: 1;
+  min-width: 0;
+  height: 20px;
+  padding: 0 4px;
+  font-family: inherit;
+  font-size: 11px;
+  box-shadow: inset -1px -1px 0 #fff, inset 1px 1px 0 #808080;
+  border: none;
+  background: #fff;
+  cursor: url('/arrow.cur'), auto;
+}
+
+.viewToggle {
+  display: flex;
+  gap: 1px;
+  padding-left: 6px;
+  border-left: 1px solid var(--border-dark, #808080);
+  flex-shrink: 0;
+}
+
+.viewToggle button {
+  width: 26px;
+  height: 22px;
+  padding: 0;
+  font-size: 13px;
+  cursor: url('/arrow.cur'), auto;
+}
+
+.viewActive {
+  box-shadow: inset 1px 1px 0 #808080, inset -1px -1px 0 #fff !important;
+}
+
+/* ── Two-pane body ──────────────────────────────────────── */
+.body {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.treePane {
+  width: 180px;
+  min-width: 120px;
+  flex-shrink: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: #fff;
+  padding: 0;
+}
+
+.treePane :global(.tree-view) {
+  height: 100%;
+  min-height: 100%;
+}
+
+.treeLeaf {
+  padding: 1px 4px;
+  cursor: url('/arrow.cur'), auto;
+  user-select: none;
+  white-space: nowrap;
+  font-size: 11px;
+}
+
+.treeLeaf:hover {
+  background: rgba(0, 0, 128, 0.1);
+}
+
+.treeLeafSelected {
+  background: #000080 !important;
+  color: #fff !important;
+}
+
+.divider {
+  width: 3px;
+  background: var(--w98-silver, #c0c0c0);
+  flex-shrink: 0;
+  border-left: 1px solid var(--border-dark, #808080);
+  border-right: 1px solid #fff;
+  cursor: ew-resize;
+}
+
+.filePane {
+  flex: 1;
+  min-width: 0;
+  overflow: auto;
+  background: #fff;
+  padding: 4px;
+}
+
+/* ── Icon grid view ─────────────────────────────────────── */
+.iconGrid {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: 4px;
+  padding: 4px;
+}
+
+.folder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  width: 76px;
+  padding: 4px 2px;
+  background: transparent;
+  border: 1px solid transparent;
+  cursor: url('/arrow.cur'), auto;
+  font-family: inherit;
+  font-size: 11px;
+  text-align: center;
+  color: inherit;
+}
+
+.folder:hover {
+  border-color: #000080;
+  background: rgba(0, 0, 128, 0.05);
+}
+
+.folderSelected {
+  background: #000080 !important;
+  color: #fff !important;
+  border-color: #000080 !important;
+}
+
+.folderIcon {
+  width: 32px;
+  height: 32px;
+  image-rendering: pixelated;
+  pointer-events: none;
+}
+
+.folderName {
+  word-break: break-word;
+  line-height: 1.2;
+  pointer-events: none;
+}
+
+/* ── List view ──────────────────────────────────────────── */
+.listTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: inherit;
+  font-size: 11px;
+}
+
+.listTable th {
+  text-align: left;
+  padding: 1px 8px;
+  border-bottom: 2px solid var(--border-dark, #808080);
+  border-right: 1px solid var(--border-dark, #808080);
+  background: var(--w98-silver, #c0c0c0);
+  font-weight: normal;
+  white-space: nowrap;
+  position: sticky;
+  top: 0;
+  cursor: url('/arrow.cur'), auto;
+}
+
+.listTable td {
+  padding: 1px 8px;
+  white-space: nowrap;
+  border-bottom: 1px solid #e8e8e8;
+  cursor: url('/arrow.cur'), auto;
+}
+
+.listTable tbody tr:hover td {
+  background: rgba(0, 0, 128, 0.08);
+}
+
+.rowSelected td {
+  background: #000080 !important;
+  color: #fff !important;
+}
+
+.nameCell {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.rowIcon {
+  width: 16px;
+  height: 16px;
+  image-rendering: pixelated;
+  flex-shrink: 0;
+}
