@@ -4,6 +4,7 @@ import { DesktopIcon } from "./components/DesktopIcon";
 import { FileExplorer } from "./components/FileExplorer";
 import { ProjectDetail } from "./components/ProjectDetail";
 import { Taskbar } from "./components/Taskbar";
+import { WordPad } from "./components/WordPad";
 import { Window } from "./components/Window";
 import { desktopApps } from "./config/desktopApps";
 import { WindowsProvider, useWindows } from "./store/windows";
@@ -20,6 +21,7 @@ const portfolioWindow = {
 
 function WindowContent({ windowId, title }: { windowId: string; title: string }) {
   if (windowId === "my-computer") return <FileExplorer />;
+  if (windowId === "resume") return <WordPad />;
   if (windowId === "appearance-themes") return <AppearanceThemesWindow />;
   if (windowId.startsWith("project-detail-")) {
     return <ProjectDetail projectId={windowId.replace("project-detail-", "")} />;

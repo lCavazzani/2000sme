@@ -1,0 +1,255 @@
+/* Fill window-body (same negative-margin trick as FileExplorer) */
+.root {
+  margin: -8px;
+  height: calc(100% + 16px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  font-family: var(--sans, 'MS Sans Serif', Arial, sans-serif);
+  font-size: 11px;
+  background: var(--w98-silver, #c0c0c0);
+}
+
+/* ── Menu bar ─────────────────────────────────────────── */
+.menuBar {
+  display: flex;
+  flex-shrink: 0;
+  background: var(--w98-silver, #c0c0c0);
+  border-bottom: 1px solid var(--border-dark, #808080);
+  padding: 1px 0;
+}
+
+.menuItem {
+  padding: 2px 8px;
+  background: transparent;
+  border: 1px solid transparent;
+  font-size: 11px;
+  font-family: inherit;
+  cursor: url('/arrow.cur'), auto;
+}
+
+.menuItem:hover {
+  background: #000080;
+  color: #fff;
+  border-color: transparent;
+}
+
+/* ── Toolbars ─────────────────────────────────────────── */
+.toolbarRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-shrink: 0;
+  width: 100%;
+  padding: 2px 4px;
+  gap: 2px;
+  border-bottom: 1px solid var(--border-dark, #808080);
+  flex-wrap: nowrap;
+  overflow: hidden;
+  background: var(--w98-silver, #c0c0c0);
+  box-sizing: border-box;
+}
+
+/* Toolbar separators */
+.toolbarRow :global([role="separator"]) {
+  display: block;
+  align-self: stretch;
+  width: 1px;
+  margin: 2px 3px;
+  background:
+    linear-gradient(
+      to right,
+      var(--border-dark, #808080) 0px,
+      var(--border-dark, #808080) 1px,
+      #fff 1px,
+      #fff 2px
+    );
+  flex-shrink: 0;
+}
+
+.toolbarRow button {
+  min-width: 24px;
+  height: 22px;
+  padding: 0 3px;
+  font-size: 13px;
+  cursor: url('/arrow.cur'), auto;
+  flex-shrink: 0;
+}
+
+.pdfBtn {
+  font-size: 10px !important;
+  font-weight: bold;
+  padding: 0 6px !important;
+  min-width: 44px !important;
+  letter-spacing: 0.5px;
+}
+
+/* Format toolbar specifics */
+.fontSelect {
+  width: 128px;
+  height: 20px;
+  font-family: inherit;
+  font-size: 11px;
+  cursor: url('/arrow.cur'), auto;
+}
+
+.sizeSelect {
+  width: 42px;
+  height: 20px;
+  font-family: inherit;
+  font-size: 11px;
+  cursor: url('/arrow.cur'), auto;
+}
+
+.fmtBtn {
+  width: 22px !important;
+  height: 20px !important;
+  padding: 0 !important;
+  font-size: 12px !important;
+}
+
+.colourBtn {
+  color: #c00;
+  text-decoration: underline;
+  text-decoration-color: #c00;
+}
+
+/* ── Document scroll area ─────────────────────────────── */
+.docArea {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: #787878;
+  padding: 20px 24px;
+  box-sizing: border-box;
+}
+
+/* White "paper" page */
+.page {
+  background: #fff;
+  max-width: 740px;
+  margin: 0 auto;
+  padding: 48px 64px;
+  box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.45);
+  color: #000;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-size: 12pt;
+  line-height: 1.65;
+  box-sizing: border-box;
+  /* Allow text selection */
+  user-select: text;
+  cursor: text;
+  /* Crisp rendering at 100% zoom */
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Rendered Markdown typography ────────────────────── */
+.page :global(h1) {
+  font-size: 22pt;
+  font-weight: bold;
+  margin: 0 0 6px;
+  padding-bottom: 6px;
+  border-bottom: 2px solid #000;
+  line-height: 1.2;
+}
+
+.page :global(h2) {
+  font-size: 13pt;
+  font-weight: bold;
+  margin: 28px 0 10px;
+  padding-bottom: 3px;
+  border-bottom: 1px solid #aaa;
+}
+
+.page :global(h3) {
+  font-size: 11pt;
+  font-weight: bold;
+  margin: 16px 0 4px;
+}
+
+.page :global(p) {
+  margin: 6px 0;
+}
+
+.page :global(a) {
+  color: #000080;
+  text-decoration: underline;
+}
+
+.page :global(a:hover) {
+  color: #0000ee;
+}
+
+.page :global(hr) {
+  border: none;
+  border-top: 1px solid #bbb;
+  margin: 20px 0;
+}
+
+.page :global(ul),
+.page :global(ol) {
+  padding-left: 26px;
+  margin: 6px 0;
+}
+
+.page :global(li) {
+  margin: 3px 0;
+}
+
+.page :global(strong) {
+  font-weight: bold;
+}
+
+.page :global(em) {
+  font-style: italic;
+}
+
+.page :global(code) {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 10pt;
+  background: #f4f4f4;
+  padding: 1px 5px;
+  border: 1px solid #ddd;
+}
+
+.page :global(pre) {
+  background: #f4f4f4;
+  border: 1px solid #ddd;
+  padding: 12px 16px;
+  overflow-x: auto;
+  margin: 10px 0;
+}
+
+.page :global(pre code) {
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+.page :global(blockquote) {
+  border-left: 3px solid #aaa;
+  margin: 10px 0 10px 8px;
+  padding-left: 14px;
+  color: #555;
+}
+
+.page :global(table) {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 12px 0;
+  font-size: 11pt;
+}
+
+.page :global(th),
+.page :global(td) {
+  border: 1px solid #ccc;
+  padding: 5px 10px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.page :global(th) {
+  background: #f0f0f0;
+  font-weight: bold;
+}
