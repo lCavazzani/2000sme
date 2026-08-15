@@ -1,0 +1,97 @@
+.guestbook {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+}
+
+.header h2,
+.header p,
+.entries h3,
+.form h3,
+.entry p,
+.deferred {
+  margin: 0;
+}
+
+.header,
+.entries,
+.form {
+  display: grid;
+  gap: 8px;
+}
+
+.entries {
+  min-height: 120px;
+}
+
+.entryList {
+  display: grid;
+  gap: 8px;
+  max-height: 210px;
+  margin: 0;
+  padding: 0;
+  overflow: auto;
+  list-style: none;
+}
+
+.entry {
+  padding: 8px;
+  border: 1px inset currentColor;
+}
+
+.entry header,
+.formFooter {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.entry time,
+.formFooter small {
+  font-size: 0.75rem;
+}
+
+.form label {
+  font-weight: 700;
+}
+
+.form textarea {
+  resize: vertical;
+}
+
+.loading,
+.empty,
+.error,
+.success {
+  margin: 0;
+  padding: 8px;
+  border: 1px dotted currentColor;
+}
+
+.error {
+  color: #8b0000;
+}
+
+.success {
+  color: #075f22;
+}
+
+.spinner {
+  display: inline-block;
+  width: 0.85em;
+  height: 0.85em;
+  margin-right: 0.35em;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: guestbook-spin 700ms linear infinite;
+}
+
+@keyframes guestbook-spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spinner { animation: none; }
+}
