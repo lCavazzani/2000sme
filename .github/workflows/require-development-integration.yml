@@ -1,4 +1,4 @@
-name: Require Development Integration
+name: Require Development Promotion
 
 on:
   pull_request:
@@ -14,28 +14,47 @@ permissions:
   contents: read
 
 jobs:
-  require-development-integration:
-    name: Require development integration
+  require-development-promotion:
+    name: Require development promotion
     runs-on: ubuntu-latest
     steps:
-      - name: Check out pull request head
+      - name: Require the official development branch as the PR source
+        env:
+          PR_HEAD_REF: ${{ github.event.pull_request.head.ref }}
+          PR_HEAD_REPOSITORY: ${{ github.event.pull_request.head.repo.full_name }}
+          EXPECTED_REPOSITORY: ${{ github.repository }}
+        run: |
+          if [ "$PR_HEAD_REF" != "development" ] || [ "$PR_HEAD_REPOSITORY" != "$EXPECTED_REPOSITORY" ]; then
+            echo "::error::Only the official development branch may be promoted to master. Merge feature work into development first, then open a development-to-master pull request."
+            exit 1
+          fi
+
+      - name: Check out promotion head
         uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
 
-      - name: Fetch shared development branch
-        run: git fetch --no-tags origin development:refs/remotes/origin/development
+      - name: Fetch current master and development branches
+        run: |
+          git fetch --no-tags origin master:refs/remotes/origin/master
+          git fetch --no-tags origin development:refs/remotes/origin/development
 
-      - name: Require pull request head in development
+      - name: Require the current development tip
         env:
           PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
-          if git merge-base --is-ancestor "$PR_HEAD_SHA" origin/development; then
-            echo "The pull request head is already integrated into development."
+          if [ "$PR_HEAD_SHA" != "$(git rev-parse origin/development)" ]; then
+            echo "::error::This promotion pull request is stale. Update it to the latest pushed development commit."
+            exit 1
+          fi
+
+      - name: Require development to include master
+        run: |
+          if git merge-base --is-ancestor origin/master HEAD; then
+            echo "development includes the current master baseline and is eligible for promotion."
             exit 0
           fi
 
-          echo "::error::This pull request cannot be promoted to master until its head commit is merged into and pushed to development."
-          echo "Merge the feature branch into development, push development, then update this pull request from development or rebase it onto the integrated development history."
+          echo "::error::development is behind master. Merge or rebase the current master branch into development, validate the integration, push development, then update this pull request."
           exit 1
