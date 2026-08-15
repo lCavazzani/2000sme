@@ -1,12 +1,30 @@
 # Backend Worker
 
-The backend is a Hono application deployed to Cloudflare Workers. Its D1 binding is named `portfolio_db`.
+This package is a Hono application deployed to Cloudflare Workers. Its D1 binding is named `portfolio_db` and its public Guestbook rate-limit binding is named `RATE_LIMIT`.
 
-## Local development
+## Development
 
 ```bash
 pnpm --filter backend dev
+pnpm --filter backend test
+pnpm --filter backend cf-typegen
 ```
+
+## Structure
+
+The Worker uses a small domain-oriented structure rather than a single large route file.
+
+| Location | Responsibility |
+|---|---|
+| `src/index.ts` | Worker entry point; exports the composed application. |
+| `src/app.ts` | Application composition, global CORS policy, health route, and domain-router mounting. |
+| `src/domains/guestbook/guestbook.routes.ts` | HTTP request and response handling only. |
+| `src/domains/guestbook/guestbook.schemas.ts` | Guestbook request and pagination validation. |
+| `src/domains/guestbook/guestbook.service.ts` | Business policy such as rate limiting and page assembly. |
+| `src/domains/guestbook/guestbook.repository.ts` | D1 queries only. |
+| `src/shared/` | Cross-domain HTTP-error and cursor helpers. |
+
+Future project-catalog APIs should be added under `src/domains/projects/` using the same route, service, repository, and types boundary. Avoid generic base repositories or dependency-injection frameworks until a real cross-domain need appears.
 
 ## Schema migrations
 
@@ -14,13 +32,13 @@ pnpm --filter backend dev
 
 `0002_project_catalog.sql` contains only the project-catalog schema: normalized tables, constraints, indexes, and the `published_projects` view. It intentionally contains no catalog content.
 
-Apply schema migrations to a local D1 database:
+Apply schema migrations locally:
 
 ```bash
 pnpm --filter backend db:migrate:local
 ```
 
-Apply schema migrations to the configured remote D1 database only through an approved deployment or maintenance workflow:
+Apply schema migrations to remote D1 only through an approved deployment or maintenance workflow:
 
 ```bash
 pnpm --filter backend db:migrate:remote
@@ -49,20 +67,6 @@ The public guestbook is immediately published after server-side validation. It a
 `GET /api/guestbook` returns a newest-first page with `entries` and an opaque `page.next_cursor`. Clients may set `limit` from 1 through 50 and must use the returned cursor for continuation rather than guessing offsets. Errors always return a JSON object with an `error` message and machine-readable `code`; a `rate_limited` response also includes `Retry-After` and `retry_after_seconds`.
 
 There is no moderation dashboard in this release. Abuse reports must be escalated to the site owner through the project’s established contact channel. The owner may review and remove an entry through an approved D1 maintenance procedure, then record the action. Do not expose deletion or moderation endpoints publicly without a separate authenticated moderation ticket.
-
-## Worker types
-
-Generate or synchronize types from the Worker configuration with:
-
-```bash
-pnpm --filter backend cf-typegen
-```
-
-Pass `CloudflareBindings` as the Hono generic:
-
-```ts
-const app = new Hono<{ Bindings: CloudflareBindings }>()
-```
 
 ## Deploy
 
