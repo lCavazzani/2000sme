@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useReducer, type ReactNode } from 'react'
-import { findDesktopApp } from '../config/desktopApps'
+import { findApplication } from '../config/applicationRegistry'
 import type { Viewport, WindowBounds, WindowConfig, WindowsContextValue } from '../types/window'
 import { readWindowSession, writeWindowSession } from './windowSession'
 import { windowsReducer } from './windowsReducer'
@@ -26,7 +26,7 @@ export function WindowsProvider({ children }: { children: ReactNode }) {
 
   const openWindow = useCallback((config: WindowConfig) => dispatch({ type: 'OPEN', config }), [])
   const openWindowById = useCallback((id: string) => {
-    const app = findDesktopApp(id)
+    const app = findApplication(id)
     if (app) dispatch({ type: 'OPEN', config: app })
   }, [])
   const closeWindow = useCallback((id: string) => dispatch({ type: 'CLOSE', id }), [])
@@ -39,7 +39,7 @@ export function WindowsProvider({ children }: { children: ReactNode }) {
   )
   const resetWindowBounds = useCallback(
     (id: string) => {
-      const app = findDesktopApp(id)
+      const app = findApplication(id)
       const existing = state.windows.find((windowState) => windowState.id === id)
       const bounds: WindowBounds | undefined = app ?? existing?.restoreBounds
       if (bounds) dispatch({ type: 'RESET_BOUNDS', id, bounds, viewport: getViewport() })
