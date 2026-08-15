@@ -2,8 +2,8 @@ import { type ActiveThemeId, useTheme } from '../theme/ThemeProvider'
 import styles from './AppearanceThemesWindow.module.css'
 
 const options: Array<{ id: ActiveThemeId; label: string; description: string; preview: string }> = [
+  { id: 'winxp', label: 'Windows XP', description: 'Luna desktop — default release theme.', preview: styles.winxp },
   { id: 'win98', label: 'Windows 98', description: 'Historic desktop — active release theme.', preview: styles.win98 },
-  { id: 'winxp', label: 'Windows XP', description: 'Luna desktop — active release theme.', preview: styles.winxp },
 ]
 
 export function AppearanceThemesWindow() {

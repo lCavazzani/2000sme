@@ -15,8 +15,8 @@ import {
 export type ThemeId = 'win98' | 'winxp' | 'win7'
 export type ActiveThemeId = Exclude<ThemeId, 'win7'>
 
-export const ACTIVE_THEME_IDS: readonly ActiveThemeId[] = ['win98', 'winxp']
-export const DEFAULT_THEME: ActiveThemeId = 'win98'
+export const ACTIVE_THEME_IDS: readonly ActiveThemeId[] = ['winxp', 'win98']
+export const DEFAULT_THEME: ActiveThemeId = 'winxp'
 const STORAGE_KEY = '2000sme:theme'
 
 const stylesheets: Record<ThemeId, string> = {
@@ -39,7 +39,7 @@ function isActiveThemeId(value: string | null): value is ActiveThemeId {
 function readStoredTheme(): ActiveThemeId {
   try {
     const storedTheme = window.localStorage.getItem(STORAGE_KEY)
-    // Older builds could persist win7. Normalize it to the historic release
+    // Older builds could persist win7. Normalize it to the current release
     // default instead of loading a preview as if it had release parity.
     return isActiveThemeId(storedTheme) ? storedTheme : DEFAULT_THEME
   } catch {

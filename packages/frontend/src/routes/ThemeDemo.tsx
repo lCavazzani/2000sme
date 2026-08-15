@@ -7,8 +7,8 @@ import { type ActiveThemeId, useTheme } from '../theme/ThemeProvider'
 import './ThemeDemo.css'
 
 const options: Array<{ id: ActiveThemeId; label: string }> = [
-  { id: 'win98', label: 'Windows 98' },
   { id: 'winxp', label: 'Windows XP' },
+  { id: 'win98', label: 'Windows 98' },
 ]
 
 export function ThemeDemo() {
