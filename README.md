@@ -53,6 +53,14 @@ pnpm --filter @sportifolio/backend dev
 
 Frontend application — see [`packages/frontend`](packages/frontend).
 
+## Theme Compatibility Scope
+
+The release compatibility target consists of **Windows 98** and **Windows XP**. The frontend loads exactly one active OS stylesheet at runtime through `ThemeProvider`, while shared components keep semantic markup independent of a specific vendor stylesheet. This makes active theme switching possible without resetting the desktop or its open windows.
+
+Windows 7 remains in the repository as a **dormant technical preview**: its stylesheet is retained for future reference, but it is not selectable from the primary Appearance Control Panel and is outside the release compatibility and visual-fidelity promise. A historic stored Windows 7 preference safely normalizes to Windows 98 on startup.
+
+Theme verification for release work must cover the desktop, taskbar, windows, forms, menus, focus states, scroll regions, responsive behavior, and content paths under both Windows 98 and Windows XP. Do not add Windows 7 parity work without a separate definition-of-ready decision.
+
 ### `@sportifolio/backend`
 
 Backend application — see [`packages/backend`](packages/backend).
