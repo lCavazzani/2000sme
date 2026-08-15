@@ -1,4 +1,4 @@
-const DEFAULT_GUESTBOOK_API_ORIGIN = 'https://00sbackedn.cavazzanileonardo.workers.dev'
+const DEFAULT_GUESTBOOK_API_ORIGIN = 'http://localhost:8787'
 
 function trimTrailingSlash(value: string) {
   return value.replace(/\/+$/, '')
