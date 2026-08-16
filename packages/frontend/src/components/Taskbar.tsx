@@ -1,16 +1,8 @@
 import { useEffect, useState } from 'react'
+import { applicationsForSurface, type ApplicationId } from '../config/applicationRegistry'
 import { useWindows } from '../store/windows'
 import type { WindowState } from '../types/window'
 import styles from './Taskbar.module.css'
-
-const portfolioWindow = {
-  id: 'portfolio',
-  title: 'My Portfolio',
-  x: 64,
-  y: 64,
-  width: 480,
-  height: 320,
-}
 
 function formatTime(date: Date) {
   return new Intl.DateTimeFormat(undefined, {
@@ -31,7 +23,7 @@ function WindowsLogo() {
 }
 
 export function Taskbar() {
-  const { windows, focusWindow, minimizeWindow, openWindow } = useWindows()
+  const { windows, focusWindow, minimizeWindow, restoreWindow, openWindowById } = useWindows()
   const [isStartMenuOpen, setIsStartMenuOpen] = useState(false)
   const [now, setNow] = useState(() => new Date())
 
@@ -52,14 +44,21 @@ export function Taskbar() {
     )?.id
 
   function toggleWindow(windowState: WindowState) {
-    minimizeWindow(windowState.id)
     if (windowState.isMinimized) {
-      focusWindow(windowState.id)
+      restoreWindow(windowState.id)
+      return
     }
+
+    if (windowState.id === activeWindowId) {
+      minimizeWindow(windowState.id)
+      return
+    }
+
+    focusWindow(windowState.id)
   }
 
-  function openPortfolio() {
-    openWindow(portfolioWindow)
+  function launchApplication(id: ApplicationId) {
+    openWindowById(id)
     setIsStartMenuOpen(false)
   }
 
@@ -68,10 +67,18 @@ export function Taskbar() {
       {isStartMenuOpen && (
         <div id="start-menu" className={styles.startMenu} role="menu" aria-label="Start menu">
           <div className={styles.startMenuBanner}>2000sme</div>
-          <button className={styles.startMenuItem} role="menuitem" onClick={openPortfolio}>
-            <span aria-hidden="true">📁</span>
-            My Portfolio
-          </button>
+          {applicationsForSurface('start-menu').map((application) => (
+            <button
+              className={styles.startMenuItem}
+              role="menuitem"
+              key={application.id}
+              data-window-launcher={application.id}
+              onClick={() => launchApplication(application.id)}
+            >
+              <img src={application.icon} alt="" width={20} height={20} />
+              {application.label}
+            </button>
+          ))}
         </div>
       )}
       <footer className={styles.taskbar} aria-label="Windows taskbar">
@@ -92,6 +99,7 @@ export function Taskbar() {
                 className={`${styles.windowButton} ${isActive ? styles.activeWindowButton : ''}`}
                 key={windowState.id}
                 aria-pressed={isActive}
+                data-window-taskbar={windowState.id}
                 onClick={() => toggleWindow(windowState)}
               >
                 {windowState.icon && <img src={windowState.icon} alt="" width={16} height={16} />}
