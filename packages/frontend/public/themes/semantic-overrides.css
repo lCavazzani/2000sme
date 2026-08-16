@@ -1,0 +1,149 @@
+:root {
+  --os-desktop-surface: #3a6ea5;
+  --os-desktop-fg: #fff;
+  --os-window-surface: #ece9d8;
+  --os-window-border-width: 1px;
+  --os-window-border-color: #3255a4;
+  --os-window-radius: 7px;
+  --os-window-elevation: 0 4px 14px rgb(0 0 0 / 35%);
+  --os-title-active-bg: linear-gradient(#5aa2f5, #245edb 52%, #1941a5);
+  --os-title-active-fg: #fff;
+  --os-title-inactive-bg: linear-gradient(#8ba0bd, #65778e);
+  --os-title-inactive-fg: #e9eef6;
+  --os-title-radius: 5px 5px 0 0;
+  --os-taskbar-bg: linear-gradient(#3f8cf2, #245edb 52%, #1941a5);
+  --os-taskbar-fg: #fff;
+  --os-taskbar-border-width: 1px 0 0;
+  --os-taskbar-border-color: #6db2ff;
+  --os-taskbar-radius: 7px 7px 0 0;
+  --os-taskbar-elevation: inset 0 1px rgb(255 255 255 / 35%);
+  --os-control-bg: #ece9d8;
+  --os-control-fg: #111;
+  --os-control-hover-bg: #dce9ff;
+  --os-control-pressed-bg: #c8dbfa;
+  --os-control-selected-bg: #316ac5;
+  --os-control-selected-fg: #fff;
+  --os-control-disabled-fg: #6d6d6d;
+  --os-control-border-color: #5d8cd3;
+  --os-control-inset: inset 0 1px rgb(255 255 255 / 42%);
+  --os-tray-bg: rgb(255 255 255 / 18%);
+  --os-tray-border-width: 1px;
+  --os-tray-border-color: rgb(17 68 166 / 75%);
+  --os-start-menu-bg: #f1f4fb;
+  --os-start-menu-fg: #111;
+  --os-start-menu-border-width: 1px;
+  --os-start-menu-border-color: #245edb;
+  --os-start-menu-radius: 7px 7px 0 0;
+  --os-start-menu-elevation: 2px 3px 9px rgb(0 0 0 / 38%);
+  --os-start-menu-banner-bg: linear-gradient(#3f8cf2, #245edb 54%, #1941a5);
+  --os-focus-ring: 2px solid #f7d04a;
+  --os-focus-offset: -3px;
+  --os-icon-label-fg: #fff;
+  --os-icon-label-shadow: 1px 1px #123867;
+  --os-icon-selected-shadow: drop-shadow(1px 0 #316ac5) drop-shadow(-1px 0 #316ac5)
+    drop-shadow(0 1px #316ac5) drop-shadow(0 -1px #316ac5);
+  --os-gloss-overlay: linear-gradient(rgb(255 255 255 / 38%), transparent 50%);
+  --os-crt-opacity: 0;
+  --os-motion-duration: 160ms;
+}
+
+:root[data-os-theme='win98'] {
+  --os-desktop-surface: #008080;
+  --os-desktop-fg: #fff;
+  --os-window-surface: #c0c0c0;
+  --os-window-border-width: 2px;
+  --os-window-border-color: #fff #000 #000 #fff;
+  --os-window-radius: 0;
+  --os-window-elevation: 1px 1px #808080;
+  --os-title-active-bg: #000080;
+  --os-title-active-fg: #fff;
+  --os-title-inactive-bg: #808080;
+  --os-title-inactive-fg: #d0d0d0;
+  --os-title-radius: 0;
+  --os-taskbar-bg: #c0c0c0;
+  --os-taskbar-fg: #000;
+  --os-taskbar-border-width: 2px 0 0;
+  --os-taskbar-border-color: #fff;
+  --os-taskbar-radius: 0;
+  --os-taskbar-elevation: inset 0 -1px #000;
+  --os-control-bg: #c0c0c0;
+  --os-control-fg: #000;
+  --os-control-hover-bg: #c0c0c0;
+  --os-control-pressed-bg: #dfdfdf;
+  --os-control-selected-bg: #000080;
+  --os-control-selected-fg: #fff;
+  --os-control-disabled-fg: #808080;
+  --os-control-border-color: #808080 #fff #fff #808080;
+  --os-control-inset: inset 1px 1px #000;
+  --os-tray-bg: #c0c0c0;
+  --os-tray-border-width: 1px;
+  --os-tray-border-color: #808080 #fff #fff #808080;
+  --os-start-menu-bg: #c0c0c0;
+  --os-start-menu-fg: #000;
+  --os-start-menu-border-width: 2px;
+  --os-start-menu-border-color: #fff #000 #000 #fff;
+  --os-start-menu-radius: 0;
+  --os-start-menu-elevation: 1px 1px #808080;
+  --os-start-menu-banner-bg: linear-gradient(#000080, #1084d0);
+  --os-focus-ring: 2px dotted #000;
+  --os-focus-offset: -4px;
+  --os-icon-label-fg: #fff;
+  --os-icon-label-shadow: 1px 1px #000;
+  --os-icon-selected-shadow: drop-shadow(1px 0 #000080) drop-shadow(-1px 0 #000080)
+    drop-shadow(0 1px #000080) drop-shadow(0 -1px #000080);
+  --os-gloss-overlay: none;
+}
+
+:root[data-theme-gloss='on'] .title-bar::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: var(--os-gloss-overlay);
+}
+
+:root[data-theme-crt='on'] body::after {
+  content: '';
+  position: fixed;
+  z-index: 20000;
+  inset: 0;
+  pointer-events: none;
+  opacity: var(--os-crt-opacity);
+  background: repeating-linear-gradient(0deg, rgb(0 0 0 / 12%) 0 1px, transparent 1px 3px);
+}
+
+.window {
+  overflow: hidden;
+  background: var(--os-window-surface);
+  border: var(--os-window-border-width) solid;
+  border-color: var(--os-window-border-color);
+  border-radius: var(--os-window-radius);
+  box-shadow: var(--os-window-elevation);
+}
+
+.title-bar {
+  position: relative;
+  overflow: hidden;
+  color: var(--os-title-active-fg);
+  background: var(--os-title-active-bg);
+  border-radius: var(--os-title-radius);
+  transition: background var(--os-motion-duration), color var(--os-motion-duration);
+}
+
+.title-bar > * {
+  position: relative;
+  z-index: 1;
+}
+
+.window[data-window-active='false'] .title-bar {
+  color: var(--os-title-inactive-fg);
+  background: var(--os-title-inactive-bg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --os-motion-duration: 0ms;
+    --os-gloss-overlay: none;
+    --os-crt-opacity: 0;
+  }
+}

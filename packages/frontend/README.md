@@ -44,3 +44,15 @@ Vitest reads the `test` configuration from `vite.config.ts`, runs frontend tests
 ```bash
 pnpm --filter 00sfrontend test
 ```
+
+## Server-state data access
+
+FE-16 uses `@tanstack/react-query` only for remote API data. The shared `src/api/client.ts` boundary owns URL requests, JSON parsing, client-side response validation, and normalized `ApiError` values. Domain modules such as `src/api/guestbook.ts` define their request and response types, query keys, services, and hooks.
+
+Use `useQuery` for remote reads and `useMutation` for remote writes. New catalog queries should define keys under their own domain module, receive the `AbortSignal` supplied by TanStack Query, set an intentional `staleTime` and retry policy, and invalidate or safely reconcile affected queries after a mutation. Do not place form inputs, theme selection, desktop windows, drag state, or other UI-only state in the query cache; those remain local React state or in the existing window/theme providers.
+
+`VITE_GUESTBOOK_API_ORIGIN` remains intentionally public browser configuration and contains only the API origin, never a credential.
+
+## Semantic theme contract
+
+THEME-10 keeps the existing runtime stylesheet swap and adds a semantic token layer for shared desktop chrome. Shared shell components use `--os-*` tokens rather than Windows-98-specific palette names, allowing the same markup to render either the sharp Windows 98 bevel grammar or rounded Windows XP/Luna chrome. The complete token, capability, state, and reduced-effects contract is documented in [`src/theme/SEMANTIC_TOKENS.md`](./src/theme/SEMANTIC_TOKENS.md).
