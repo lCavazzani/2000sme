@@ -1,12 +1,14 @@
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import { guestbookRoutes } from './domains/guestbook/guestbook.routes'
+import { securityHeaders } from './shared/security-headers'
 
 const ALLOWED_ORIGINS = ['https://2000sme.cavazzanileonardo.workers.dev']
 
 export function createApp() {
   const app = new Hono<{ Bindings: CloudflareBindings }>()
 
+  app.use('*', securityHeaders)
   app.use(
     '*',
     cors({
