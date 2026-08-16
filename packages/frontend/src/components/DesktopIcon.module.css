@@ -6,10 +6,10 @@
   align-content: start;
   gap: 4px;
   padding: 5px 3px;
-  color: #fff;
+  color: var(--os-icon-label-fg);
   font: inherit;
   line-height: 1.2;
-  text-shadow: 1px 1px #000;
+  text-shadow: var(--os-icon-label-shadow);
   border: 1px solid transparent;
   background: transparent;
   cursor: pointer;
@@ -30,16 +30,15 @@
 .desktopIcon:hover,
 .desktopIcon:focus-visible,
 .selected {
-  outline: 1px dotted #fff;
+  outline: var(--os-focus-ring);
   outline-offset: -3px;
 }
 
 .selected img {
-  filter: drop-shadow(1px 0 #000080) drop-shadow(-1px 0 #000080)
-    drop-shadow(0 1px #000080) drop-shadow(0 -1px #000080);
+  filter: var(--os-icon-selected-shadow);
 }
 
 .selected span {
-  color: #fff;
-  background: #000080;
+  color: var(--os-icon-label-fg);
+  background: var(--os-control-selected-bg);
 }

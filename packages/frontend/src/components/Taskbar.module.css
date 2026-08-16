@@ -10,10 +10,14 @@
   align-items: center;
   gap: 4px;
   padding: 3px;
-  color: #000;
-  background: #c0c0c0;
-  border-top: 2px solid #fff;
-  box-shadow: inset 0 -1px #000;
+  color: var(--os-taskbar-fg);
+  background: var(--os-taskbar-bg);
+  border-style: solid;
+  border-width: var(--os-taskbar-border-width);
+  border-color: var(--os-taskbar-border-color);
+  border-radius: var(--os-taskbar-radius);
+  box-shadow: var(--os-taskbar-elevation);
+  transition: background var(--os-motion-duration), color var(--os-motion-duration);
 }
 
 .startButton,
@@ -36,8 +40,8 @@
 .startButton:focus-visible,
 .windowButton:focus-visible,
 .startMenuItem:focus-visible {
-  outline: 2px dotted #000;
-  outline-offset: -4px;
+  outline: var(--os-focus-ring);
+  outline-offset: var(--os-focus-offset);
 }
 
 .windowsLogo {
@@ -50,10 +54,21 @@
   transform: skewY(-8deg);
 }
 
-.windowsLogo span:nth-child(1) { background: #f25022; }
-.windowsLogo span:nth-child(2) { background: #7fba00; }
-.windowsLogo span:nth-child(3) { background: #00a4ef; }
-.windowsLogo span:nth-child(4) { background: #ffb900; }
+.windowsLogo span:nth-child(1) {
+  background: #f25022;
+}
+
+.windowsLogo span:nth-child(2) {
+  background: #7fba00;
+}
+
+.windowsLogo span:nth-child(3) {
+  background: #00a4ef;
+}
+
+.windowsLogo span:nth-child(4) {
+  background: #ffb900;
+}
 
 .windowList {
   min-width: 0;
@@ -79,9 +94,11 @@
 }
 
 .activeWindowButton {
-  background: #dfdfdf;
-  border-color: #808080 #fff #fff #808080;
-  box-shadow: inset 1px 1px #000;
+  color: var(--os-control-fg);
+  background: var(--os-control-pressed-bg);
+  border: 1px solid;
+  border-color: var(--os-control-border-color);
+  box-shadow: var(--os-control-inset);
 }
 
 .systemTray {
@@ -89,8 +106,10 @@
   display: flex;
   align-items: center;
   padding: 2px 8px;
-  border: 1px solid;
-  border-color: #808080 #fff #fff #808080;
+  color: var(--os-taskbar-fg);
+  background: var(--os-tray-bg);
+  border: var(--os-tray-border-width) solid;
+  border-color: var(--os-tray-border-color);
   white-space: nowrap;
 }
 
@@ -102,11 +121,13 @@
   width: min(248px, calc(100vw - 6px));
   display: grid;
   grid-template-columns: 30px 1fr;
-  color: #000;
-  background: #c0c0c0;
-  border: 2px solid;
-  border-color: #fff #000 #000 #fff;
-  box-shadow: 1px 1px #808080;
+  color: var(--os-start-menu-fg);
+  background: var(--os-start-menu-bg);
+  border: var(--os-start-menu-border-width) solid;
+  border-color: var(--os-start-menu-border-color);
+  border-radius: var(--os-start-menu-radius);
+  box-shadow: var(--os-start-menu-elevation);
+  overflow: hidden;
 }
 
 .startMenuBanner {
@@ -114,11 +135,11 @@
   writing-mode: vertical-rl;
   transform: rotate(180deg);
   padding: 7px 5px;
-  color: #fff;
+  color: var(--os-control-selected-fg);
   font-size: 14px;
   font-weight: 700;
   letter-spacing: 1px;
-  background: linear-gradient(#000080, #1084d0);
+  background: var(--os-start-menu-banner-bg);
 }
 
 .startMenuItem {
@@ -132,11 +153,16 @@
 
 .startMenuItem:hover,
 .startMenuItem:focus-visible {
-  color: #fff;
-  background: #000080;
+  color: var(--os-control-selected-fg);
+  background: var(--os-control-selected-bg);
 }
 
 @media (max-width: 480px) {
-  .windowButton { min-width: 84px; }
-  .windowButton span { max-width: 110px; }
+  .windowButton {
+    min-width: 84px;
+  }
+
+  .windowButton span {
+    max-width: 110px;
+  }
 }
