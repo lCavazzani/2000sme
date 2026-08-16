@@ -45,6 +45,11 @@ async function postGuestbook(payload: unknown, ip = '198.51.100.10') {
   })
 }
 
+async function guestbookCount() {
+  const result = await env.portfolio_db.prepare('SELECT COUNT(*) as count FROM guestbook').first<{ count: number }>()
+  return result?.count ?? 0
+}
+
 beforeEach(async () => {
   await env.portfolio_db.prepare('DELETE FROM guestbook').run()
 
@@ -87,6 +92,93 @@ describe('guestbook public-content contract', () => {
     const invalidCursor = await request('/api/guestbook?cursor=not-a-cursor')
     expect(invalidCursor.status).toBe(400)
     expect((await invalidCursor.json()) as ApiError).toMatchObject({ code: 'invalid_cursor' })
+  })
+
+  it('persists trimmed submissions and returns the serialized record first in a following newest-first page', async () => {
+    const response = await postGuestbook(
+      { name: '  New visitor  ', message: '  A persisted, trimmed message.  ' },
+      '198.51.100.61',
+    )
+
+    expect(response.status).toBe(201)
+    expect((await response.json()) as GuestbookEntry).toMatchObject({
+      name: 'New visitor',
+      message: 'A persisted, trimmed message.',
+    })
+    expect(await guestbookCount()).toBe(5)
+
+    const page = await request('/api/guestbook?limit=5')
+    expect(page.status).toBe(200)
+    expect(((await page.json()) as GuestbookPage).entries[0]).toMatchObject({
+      name: 'New visitor',
+      message: 'A persisted, trimmed message.',
+    })
+  })
+
+  it('accepts exact maximum-length plain-text fields', async () => {
+    const response = await postGuestbook(
+      { name: 'n'.repeat(50), message: 'm'.repeat(280) },
+      '198.51.100.62',
+    )
+
+    expect(response.status).toBe(201)
+    expect((await response.json()) as GuestbookEntry).toMatchObject({
+      name: 'n'.repeat(50),
+      message: 'm'.repeat(280),
+    })
+  })
+
+  it('rejects malformed, missing, and boundary-length submissions without writing to D1', async () => {
+    const initialCount = await guestbookCount()
+    const invalidJson = await request('/api/guestbook', {
+      method: 'POST',
+      headers: { 'CF-Connecting-IP': '198.51.100.62', 'Content-Type': 'application/json' },
+      body: '{not-json',
+    })
+    expect(invalidJson.status).toBe(400)
+    expect((await invalidJson.json()) as ApiError).toMatchObject({ code: 'invalid_json' })
+
+    const missingMessage = await postGuestbook({ name: 'Ada' }, '198.51.100.63')
+    expect(missingMessage.status).toBe(400)
+    expect((await missingMessage.json()) as ApiError).toMatchObject({
+      code: 'validation_error',
+      details: { field: 'message' },
+    })
+
+    const longName = await postGuestbook({ name: 'a'.repeat(51), message: 'Hello' }, '198.51.100.64')
+    expect(longName.status).toBe(400)
+    expect((await longName.json()) as ApiError).toMatchObject({
+      code: 'validation_error',
+      details: { field: 'name', max_length: 50 },
+    })
+
+    const longMessage = await postGuestbook({ name: 'Ada', message: 'a'.repeat(281) }, '198.51.100.65')
+    expect(longMessage.status).toBe(400)
+    expect((await longMessage.json()) as ApiError).toMatchObject({
+      code: 'validation_error',
+      details: { field: 'message', max_length: 280 },
+    })
+
+    expect(await guestbookCount()).toBe(initialCount)
+  })
+
+  it('returns CORS headers only for approved origins', async () => {
+    const allowedOrigin = 'https://2000sme.cavazzanileonardo.workers.dev'
+    const allowed = await request('/api/guestbook', { headers: { Origin: allowedOrigin } })
+    expect(allowed.headers.get('Access-Control-Allow-Origin')).toBe(allowedOrigin)
+
+    const preflight = await request('/api/guestbook', {
+      method: 'OPTIONS',
+      headers: {
+        Origin: allowedOrigin,
+        'Access-Control-Request-Method': 'POST',
+      },
+    })
+    expect(preflight.headers.get('Access-Control-Allow-Origin')).toBe(allowedOrigin)
+    expect(preflight.headers.get('Access-Control-Allow-Methods')).toContain('POST')
+
+    const unapproved = await request('/api/guestbook', { headers: { Origin: 'https://unapproved.example' } })
+    expect(unapproved.headers.get('Access-Control-Allow-Origin')).toBeNull()
   })
 
   it('accepts plain text only and rejects presentational guestbook fields', async () => {
