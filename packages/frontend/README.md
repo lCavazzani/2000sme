@@ -44,3 +44,11 @@ Vitest reads the `test` configuration from `vite.config.ts`, runs frontend tests
 ```bash
 pnpm --filter 00sfrontend test
 ```
+
+## Server-state data access
+
+FE-16 uses `@tanstack/react-query` only for remote API data. The shared `src/api/client.ts` boundary owns URL requests, JSON parsing, client-side response validation, and normalized `ApiError` values. Domain modules such as `src/api/guestbook.ts` define their request and response types, query keys, services, and hooks.
+
+Use `useQuery` for remote reads and `useMutation` for remote writes. New catalog queries should define keys under their own domain module, receive the `AbortSignal` supplied by TanStack Query, set an intentional `staleTime` and retry policy, and invalidate or safely reconcile affected queries after a mutation. Do not place form inputs, theme selection, desktop windows, drag state, or other UI-only state in the query cache; those remain local React state or in the existing window/theme providers.
+
+`VITE_GUESTBOOK_API_ORIGIN` remains intentionally public browser configuration and contains only the API origin, never a credential.

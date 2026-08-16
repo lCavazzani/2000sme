@@ -1,22 +1,12 @@
-import { useCallback, useEffect, useState, type FormEvent } from 'react'
-import { guestbookApiUrl } from '../config/api'
+import { useCallback, useState, type FormEvent } from 'react'
+import {
+  guestbookErrorMessage,
+  useCreateGuestbookEntry,
+  useGuestbookEntries,
+} from '../api/guestbook'
 import { turnstileSiteKey } from '../config/turnstile'
 import { TurnstileWidget } from './TurnstileWidget'
 import styles from './Guestbook.module.css'
-
-type GuestbookEntry = {
-  id: number
-  name: string
-  message: string
-  created_at: string
-}
-
-type RequestState = 'idle' | 'loading' | 'submitting'
-
-function requestErrorMessage(response: Response, fallback: string) {
-  if (response.status >= 500) return 'The guestbook service is unavailable. Please try again later.'
-  return fallback
-}
 
 function formatEntryDate(value: string) {
   const date = new Date(value)
@@ -28,47 +18,14 @@ function formatEntryDate(value: string) {
 }
 
 export function Guestbook() {
-  const [entries, setEntries] = useState<GuestbookEntry[]>([])
   const [name, setName] = useState('')
   const [message, setMessage] = useState('')
-  const [requestState, setRequestState] = useState<RequestState>('loading')
-  const [loadError, setLoadError] = useState<string | null>(null)
   const [submitError, setSubmitError] = useState<string | null>(null)
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
   const [turnstileResetKey, setTurnstileResetKey] = useState(0)
-
-  useEffect(() => {
-    const controller = new AbortController()
-    let active = true
-
-    async function loadEntries() {
-      setRequestState('loading')
-      setLoadError(null)
-
-      try {
-        const response = await fetch(guestbookApiUrl, { signal: controller.signal })
-        if (!response.ok) throw new Error(requestErrorMessage(response, 'Could not load guestbook entries.'))
-
-        const payload: unknown = await response.json()
-        if (!Array.isArray(payload)) throw new Error('The guestbook service returned an invalid response.')
-
-        if (active) setEntries(payload as GuestbookEntry[])
-      } catch (error) {
-        if (active && !(error instanceof DOMException && error.name === 'AbortError')) {
-          setLoadError(error instanceof Error ? error.message : 'Could not load guestbook entries.')
-        }
-      } finally {
-        if (active) setRequestState('idle')
-      }
-    }
-
-    void loadEntries()
-    return () => {
-      active = false
-      controller.abort()
-    }
-  }, [])
+  const guestbookQuery = useGuestbookEntries()
+  const createEntry = useCreateGuestbookEntry()
 
   const handleTurnstileToken = useCallback((token: string) => {
     setTurnstileToken(token)
@@ -101,37 +58,23 @@ export function Guestbook() {
       return
     }
 
-    setRequestState('submitting')
     try {
-      const response = await fetch(guestbookApiUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: trimmedName, message: trimmedMessage, turnstileToken }),
-      })
-
-      const payload: unknown = await response.json().catch(() => null)
-      if (!response.ok || !payload || typeof payload !== 'object') {
-        const apiMessage = payload && typeof payload === 'object' && 'error' in payload && typeof payload.error === 'string'
-          ? payload.error
-          : requestErrorMessage(response, 'Could not save your guestbook entry.')
-        throw new Error(apiMessage)
-      }
-
-      const entry = payload as GuestbookEntry
-      setEntries((currentEntries) => [entry, ...currentEntries])
+      await createEntry.mutateAsync({ name: trimmedName, message: trimmedMessage, turnstileToken })
       setName('')
       setMessage('')
       setSuccessMessage('Thanks for signing the guestbook! Your entry is now visible.')
     } catch (error) {
-      setSubmitError(error instanceof Error ? error.message : 'Could not save your guestbook entry.')
+      setSubmitError(guestbookErrorMessage(error))
     } finally {
       setTurnstileToken(null)
       setTurnstileResetKey((current) => current + 1)
-      setRequestState('idle')
     }
   }
 
-  const isSubmitting = requestState === 'submitting'
+  const entries = guestbookQuery.data?.entries ?? []
+  const loadError = guestbookQuery.isError ? guestbookErrorMessage(guestbookQuery.error) : null
+  const isSubmitting = createEntry.isPending
+  const isLoading = guestbookQuery.isPending
   const turnstileConfigured = Boolean(turnstileSiteKey)
 
   return (
@@ -141,15 +84,22 @@ export function Guestbook() {
         <p>Leave a note for the next visitor.</p>
       </header>
 
-      <section className={styles.entries} aria-live="polite" aria-busy={requestState === 'loading'}>
+      <section className={styles.entries} aria-live="polite" aria-busy={isLoading || guestbookQuery.isFetching}>
         <h3>Recent entries</h3>
-        {requestState === 'loading' && (
+        {isLoading && (
           <p className={styles.loading} role="status">
             <span aria-hidden="true" className={styles.spinner} /> Loading guestbook entries…
           </p>
         )}
-        {loadError && <p className={styles.error} role="alert">{loadError}</p>}
-        {requestState !== 'loading' && !loadError && entries.length === 0 && (
+        {loadError && (
+          <>
+            <p className={styles.error} role="alert">{loadError}</p>
+            <button type="button" onClick={() => void guestbookQuery.refetch()} disabled={guestbookQuery.isFetching}>
+              Try again
+            </button>
+          </>
+        )}
+        {!isLoading && !loadError && entries.length === 0 && (
           <p className={styles.empty}>No entries yet. Be the first to sign the guestbook.</p>
         )}
         {entries.length > 0 && (
