@@ -17,3 +17,26 @@
   width: 100%;
   padding: 16px;
 }
+
+.directRoute {
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 24px;
+  background: var(--bg-primary);
+  color: var(--text-color, #111);
+}
+
+.directRouteBack {
+  display: inline-block;
+  margin-bottom: 20px;
+}
+
+.directRoute h1 {
+  margin-top: 0;
+}
+
+@media (max-width: 640px) {
+  .desktopIcons {
+    display: none;
+  }
+}
