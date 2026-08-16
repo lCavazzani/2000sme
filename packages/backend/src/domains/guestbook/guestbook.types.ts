@@ -15,6 +15,10 @@ export type GuestbookInput = {
   message: string
 }
 
+export type GuestbookSubmissionInput = GuestbookInput & {
+  turnstileToken: string
+}
+
 export type GuestbookPage = {
   entries: GuestbookEntry[]
   page: {

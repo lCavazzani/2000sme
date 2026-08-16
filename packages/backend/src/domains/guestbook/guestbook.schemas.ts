@@ -1,10 +1,11 @@
 import { apiError, type ApiError } from '../../shared/http-errors'
 import { decodeGuestbookCursor } from '../../shared/pagination'
-import type { GuestbookCursor, GuestbookInput } from './guestbook.types'
+import type { GuestbookCursor, GuestbookSubmissionInput } from './guestbook.types'
 
 export const DEFAULT_PAGE_LIMIT = 20
 export const MAX_PAGE_LIMIT = 50
-export const MAX_GUESTBOOK_BODY_BYTES = 1024
+export const MAX_GUESTBOOK_BODY_BYTES = 4096
+export const MAX_TURNSTILE_TOKEN_LENGTH = 2048
 
 export type GuestbookPageInput = {
   limit: number
@@ -32,17 +33,17 @@ export function parseGuestbookPageInput(url: URL): GuestbookPageInput | ApiError
   return { limit, cursor }
 }
 
-export async function parseGuestbookInput(request: Request): Promise<GuestbookInput | ApiError> {
+export async function parseGuestbookInput(request: Request): Promise<GuestbookSubmissionInput | ApiError> {
   const declaredLength = request.headers.get('Content-Length')
   if (declaredLength && (!/^\d+$/.test(declaredLength) || Number(declaredLength) > MAX_GUESTBOOK_BODY_BYTES)) {
-    return apiError(413, 'payload_too_large', 'Guestbook submissions must be 1 KB or smaller.', {
+    return apiError(413, 'payload_too_large', 'Guestbook submissions must be 4 KB or smaller.', {
       details: { max_bytes: MAX_GUESTBOOK_BODY_BYTES },
     })
   }
 
   const rawBody = await request.text()
   if (new TextEncoder().encode(rawBody).byteLength > MAX_GUESTBOOK_BODY_BYTES) {
-    return apiError(413, 'payload_too_large', 'Guestbook submissions must be 1 KB or smaller.', {
+    return apiError(413, 'payload_too_large', 'Guestbook submissions must be 4 KB or smaller.', {
       details: { max_bytes: MAX_GUESTBOOK_BODY_BYTES },
     })
   }
@@ -59,11 +60,11 @@ export async function parseGuestbookInput(request: Request): Promise<GuestbookIn
   }
 
   const fields = Object.keys(body)
-  if (fields.some((field) => field !== 'name' && field !== 'message')) {
-    return apiError(400, 'validation_error', 'Guestbook submissions accept plain-text name and message fields only.')
+  if (fields.some((field) => field !== 'name' && field !== 'message' && field !== 'turnstileToken')) {
+    return apiError(400, 'validation_error', 'Guestbook submissions accept name, message, and turnstileToken fields only.')
   }
 
-  const { name, message } = body as { name?: unknown; message?: unknown }
+  const { name, message, turnstileToken } = body as { name?: unknown; message?: unknown; turnstileToken?: unknown }
   if (typeof name !== 'string' || name.trim() === '') {
     return apiError(400, 'validation_error', 'name is required.', { details: { field: 'name' } })
   }
@@ -76,8 +77,16 @@ export async function parseGuestbookInput(request: Request): Promise<GuestbookIn
   if (message.trim().length > 280) {
     return apiError(400, 'validation_error', 'message must be 280 characters or fewer.', { details: { field: 'message', max_length: 280 } })
   }
+  if (typeof turnstileToken !== 'string' || turnstileToken.trim() === '') {
+    return apiError(400, 'validation_error', 'turnstileToken is required.', { details: { field: 'turnstileToken' } })
+  }
+  if (turnstileToken.trim().length > MAX_TURNSTILE_TOKEN_LENGTH) {
+    return apiError(400, 'validation_error', 'turnstileToken is too long.', {
+      details: { field: 'turnstileToken', max_length: MAX_TURNSTILE_TOKEN_LENGTH },
+    })
+  }
 
-  return { name: name.trim(), message: message.trim() }
+  return { name: name.trim(), message: message.trim(), turnstileToken: turnstileToken.trim() }
 }
 
 function parsePageLimit(value: string | undefined): number | null {

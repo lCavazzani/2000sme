@@ -1,5 +1,7 @@
-import { useEffect, useState, type FormEvent } from 'react'
+import { useCallback, useEffect, useState, type FormEvent } from 'react'
 import { guestbookApiUrl } from '../config/api'
+import { turnstileSiteKey } from '../config/turnstile'
+import { TurnstileWidget } from './TurnstileWidget'
 import styles from './Guestbook.module.css'
 
 type GuestbookEntry = {
@@ -33,6 +35,8 @@ export function Guestbook() {
   const [loadError, setLoadError] = useState<string | null>(null)
   const [submitError, setSubmitError] = useState<string | null>(null)
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
+  const [turnstileResetKey, setTurnstileResetKey] = useState(0)
 
   useEffect(() => {
     const controller = new AbortController()
@@ -66,6 +70,16 @@ export function Guestbook() {
     }
   }, [])
 
+  const handleTurnstileToken = useCallback((token: string) => {
+    setTurnstileToken(token)
+    setSubmitError(null)
+  }, [])
+
+  const handleTurnstileFailure = useCallback((error: string) => {
+    setTurnstileToken(null)
+    setSubmitError(error)
+  }, [])
+
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     const trimmedName = name.trim()
@@ -78,13 +92,21 @@ export function Guestbook() {
       setSubmitError('Enter both your name and a guestbook message.')
       return
     }
+    if (!turnstileSiteKey) {
+      setSubmitError('Guestbook verification is not configured yet. Please try again later.')
+      return
+    }
+    if (!turnstileToken) {
+      setSubmitError('Complete the verification before signing the guestbook.')
+      return
+    }
 
     setRequestState('submitting')
     try {
       const response = await fetch(guestbookApiUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: trimmedName, message: trimmedMessage }),
+        body: JSON.stringify({ name: trimmedName, message: trimmedMessage, turnstileToken }),
       })
 
       const payload: unknown = await response.json().catch(() => null)
@@ -103,11 +125,14 @@ export function Guestbook() {
     } catch (error) {
       setSubmitError(error instanceof Error ? error.message : 'Could not save your guestbook entry.')
     } finally {
+      setTurnstileToken(null)
+      setTurnstileResetKey((current) => current + 1)
       setRequestState('idle')
     }
   }
 
   const isSubmitting = requestState === 'submitting'
+  const turnstileConfigured = Boolean(turnstileSiteKey)
 
   return (
     <section className={styles.guestbook} aria-labelledby="guestbook-heading">
@@ -165,9 +190,19 @@ export function Guestbook() {
           disabled={isSubmitting}
           required
         />
+        {turnstileConfigured ? (
+          <TurnstileWidget
+            siteKey={turnstileSiteKey}
+            resetKey={turnstileResetKey}
+            onToken={handleTurnstileToken}
+            onFailure={handleTurnstileFailure}
+          />
+        ) : (
+          <p className={styles.error} role="status">Guestbook verification is not configured yet.</p>
+        )}
         <div className={styles.formFooter}>
           <small>{message.length}/280 characters</small>
-          <button type="submit" disabled={isSubmitting}>
+          <button type="submit" disabled={isSubmitting || !turnstileConfigured || !turnstileToken}>
             {isSubmitting ? 'Signing…' : 'Sign Guestbook'}
           </button>
         </div>

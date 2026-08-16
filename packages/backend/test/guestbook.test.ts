@@ -1,7 +1,7 @@
 import { env } from 'cloudflare:workers'
 import { createExecutionContext, waitOnExecutionContext } from 'cloudflare:test'
 import { beforeEach, describe, expect, it } from 'vitest'
-import worker from '../src'
+import { createApp } from '../src/app'
 
 type ApiError = {
   code: string
@@ -25,10 +25,11 @@ type GuestbookPage = {
 }
 
 const IncomingRequest = Request<unknown, IncomingRequestCfProperties>
+const worker = createApp(async () => ({ status: 'valid' }))
 
-async function request(path: string, init?: RequestInit): Promise<Response> {
+async function request(path: string, init?: RequestInit, app = worker): Promise<Response> {
   const context = createExecutionContext()
-  const response = await worker.fetch(new IncomingRequest(`https://example.test${path}`, init), env, context)
+  const response = await app.fetch(new IncomingRequest(`https://example.test${path}`, init), env, context)
   await waitOnExecutionContext(context)
   return response
 }
@@ -40,7 +41,7 @@ async function postGuestbook(payload: unknown, ip = '198.51.100.10') {
       'CF-Connecting-IP': ip,
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(payload),
+    body: JSON.stringify({ ...payload, turnstileToken: 'test-token' }),
   })
 }
 
@@ -130,7 +131,7 @@ describe('guestbook public-content contract', () => {
         'CF-Connecting-IP': '198.51.100.99',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ name: 'Ada', message: 'x'.repeat(2_000) }),
+      body: JSON.stringify({ name: 'Ada', message: 'x'.repeat(5_000), turnstileToken: 'test-token' }),
     })
 
     expect(oversized.status).toBe(413)
