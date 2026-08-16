@@ -27,6 +27,17 @@ const stylesheets: Record<ThemeId, string> = {
   win7: '/themes/7.css',
 }
 
+const SEMANTIC_OVERRIDE_STYLESHEET = '/themes/semantic-overrides.css'
+
+const themeCapabilities: Record<ActiveThemeId, {
+  chrome: 'bevel' | 'luna'
+  gloss: 'off' | 'on'
+  crt: 'off' | 'on'
+}> = {
+  win98: { chrome: 'bevel', gloss: 'off', crt: 'off' },
+  winxp: { chrome: 'luna', gloss: 'on', crt: 'off' },
+}
+
 const ThemeContext = createContext<{
   theme: ActiveThemeId
   setTheme: (theme: ActiveThemeId) => void
@@ -72,6 +83,27 @@ function getThemeLink() {
   return link
 }
 
+function getSemanticOverridesLink(themeLink: HTMLLinkElement) {
+  const existing = document.getElementById('os-theme-overrides')
+  const link = existing instanceof HTMLLinkElement ? existing : document.createElement('link')
+
+  link.id = 'os-theme-overrides'
+  link.dataset.osThemeOverrides = 'true'
+  link.rel = 'stylesheet'
+  link.href = SEMANTIC_OVERRIDE_STYLESHEET
+  themeLink.after(link)
+  return link
+}
+
+function applyThemeAttributes(theme: ActiveThemeId) {
+  const root = document.documentElement
+  const capabilities = themeCapabilities[theme]
+  root.dataset.osTheme = theme
+  root.dataset.themeChrome = capabilities.chrome
+  root.dataset.themeGloss = capabilities.gloss
+  root.dataset.themeCrt = capabilities.crt
+}
+
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setActiveTheme] = useState<ActiveThemeId>(readStoredTheme)
   const setTheme = useCallback((nextTheme: ActiveThemeId) => {
@@ -81,9 +113,14 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
   useLayoutEffect(() => {
     const link = getThemeLink()
+    getSemanticOverridesLink(link)
+    const reducedMotionQuery = window.matchMedia?.('(prefers-reduced-motion: reduce)')
     let disposed = false
+    const syncEffectsPreference = () => {
+      document.documentElement.dataset.themeEffects = reducedMotionQuery?.matches ? 'reduced' : 'full'
+    }
     const handleLoad = () => {
-      if (!disposed) document.documentElement.dataset.osTheme = theme
+      if (!disposed) applyThemeAttributes(theme)
     }
     const handleError = () => {
       if (!disposed && theme !== DEFAULT_THEME) {
@@ -94,16 +131,18 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
     link.addEventListener('load', handleLoad)
     link.addEventListener('error', handleError)
-    document.documentElement.dataset.osTheme = theme
+    reducedMotionQuery?.addEventListener('change', syncEffectsPreference)
+    applyThemeAttributes(theme)
+    syncEffectsPreference()
     if (link.dataset.themeId !== theme) {
       link.dataset.themeId = theme
       link.href = stylesheets[theme]
     }
-
     return () => {
       disposed = true
       link.removeEventListener('load', handleLoad)
       link.removeEventListener('error', handleError)
+      reducedMotionQuery?.removeEventListener('change', syncEffectsPreference)
     }
   }, [theme])
 

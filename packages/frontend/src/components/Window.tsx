@@ -37,6 +37,12 @@ export function Window({ id, children }: WindowProps) {
   const win = windows.find((windowState) => windowState.id === id)
   const shouldFocus = Boolean(win?.isOpen && !win?.isMinimized)
   const windowZIndex = win?.zIndex
+  const activeWindowZIndex = Math.max(
+    ...windows
+      .filter((windowState) => windowState.isOpen && !windowState.isMinimized)
+      .map((windowState) => windowState.zIndex),
+  )
+  const isActive = windowZIndex === activeWindowZIndex
 
   useEffect(() => {
     if (shouldFocus) {
@@ -115,6 +121,7 @@ export function Window({ id, children }: WindowProps) {
       <div
         ref={windowRef}
         className={`window ${styles.window}`}
+        data-window-active={isActive}
         tabIndex={-1}
         aria-label={`${win.title} window`}
         aria-keyshortcuts="Alt+F9 Alt+F10 Alt+Home Escape"

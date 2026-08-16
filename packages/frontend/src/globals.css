@@ -1,7 +1,35 @@
-:root { --w98-teal: #008080; --w98-silver: #c0c0c0; --w98-white: #dfdfdf; --w98-dark-gray: #808080; --w98-black: #000; --w98-light-gray: #efefef; --w98-highlight: #fff; --w98-shadow: #808080; --bg-primary: #008080; --bg-window: var(--w98-silver); --text-primary: var(--w98-black); --text-inverse: var(--w98-white); --border-light: var(--w98-highlight); --border-dark: var(--w98-shadow); }
-:root[data-os-theme='winxp'] { --bg-primary: #3a6ea5; }
-:root[data-os-theme='win7'] { --bg-primary: #1f609c; }
-html { cursor: url('/arrow.cur'), auto; }
-body { margin: 0; min-width: 320px; background: var(--bg-primary); color: var(--text-primary); }
-* { box-sizing: border-box; }
-html, body, #root { width: 100%; height: 100%; }
+:root {
+  --os-desktop-surface: #3a6ea5;
+  --os-desktop-fg: #fff;
+  --os-focus-ring: 2px solid #f7d04a;
+  --os-focus-offset: -3px;
+  --os-motion-duration: 160ms;
+}
+
+html {
+  cursor: url('/arrow.cur'), auto;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background: var(--os-desktop-surface);
+  color: var(--os-desktop-fg);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --os-motion-duration: 0ms;
+  }
+}
