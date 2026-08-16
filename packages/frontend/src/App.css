@@ -28,6 +28,20 @@
 .directRouteBack {
   display: inline-block;
   margin-bottom: 20px;
+  padding: 8px 12px;
+  color: var(--os-control-fg);
+  background: var(--os-window-surface);
+  border: 1px solid var(--os-control-border-color);
+  border-radius: var(--os-window-radius);
+}
+
+.directRouteBack:hover {
+  background: var(--os-control-hover-bg);
+}
+
+.directRouteBack:focus-visible {
+  outline: var(--os-focus-ring);
+  outline-offset: 3px;
 }
 
 .directRoute h1 {

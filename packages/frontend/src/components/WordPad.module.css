@@ -85,6 +85,11 @@
 }
 
 /* Format toolbar specifics */
+.toolbarLabel {
+  flex-shrink: 0;
+  font-size: 10px;
+}
+
 .fontSelect {
   width: 128px;
   height: 20px;

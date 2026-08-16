@@ -66,15 +66,17 @@
 .success {
   margin: 0;
   padding: 8px;
+  color: var(--os-control-fg, #111);
+  background: var(--os-window-surface, #fff);
   border: 1px dotted currentColor;
 }
 
 .error {
-  color: #8b0000;
+  border-color: #8b0000;
 }
 
 .success {
-  color: #075f22;
+  border-color: #075f22;
 }
 
 .spinner {

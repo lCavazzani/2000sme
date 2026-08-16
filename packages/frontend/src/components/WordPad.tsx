@@ -51,12 +51,14 @@ export function WordPad() {
 
       {/* ── Format toolbar ── */}
       <div className={styles.toolbarRow}>
-        <select className={styles.fontSelect} defaultValue="Times New Roman" title="Font">
+        <label className={styles.toolbarLabel} htmlFor="wordpad-font">Font</label>
+        <select id="wordpad-font" className={styles.fontSelect} defaultValue="Times New Roman" title="Font">
           {['Arial', 'Times New Roman', 'Courier New', 'Verdana', 'Georgia'].map((f) => (
             <option key={f}>{f}</option>
           ))}
         </select>
-        <select className={styles.sizeSelect} defaultValue="12" title="Size">
+        <label className={styles.toolbarLabel} htmlFor="wordpad-size">Size</label>
+        <select id="wordpad-size" className={styles.sizeSelect} defaultValue="12" title="Size">
           {FONT_SIZES.map((s) => (
             <option key={s}>{s}</option>
           ))}

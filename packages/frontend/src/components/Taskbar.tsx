@@ -120,7 +120,7 @@ export function Taskbar() {
           <WindowsLogo />
           <span>Start</span>
         </button>
-        <div className={styles.windowList} aria-label="Open windows">
+        <div className={styles.windowList} role="group" aria-label="Open windows">
           {openWindows.map((windowState) => {
             const isActive = windowState.id === activeWindowId
             return (
