@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState, type KeyboardEvent } from 'react'
 import { applicationsForSurface, type ApplicationId } from '../config/applicationRegistry'
 import { useWindows } from '../store/windows'
 import type { WindowState } from '../types/window'
@@ -25,12 +25,22 @@ function WindowsLogo() {
 export function Taskbar() {
   const { windows, focusWindow, minimizeWindow, restoreWindow, openWindowById } = useWindows()
   const [isStartMenuOpen, setIsStartMenuOpen] = useState(false)
+  const startButtonRef = useRef<HTMLButtonElement>(null)
+  const startMenuRef = useRef<HTMLDivElement>(null)
   const [now, setNow] = useState(() => new Date())
 
   useEffect(() => {
     const intervalId = window.setInterval(() => setNow(new Date()), 60_000)
     return () => window.clearInterval(intervalId)
   }, [])
+
+  useEffect(() => {
+    if (!isStartMenuOpen) return
+
+    window.requestAnimationFrame(() => {
+      startMenuRef.current?.querySelector<HTMLButtonElement>('[role="menuitem"]')?.focus()
+    })
+  }, [isStartMenuOpen])
 
   const openWindows = windows.filter((windowState) => windowState.isOpen)
   const activeWindowId = openWindows
@@ -62,10 +72,28 @@ export function Taskbar() {
     setIsStartMenuOpen(false)
   }
 
+  function closeStartMenu() {
+    setIsStartMenuOpen(false)
+    window.requestAnimationFrame(() => startButtonRef.current?.focus())
+  }
+
+  function handleStartMenuKeyDown(event: KeyboardEvent<HTMLDivElement>) {
+    if (event.key !== 'Escape') return
+    event.preventDefault()
+    closeStartMenu()
+  }
+
   return (
     <>
       {isStartMenuOpen && (
-        <div id="start-menu" className={styles.startMenu} role="menu" aria-label="Start menu">
+        <div
+          ref={startMenuRef}
+          id="start-menu"
+          className={styles.startMenu}
+          role="menu"
+          aria-label="Start menu"
+          onKeyDown={handleStartMenuKeyDown}
+        >
           <div className={styles.startMenuBanner}>2000sme</div>
           {applicationsForSurface('start-menu').map((application) => (
             <button
@@ -83,6 +111,7 @@ export function Taskbar() {
       )}
       <footer className={styles.taskbar} aria-label="Windows taskbar">
         <button
+          ref={startButtonRef}
           className={styles.startButton}
           aria-expanded={isStartMenuOpen}
           aria-controls="start-menu"
