@@ -35,6 +35,8 @@ export function constrainBounds(bounds: WindowBounds, viewport: Viewport): Windo
 }
 
 function withFocus(state: StoreState, id: string, update: (windowState: WindowState) => WindowState): StoreState {
+  if (!state.windows.some((windowState) => windowState.id === id)) return state
+
   const nextZ = state.topZ + 1
   return {
     topZ: nextZ,
@@ -77,21 +79,25 @@ export function windowsReducer(state: StoreState, action: Action): StoreState {
     }
 
     case 'CLOSE':
-      return {
-        ...state,
-        windows: state.windows.filter((windowState) => windowState.id !== action.id),
-      }
+      return state.windows.some((windowState) => windowState.id === action.id)
+        ? {
+            ...state,
+            windows: state.windows.filter((windowState) => windowState.id !== action.id),
+          }
+        : state
 
     case 'FOCUS':
       return withFocus(state, action.id, (windowState) => ({ ...windowState, isMinimized: false }))
 
     case 'MINIMIZE':
-      return {
-        ...state,
-        windows: state.windows.map((windowState) =>
-          windowState.id === action.id ? { ...windowState, isMinimized: true } : windowState,
-        ),
-      }
+      return state.windows.some((windowState) => windowState.id === action.id)
+        ? {
+            ...state,
+            windows: state.windows.map((windowState) =>
+              windowState.id === action.id ? { ...windowState, isMinimized: true } : windowState,
+            ),
+          }
+        : state
 
     case 'RESTORE':
       return withFocus(state, action.id, (windowState) => ({ ...windowState, isMinimized: false }))
@@ -122,19 +128,21 @@ export function windowsReducer(state: StoreState, action: Action): StoreState {
       }))
 
     case 'UPDATE_BOUNDS':
-      return {
-        ...state,
-        windows: state.windows.map((windowState) =>
-          windowState.id === action.id
-            ? {
-                ...windowState,
-                ...constrainBounds(action.bounds, action.viewport),
-                isMaximized: false,
-                restoreBounds: undefined,
-              }
-            : windowState,
-        ),
-      }
+      return state.windows.some((windowState) => windowState.id === action.id)
+        ? {
+            ...state,
+            windows: state.windows.map((windowState) =>
+              windowState.id === action.id
+                ? {
+                    ...windowState,
+                    ...constrainBounds(action.bounds, action.viewport),
+                    isMaximized: false,
+                    restoreBounds: undefined,
+                  }
+                : windowState,
+            ),
+          }
+        : state
 
     case 'CONSTRAIN_TO_VIEWPORT':
       return {
