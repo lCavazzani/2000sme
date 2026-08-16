@@ -30,3 +30,9 @@ If you are developing a production application, we recommend enabling type-aware
 ```
 
 See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+
+## Guestbook Turnstile configuration
+
+`VITE_TURNSTILE_SITE_KEY` is intentionally public browser configuration. Vite includes every `VITE_*` value in the compiled client bundle, and Cloudflare Turnstile site keys are designed to be exposed to the browser so its widget can render. Configure this value in the approved frontend build environment only; it must never contain a credential.
+
+The matching `TURNSTILE_SECRET_KEY` is a backend Worker secret and must never be passed to Vite, placed in frontend source, or committed to the repository. The guestbook submission form remains disabled until the public site key is configured, while the backend independently verifies each submitted token.

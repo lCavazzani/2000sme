@@ -62,11 +62,17 @@ pnpm --filter backend db:seed:remote
 
 ## Public Guestbook contract
 
-The public guestbook is immediately published after server-side validation. It accepts **plain-text `name` and `message` fields only**; HTML, CSS, fonts, image URLs, card decoration, rich text, uploads, and other presentation metadata are rejected or ignored by the contract. Clients must render returned fields as text, never as HTML.
+The public guestbook is immediately published after server-side validation. A submission accepts plain-text `name`, `message`, and a required `turnstileToken` verification field; only `name` and `message` are persisted. HTML, CSS, fonts, image URLs, card decoration, rich text, uploads, and other presentation metadata are rejected or ignored by the contract. Clients must render returned fields as text, never as HTML.
 
 `GET /api/guestbook` returns a newest-first page with `entries` and an opaque `page.next_cursor`. Clients may set `limit` from 1 through 50 and must use the returned cursor for continuation rather than guessing offsets. Errors always return a JSON object with an `error` message and machine-readable `code`; a `rate_limited` response also includes `Retry-After` and `retry_after_seconds`.
 
 There is no moderation dashboard in this release. Abuse reports must be escalated to the site owner through the project’s established contact channel. The owner may review and remove an entry through an approved D1 maintenance procedure, then record the action. Do not expose deletion or moderation endpoints publicly without a separate authenticated moderation ticket.
+
+### Turnstile verification
+
+Every public `POST /api/guestbook` submission must include a bounded `turnstileToken`. The Worker sends that token, along with the visitor IP when available, to Cloudflare Siteverify before it consumes rate-limit capacity or writes to D1. Invalid, expired, reused, missing, and wrong-action tokens cannot create an entry.
+
+`TURNSTILE_SECRET_KEY` is a backend-only Cloudflare Worker secret. It must be added through the approved secret-management workflow (for example, `wrangler secret put TURNSTILE_SECRET_KEY`) and must never appear in `wrangler.jsonc`, GitHub Actions YAML, `.env` files committed to the repository, client code, logs, or pull-request screenshots. The Worker fails closed if the secret or Siteverify is unavailable.
 
 ## Deploy
 
