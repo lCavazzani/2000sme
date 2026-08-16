@@ -3,7 +3,7 @@
   width: 100%;
   min-height: 100vh;
   overflow: hidden;
-  background: var(--bg-primary);
+  background: var(--os-desktop-surface);
   padding: 16px 16px 52px;
   box-sizing: border-box;
 }
@@ -21,8 +21,8 @@
   min-height: 100vh;
   box-sizing: border-box;
   padding: 24px;
-  background: var(--bg-primary);
-  color: var(--text-color, #111);
+  background: var(--os-desktop-surface);
+  color: var(--os-desktop-fg);
 }
 
 .directRouteBack {
@@ -35,7 +35,18 @@
 }
 
 @media (max-width: 640px) {
+  .desktop {
+    min-height: 100dvh;
+    overflow: auto;
+    padding: 0;
+  }
+
   .desktopIcons {
     display: none;
+  }
+
+  .directRoute {
+    min-height: 100dvh;
+    padding: 20px 16px;
   }
 }

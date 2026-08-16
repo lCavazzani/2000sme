@@ -56,3 +56,7 @@ Use `useQuery` for remote reads and `useMutation` for remote writes. New catalog
 ## Semantic theme contract
 
 THEME-10 keeps the existing runtime stylesheet swap and adds a semantic token layer for shared desktop chrome. Shared shell components use `--os-*` tokens rather than Windows-98-specific palette names, allowing the same markup to render either the sharp Windows 98 bevel grammar or rounded Windows XP/Luna chrome. The complete token, capability, state, and reduced-effects contract is documented in [`src/theme/SEMANTIC_TOKENS.md`](./src/theme/SEMANTIC_TOKENS.md).
+
+## Responsive fallback release validation
+
+FE-12 keeps the desktop metaphor for larger screens while exposing the registry-driven mobile launcher at `640px` and below. Before a release, verify each primary route—Portfolio, Resume, Guestbook, About, Contact, and Themes—at narrow widths with touch simulation and keyboard navigation. Confirm that every launcher card can receive focus and open its hash route, no essential mobile action needs hover, dragging, or double-clicking, and the direct-route return control remains reachable.

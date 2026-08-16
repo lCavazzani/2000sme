@@ -1,0 +1,27 @@
+.contact {
+  display: grid;
+  gap: 12px;
+  max-width: 42rem;
+  color: var(--os-control-fg, #111);
+}
+
+.contact h2,
+.contact p {
+  margin: 0;
+}
+
+.contact address {
+  display: grid;
+  gap: 8px;
+  font-style: normal;
+}
+
+.contact a {
+  width: fit-content;
+  color: inherit;
+}
+
+.contact a:focus-visible {
+  outline: var(--os-focus-ring, 2px solid Highlight);
+  outline-offset: 3px;
+}
