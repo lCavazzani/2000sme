@@ -1,67 +1,64 @@
-# Your Name
+# Leonardo Cavazzani
 
-**Software Engineer**<br />
-your@email.com &nbsp;·&nbsp; [github.com/username](https://github.com) &nbsp;·&nbsp; [linkedin.com/in/username](#) &nbsp;·&nbsp; City, Country
+**Senior Software Engineer**  
+*Frontend Architecture · React · Microfrontends*
 
----
-
-## Summary
-
-Replace this with a 2–3 sentence professional summary that highlights your experience, key skills, and what you bring to a team.
+Calgary, AB, Canada · (204) 403-8256 · cavazzanileonardo@gmail.com · LinkedIn
 
 ---
 
-## Experience
+## Professional Profile
 
-### Senior Software Engineer · Company Name
-*Month Year – Present · City, Country*
-
-- Led development of a scalable TypeScript monorepo serving 10M+ monthly requests using Cloudflare Workers and Hono.
-- Improved deploy pipeline reliability by migrating to GitHub Actions with automated lint, type-check, and deploy steps.
-- Built a rate-limited guestbook API backed by Cloudflare D1 (SQLite) and KV, achieving sub-50ms p99 response times.
-
-### Software Engineer · Previous Company
-*Month Year – Month Year · City, Country*
-
-- Designed and shipped a React component library adopted across 5 product teams, reducing UI inconsistency by 40%.
-- Migrated legacy REST service to GraphQL, cutting average payload size by 60%.
-- Mentored 2 junior engineers through code reviews and pairing sessions.
-
-### Junior Software Engineer · First Company
-*Month Year – Month Year · City, Country*
-
-- Contributed to a customer-facing web application built with React and Node.js used by 50K+ daily active users.
-- Fixed 30+ bugs and improved test coverage from 42% to 71%.
+Senior Software Engineer with **10 years of experience** building and modernizing web applications, with a focus on **React, TypeScript, frontend architecture, and microfrontends**. Experienced in turning complex internal workflows into scalable products, improving developer delivery systems, and partnering with engineering and product stakeholders to move work from technical direction through release. Brings hands-on breadth across frontend systems, backend integrations, cloud infrastructure, CI/CD, and observability.
 
 ---
 
-## Education
+## Technical Strengths
 
-### Bachelor of Computer Science
-**University Name** &nbsp;·&nbsp; Year – Year
-
-Relevant coursework: Algorithms & Data Structures, Operating Systems, Distributed Systems, Software Engineering.
-
----
-
-## Skills
-
-| Category | Technologies |
-|----------|-------------|
-| **Languages** | TypeScript, JavaScript, Python, Go |
-| **Frontend** | React, Vite, CSS Modules, Tailwind |
-| **Backend** | Node.js, Hono, REST, GraphQL |
-| **Cloud & Infra** | Cloudflare Workers, D1, KV, AWS, Docker |
-| **Tools** | Git, pnpm, PostgreSQL, Redis, GitHub Actions |
+**Frontend Architecture** — React, TypeScript, JavaScript, Redux, GraphQL, HTML5, CSS3, Microfrontends, Single-SPA, Module Federation  
+**Backend & APIs** — Node.js, Express, Python, Firebase, REST APIs, Java  
+**Cloud & Delivery** — AWS, S3, EC2, CloudFront, SQS, Docker, Jenkins, GitHub Actions, CI/CD, Git  
+**Quality & Product Insight** — Sentry, Google Analytics, Snowplow, A/B testing, performance optimization  
+**Data** — MySQL, MongoDB, Firebase
 
 ---
 
-## Projects
+## Professional Experience
 
-### 00sportifolio
-Personal portfolio built as a Windows 98 desktop simulation. Draggable/resizable windows, multi-theme support (Win98/XP/7), guestbook backed by Cloudflare Workers + D1, pnpm monorepo with CI/CD.<br />
-[github.com/lCavazzani/2000sme](https://github.com/lCavazzani/2000sme) · [Live demo](https://2000sme.cavazzanileonardo.workers.dev)
+### SkipTheDishes — Senior Software Engineer
+*Calgary, AB, Canada · February 2024 – Present*
+
+- Lead frontend architecture for internal platforms, shaping microfrontend foundations, project setup, delivery plans, and technical execution.
+- Build new React and TypeScript applications with Single-SPA while contributing to Module Federation initiatives across a shared frontend ecosystem.
+- Reduced build and deployment time by **30%** by improving the microfrontend delivery workflow and project structure.
+- Strengthened release reliability through Jenkins and GitHub Actions pipeline improvements, S3-based microfrontend asset hosting, and deployment configuration.
+- Implemented Sentry and analytics tooling across internal products to improve error visibility and product insight.
+- Partner with product and engineering stakeholders to scope delivery, report progress, and support systems used across **15+ countries**.
+
+### SkipTheDishes — Software Engineer
+*Winnipeg, MB, Canada · August 2018 – February 2024*
+
+- Delivered full-stack features for internal operations tools using React, TypeScript, Firebase, Node.js, Python, and AWS.
+- Led modernization of legacy internal tools, improving maintainability, frontend quality, and day-to-day user experience.
+- Migrated Python-based systems to modern React applications, establishing a more sustainable frontend stack for operational workflows.
+- Helped introduce and establish microfrontend architecture for internal platforms.
+- Built a React call-centre automation tool with live Firebase data, simplifying a critical internal workflow.
+- Worked across frontend development, backend integrations, and infrastructure, including EC2, CloudFront, SQS, Jenkins, and Git.
+
+### Learn to Fly — Fullstack Developer
+*São Paulo, Brazil · October 2017 – March 2018*
+
+- Built a dashboard application using React, React Native, Node.js, Express, and MongoDB.
+
+### Carreira Beauty — Android Developer
+*Brazil · October 2016 – October 2017*
+
+- Developed and maintained a native Android application in Java, with a focus on product quality and user experience.
 
 ---
 
-*References available upon request.*
+## Education & Certification
+
+**FIAP** — Bachelor’s Degree, Computer Engineering · 2013 – 2017  
+**Udacity** — React Developer Nanodegree · 2017 – 2018
+
