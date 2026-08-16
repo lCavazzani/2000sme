@@ -10,6 +10,14 @@ pnpm --filter backend test
 pnpm --filter backend cf-typegen
 ```
 
+## Tests
+
+`vitest.config.ts` runs the suite through `@cloudflare/vitest-pool-workers` using `wrangler.jsonc`. `test/setup.ts` applies the D1 migrations to an isolated database before every test and resets worker state afterward. Tests must use these runtime fixtures and never depend on production secrets, D1 data, or KV contents. `test/health.test.ts` is the package smoke test; guestbook tests cover public API behavior.
+
+```bash
+pnpm --filter backend test
+```
+
 ## Structure
 
 The Worker uses a small domain-oriented structure rather than a single large route file.

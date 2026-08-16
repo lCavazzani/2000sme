@@ -5,7 +5,7 @@ This template provides a minimal setup to get React working in Vite with HMR and
 Currently, two official plugins are available:
 
 - [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/)
 
 ## React Compiler
 
@@ -36,3 +36,11 @@ See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rule
 `VITE_TURNSTILE_SITE_KEY` is intentionally public browser configuration. Vite includes every `VITE_*` value in the compiled client bundle, and Cloudflare Turnstile site keys are designed to be exposed to the browser so its widget can render. Configure this value in the approved frontend build environment only; it must never contain a credential.
 
 The matching `TURNSTILE_SECRET_KEY` is a backend Worker secret and must never be passed to Vite, placed in frontend source, or committed to the repository. The guestbook submission form remains disabled until the public site key is configured, while the backend independently verifies each submitted token.
+
+## Tests
+
+Vitest reads the `test` configuration from `vite.config.ts`, runs frontend tests in jsdom, and loads `src/test/setup.ts`. The setup file enables `@testing-library/jest-dom` matchers and performs React Testing Library cleanup after every test. Use `@testing-library/react` and `@testing-library/user-event` for behavior-focused component tests; assert user-visible output and interactions rather than component internals.
+
+```bash
+pnpm --filter 00sfrontend test
+```

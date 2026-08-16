@@ -7,8 +7,8 @@ on:
       - master
 
 jobs:
-  lint:
-    name: Lint
+  quality:
+    name: Lint, test, and build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -28,9 +28,15 @@ jobs:
       - name: Lint frontend
         run: pnpm --filter 00sfrontend lint
 
+      - name: Run workspace tests
+        run: pnpm test
+
+      - name: Build frontend
+        run: pnpm --filter 00sfrontend build
+
   deploy-backend:
     name: Deploy Backend
-    needs: lint
+    needs: quality
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -57,7 +63,7 @@ jobs:
 
   deploy-frontend:
     name: Deploy Frontend
-    # needs: deploy-backend
+    needs: quality
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -73,9 +79,6 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-
-      - name: Build
-        run: pnpm --filter 00sfrontend build
 
       - name: Deploy to Cloudflare Workers
         uses: cloudflare/wrangler-action@v3
