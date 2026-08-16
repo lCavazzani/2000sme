@@ -1,12 +1,15 @@
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
-import { guestbookRoutes } from './domains/guestbook/guestbook.routes'
+import { createGuestbookRoutes } from './domains/guestbook/guestbook.routes'
+import type { TurnstileVerifier } from './domains/guestbook/turnstile.service'
+import { securityHeaders } from './shared/security-headers'
 
 const ALLOWED_ORIGINS = ['https://2000sme.cavazzanileonardo.workers.dev']
 
-export function createApp() {
+export function createApp(verifyTurnstileToken?: TurnstileVerifier) {
   const app = new Hono<{ Bindings: CloudflareBindings }>()
 
+  app.use('*', securityHeaders)
   app.use(
     '*',
     cors({
@@ -22,7 +25,7 @@ export function createApp() {
 
   app.get('/', (c) => c.text('Hello Hono!'))
   app.get('/api/health', (c) => c.text('ok'))
-  app.route('/api/guestbook', guestbookRoutes)
+  app.route('/api/guestbook', createGuestbookRoutes(verifyTurnstileToken))
 
   return app
 }

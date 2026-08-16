@@ -43,9 +43,22 @@ This installs dependencies for all packages from the root.
 To run a script in a single package:
 
 ```bash
-pnpm --filter @sportifolio/frontend dev
-pnpm --filter @sportifolio/backend dev
+pnpm --filter 00sfrontend dev
+pnpm --filter backend dev
 ```
+
+## Local quality checks
+
+Run the following commands before opening a pull request. The quality workflow runs the same lint, test, and build checks for every pull request, and the deployment workflow runs them again before either production deployment job.
+
+| Command | Purpose | When to run |
+|---|---|---|
+| `pnpm --filter 00sfrontend lint` | Runs Oxlint against frontend source. | After changing frontend TypeScript or styles. |
+| `pnpm test` | Runs every package test suite from the workspace root. | Before every pull request. |
+| `pnpm --filter 00sfrontend build` | Type-checks and builds the static frontend Worker asset bundle. | After changing frontend code or build configuration. |
+| `pnpm --filter backend test` | Runs backend API tests in the Cloudflare Workers runtime with isolated D1 and KV bindings. | After changing API, persistence, middleware, or Worker configuration. |
+
+The frontend suite runs in jsdom with React Testing Library, `user-event`, and `jest-dom` matchers. The backend suite uses `@cloudflare/vitest-pool-workers` with the Worker configuration and local migration fixtures. Tests must use fixtures or runtime bindings rather than production credentials or production data.
 
 ## Packages
 
