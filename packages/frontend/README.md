@@ -60,3 +60,7 @@ THEME-10 keeps the existing runtime stylesheet swap and adds a semantic token la
 ## Responsive fallback release validation
 
 FE-12 keeps the desktop metaphor for larger screens while exposing the registry-driven mobile launcher at `640px` and below. Before a release, verify each primary route—Portfolio, Resume, Guestbook, About, Contact, and Themes—at narrow widths with touch simulation and keyboard navigation. Confirm that every launcher card can receive focus and open its hash route, no essential mobile action needs hover, dragging, or double-clicking, and the direct-route return control remains reachable.
+
+## Browser accessibility regression checks
+
+Run `pnpm --filter 00sfrontend test:a11y` to execute the Chromium Playwright suite with `@axe-core/playwright`. It scans the Windows XP first-visit desktop and Start menu, a Windows 98 stored-preference window, and the direct Guestbook route. The suite blocks new serious or critical automated findings; pair it with the required manual review in [`../../docs/quality/accessibility-release-checklist.md`](../../docs/quality/accessibility-release-checklist.md).
