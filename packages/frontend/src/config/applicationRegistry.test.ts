@@ -55,7 +55,7 @@ describe('applicationRegistry', () => {
     }
 
     expect(applicationsForSurface('desktop').map((application) => application.id)).toEqual([
-      'my-computer',
+      'portfolio',
       'resume',
       'guestbook',
       'about-me',
