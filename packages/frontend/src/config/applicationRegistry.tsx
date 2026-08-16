@@ -1,5 +1,6 @@
 import type { ComponentType } from 'react'
 import { AppearanceThemesWindow } from '../components/AppearanceThemesWindow'
+import { Contact } from '../components/Contact'
 import { FileExplorer } from '../components/FileExplorer'
 import { Guestbook } from '../components/Guestbook'
 import { WordPad } from '../components/WordPad'
@@ -15,6 +16,7 @@ export type ApplicationId =
   | 'resume'
   | 'guestbook'
   | 'about-me'
+  | 'contact'
   | 'appearance-themes'
 
 export type ApplicationDefinition = WindowConfig & {
@@ -118,6 +120,22 @@ export const applicationRegistry = [
     y: 152,
     width: 420,
     height: 320,
+  }),
+  defineApplication({
+    id: 'contact',
+    label: 'Contact',
+    title: 'Contact Leonardo',
+    category: 'career',
+    icon: '/desktop-icons/about-me.svg',
+    mobileLabel: 'Contact',
+    path: '#/apps/contact',
+    capability: 'desktop-window',
+    launchSurfaces: ['start-menu', 'mobile'],
+    x: 224,
+    y: 168,
+    width: 420,
+    height: 280,
+    renderer: Contact,
   }),
   defineApplication({
     id: 'appearance-themes',

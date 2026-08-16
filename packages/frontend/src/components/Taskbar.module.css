@@ -157,6 +157,12 @@
   background: var(--os-control-selected-bg);
 }
 
+@media (max-width: 640px) {
+  .taskbar {
+    display: none;
+  }
+}
+
 @media (max-width: 480px) {
   .windowButton {
     min-width: 84px;

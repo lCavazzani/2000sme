@@ -4,24 +4,65 @@
 
 @media (max-width: 640px) {
   .mobileLauncher {
+    min-height: 100dvh;
+    display: grid;
+    align-content: start;
+    gap: 20px;
+    padding: 28px 16px 36px;
+    color: var(--os-desktop-fg);
+    background: var(--os-desktop-surface);
+  }
+
+  .introduction {
+    display: grid;
+    gap: 8px;
+  }
+
+  .introduction h1,
+  .introduction p {
+    margin: 0;
+  }
+
+  .introduction h1 {
+    font-size: clamp(1.5rem, 7vw, 2rem);
+  }
+
+  .entries {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 8px;
-    padding: 12px;
+    gap: 10px;
   }
 
   .entry {
+    min-height: 52px;
     display: flex;
     align-items: center;
     gap: 8px;
-    min-height: 44px;
-    padding: 8px;
-    color: inherit;
+    padding: 10px;
+    color: var(--os-control-fg);
     text-decoration: none;
+    background: var(--os-window-surface);
+    border: 1px solid var(--os-control-border-color);
+    border-radius: min(8px, var(--os-window-radius));
+    box-shadow: var(--os-control-inset);
+  }
+
+  .entry:hover {
+    background: var(--os-control-hover-bg);
+  }
+
+  .entry:active {
+    background: var(--os-control-pressed-bg);
   }
 
   .entry:focus-visible {
-    outline: 2px solid Highlight;
-    outline-offset: 2px;
+    outline: var(--os-focus-ring);
+    outline-offset: 3px;
+  }
+}
+
+@media (max-width: 360px) {
+  .entries {
+    grid-template-columns: 1fr;
   }
 }
