@@ -51,8 +51,16 @@ describe('Turnstile-protected guestbook submissions', () => {
     expect((await env.portfolio_db.prepare('SELECT COUNT(*) AS count FROM guestbook').first<{ count: number }>())?.count).toBe(0)
   })
 
-  it('rejects an invalid or reused Turnstile token before a guestbook entry is created', async () => {
-    const response = await submit('invalid')
+  it('rejects an invalid Turnstile token before a guestbook entry is created', async () => {
+    const response = await submit('invalid', 'invalid-token')
+
+    expect(response.status).toBe(400)
+    expect(await response.json()).toMatchObject({ code: 'turnstile_verification_failed' })
+    expect((await env.portfolio_db.prepare('SELECT COUNT(*) AS count FROM guestbook').first<{ count: number }>())?.count).toBe(0)
+  })
+
+  it('rejects a verifier-reported reused Turnstile token before a guestbook entry is created', async () => {
+    const response = await submit('invalid', 'reused-token')
 
     expect(response.status).toBe(400)
     expect(await response.json()).toMatchObject({ code: 'turnstile_verification_failed' })

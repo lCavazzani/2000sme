@@ -228,6 +228,7 @@ describe('guestbook public-content contract', () => {
 
     expect(oversized.status).toBe(413)
     expect((await oversized.json()) as ApiError).toMatchObject({ code: 'payload_too_large' })
+    expect(await guestbookCount()).toBe(4)
   })
 
   it('returns a structured service error when the guestbook query cannot run', async () => {
