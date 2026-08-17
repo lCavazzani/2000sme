@@ -5,7 +5,7 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  background: var(--w98-silver, #c0c0c0);
+  background: var(--os-app-toolbar-surface);
   font-family: var(--sans, 'MS Sans Serif', Arial, sans-serif);
   font-size: 11px;
 }
@@ -16,9 +16,9 @@
   align-items: center;
   gap: 4px;
   padding: 2px 4px;
-  border-bottom: 1px solid var(--border-dark, #808080);
+  border-bottom: 1px solid var(--os-app-divider);
   flex-shrink: 0;
-  background: var(--w98-silver, #c0c0c0);
+  background: var(--os-app-toolbar-surface);
 }
 
 .navBtn {
@@ -50,9 +50,10 @@
   padding: 0 4px;
   font-family: inherit;
   font-size: 11px;
-  box-shadow: inset -1px -1px 0 #fff, inset 1px 1px 0 #808080;
+  box-shadow: var(--os-app-inset-shadow);
   border: none;
-  background: #fff;
+  color: var(--os-control-fg);
+  background: var(--os-app-content-surface);
   cursor: url('/arrow.cur'), auto;
 }
 
@@ -60,7 +61,7 @@
   display: flex;
   gap: 1px;
   padding-left: 6px;
-  border-left: 1px solid var(--border-dark, #808080);
+  border-left: 1px solid var(--os-app-divider);
   flex-shrink: 0;
 }
 
@@ -73,7 +74,7 @@
 }
 
 .viewActive {
-  box-shadow: inset 1px 1px 0 #808080, inset -1px -1px 0 #fff !important;
+  box-shadow: var(--os-control-inset) !important;
 }
 
 /* ── Two-pane body ──────────────────────────────────────── */
@@ -90,7 +91,7 @@
   flex-shrink: 0;
   overflow-y: auto;
   overflow-x: hidden;
-  background: #fff;
+  background: var(--os-app-content-surface);
   padding: 0;
 }
 
@@ -108,20 +109,20 @@
 }
 
 .treeLeaf:hover {
-  background: rgba(0, 0, 128, 0.1);
+  background: var(--os-app-selection-hover);
 }
 
 .treeLeafSelected {
-  background: #000080 !important;
-  color: #fff !important;
+  background: var(--os-app-selection-bg) !important;
+  color: var(--os-app-selection-fg) !important;
 }
 
 .divider {
   width: 3px;
-  background: var(--w98-silver, #c0c0c0);
+  background: var(--os-app-toolbar-surface);
   flex-shrink: 0;
-  border-left: 1px solid var(--border-dark, #808080);
-  border-right: 1px solid #fff;
+  border-left: 1px solid var(--os-app-divider);
+  border-right: 1px solid var(--os-app-content-surface);
   cursor: ew-resize;
 }
 
@@ -129,7 +130,7 @@
   flex: 1;
   min-width: 0;
   overflow: auto;
-  background: #fff;
+  background: var(--os-app-content-surface);
   padding: 4px;
 }
 
@@ -159,14 +160,14 @@
 }
 
 .folder:hover {
-  border-color: #000080;
-  background: rgba(0, 0, 128, 0.05);
+  border-color: var(--os-app-selection-bg);
+  background: var(--os-app-selection-hover);
 }
 
 .folderSelected {
-  background: #000080 !important;
-  color: #fff !important;
-  border-color: #000080 !important;
+  background: var(--os-app-selection-bg) !important;
+  color: var(--os-app-selection-fg) !important;
+  border-color: var(--os-app-selection-bg) !important;
 }
 
 .folderIcon {
@@ -193,9 +194,9 @@
 .listTable th {
   text-align: left;
   padding: 1px 8px;
-  border-bottom: 2px solid var(--border-dark, #808080);
-  border-right: 1px solid var(--border-dark, #808080);
-  background: var(--w98-silver, #c0c0c0);
+  border-bottom: 2px solid var(--os-app-divider);
+  border-right: 1px solid var(--os-app-divider);
+  background: var(--os-app-toolbar-surface);
   font-weight: normal;
   white-space: nowrap;
   position: sticky;
@@ -211,12 +212,12 @@
 }
 
 .listTable tbody tr:hover td {
-  background: rgba(0, 0, 128, 0.08);
+  background: var(--os-app-selection-hover);
 }
 
 .rowSelected td {
-  background: #000080 !important;
-  color: #fff !important;
+  background: var(--os-app-selection-bg) !important;
+  color: var(--os-app-selection-fg) !important;
 }
 
 .nameCell {
