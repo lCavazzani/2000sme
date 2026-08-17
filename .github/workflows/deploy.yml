@@ -6,6 +6,9 @@ on:
       - main
       - master
 
+permissions:
+  contents: read
+
 jobs:
   quality:
     name: Lint, test, and build
@@ -90,3 +93,27 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           workingDirectory: packages/frontend
           command: deploy
+
+  release-evidence:
+    name: Publish Release Evidence
+    needs:
+      - deploy-backend
+      - deploy-frontend
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out release source
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Generate release evidence
+        env:
+          PUBLIC_FRONTEND_URL: https://2000sme.cavazzanileonardo.workers.dev
+          PUBLIC_BACKEND_URL: https://00sbackedn.cavazzanileonardo.workers.dev
+        run: node scripts/generate-release-evidence.mjs
+      - name: Publish release-evidence artifact
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: release-evidence
+          path: release-evidence
+          if-no-files-found: error
+          retention-days: 90
+      - name: Add release evidence to workflow summary
+        run: cat release-evidence/release-summary.md >> "$GITHUB_STEP_SUMMARY"
