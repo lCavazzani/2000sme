@@ -54,10 +54,6 @@ export function WordPad() {
       </div>
 
       <div className={styles.primaryActionBar} aria-label="Resume download">
-        <div>
-          <p className={styles.previewEyebrow}>Read-only resume preview</p>
-          <p className={styles.downloadHint}>Save the approved resume from the print dialog as a PDF.</p>
-        </div>
         <button
           type="button"
           className={styles.primaryDownload}
