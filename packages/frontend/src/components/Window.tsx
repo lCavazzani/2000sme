@@ -45,9 +45,20 @@ export function Window({ id, children }: WindowProps) {
   const isActive = windowZIndex === activeWindowZIndex
 
   useEffect(() => {
-    if (shouldFocus) {
-      window.requestAnimationFrame(() => windowRef.current?.focus({ preventScroll: true }))
-    }
+    if (!shouldFocus) return
+
+    const frame = window.requestAnimationFrame(() => {
+      const windowElement = windowRef.current
+      if (!windowElement) return
+
+      // A pointer interaction can raise this window before the browser focuses
+      // a descendant form control. Preserve that real control focus instead of
+      // returning focus to the dialog container after the state update.
+      if (windowElement.contains(document.activeElement)) return
+      windowElement.focus({ preventScroll: true })
+    })
+
+    return () => window.cancelAnimationFrame(frame)
   }, [shouldFocus, windowZIndex])
 
   const minimize = useCallback(() => {
