@@ -66,3 +66,10 @@ FE-12 keeps the desktop metaphor for larger screens while exposing the registry-
 ## Browser accessibility regression checks
 
 Run `pnpm --filter 00sfrontend test:a11y` to execute the Chromium Playwright suite with `@axe-core/playwright`. It scans the Windows XP first-visit desktop and Start menu, a Windows 98 stored-preference window, and the direct Guestbook route. The suite blocks new serious or critical automated findings; pair it with the required manual review in [`../../docs/quality/accessibility-release-checklist.md`](../../docs/quality/accessibility-release-checklist.md).
+
+
+## Visitor Scrapbook
+
+FE-17 presents the Guestbook application as **Visitor Scrapbook** while preserving the `guestbook` application ID and `#/apps/guestbook` route. It consumes only `useGuestbookEntries` and `useCreateGuestbookEntry` from `src/api/guestbook.ts`; presentation components must not call `fetch`, construct API URLs, or parse raw response data. The interface uses Read notes and Leave a note tabs, an ordered feed with article, heading, message, and time semantics, typed-query loading/error/retry states, inline client validation, Turnstile-gated duplicate-submit prevention, and an effects-independent live/status contract.
+
+Keep the direct route readable at narrow widths and preserve the larger desktop window bounds in the registry. `src/components/Guestbook.test.tsx` and `e2e/visitor-scrapbook.spec.ts` cover the semantic feed, composer focus/validation, typed error retry, active theme compatibility, and mobile layout.

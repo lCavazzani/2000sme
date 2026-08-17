@@ -8,7 +8,7 @@ const ACTIVE_THEMES = [
 const CORE_APPLICATIONS = [
   { shortcut: 'Alt+1', windowName: 'My Portfolio window' },
   { shortcut: 'Alt+3', windowName: 'resume.md - WordPad window' },
-  { shortcut: 'Alt+4', windowName: 'Guestbook window' },
+  { shortcut: 'Alt+4', windowName: 'Visitor Scrapbook window' },
   { shortcut: 'Alt+5', windowName: 'About Me window' },
   { shortcut: 'Alt+6', windowName: 'Appearance & Themes window' },
 ] as const
@@ -62,16 +62,14 @@ test.describe('supported theme compatibility', () => {
       await visitInTheme(page, theme.id)
       await page.keyboard.press('Alt+1')
 
-      const maximizeControl = page.getByRole('button', { name: 'Maximize window' })
-      await expect(maximizeControl.locator('svg[data-window-control-glyph="maximize"] rect')).toBeVisible()
-      await maximizeControl.hover()
-      await maximizeControl.focus()
-      await expect(maximizeControl.locator('svg[data-window-control-glyph="maximize"]')).toHaveCSS('stroke', /rgb\(/)
+      const maximizeControl = page.getByRole('button', { name: 'Maximize' })
+      await expect(maximizeControl).toBeVisible()
+      await expect(maximizeControl).toHaveCSS('background-image', /url\(/)
 
       await maximizeControl.click()
-      const restoreControl = page.getByRole('button', { name: 'Restore window' })
-      await expect(restoreControl.locator('svg[data-window-control-glyph="restore"] rect')).toBeVisible()
-      await expect(restoreControl.locator('svg[data-window-control-glyph="restore"] path')).toBeVisible()
+      const restoreControl = page.getByRole('button', { name: 'Restore' })
+      await expect(restoreControl).toBeVisible()
+      await expect(restoreControl).toHaveCSS('background-image', /url\(/)
     })
 
     test(`${theme.id} presents an accessible two-column Start menu with a narrow fallback`, async ({ page }) => {
@@ -117,7 +115,7 @@ test.describe('supported theme compatibility', () => {
       await expect(mobileLauncher.getByRole('link')).toHaveCount(7)
       await expect(mobileLauncher.getByRole('link', { name: /Portfolio/ })).toBeVisible()
       await expect(mobileLauncher.getByRole('link', { name: /Resume/ })).toBeVisible()
-      await expect(mobileLauncher.getByRole('link', { name: /Guestbook/ })).toBeVisible()
+      await expect(mobileLauncher.getByRole('link', { name: /Scrapbook/ })).toBeVisible()
       await expect(mobileLauncher.getByRole('link', { name: /About/ })).toBeVisible()
       await expect(mobileLauncher.getByRole('link', { name: /Themes/ })).toBeVisible()
     })

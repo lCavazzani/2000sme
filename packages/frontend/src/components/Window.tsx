@@ -45,9 +45,20 @@ export function Window({ id, children }: WindowProps) {
   const isActive = windowZIndex === activeWindowZIndex
 
   useEffect(() => {
-    if (shouldFocus) {
-      window.requestAnimationFrame(() => windowRef.current?.focus({ preventScroll: true }))
-    }
+    if (!shouldFocus) return
+
+    const frame = window.requestAnimationFrame(() => {
+      const windowElement = windowRef.current
+      if (!windowElement) return
+
+      // A pointer interaction can raise this window before the browser focuses
+      // a descendant form control. Preserve that real control focus instead of
+      // returning focus to the dialog container after the state update.
+      if (windowElement.contains(document.activeElement)) return
+      windowElement.focus({ preventScroll: true })
+    })
+
+    return () => window.cancelAnimationFrame(frame)
   }, [shouldFocus, windowZIndex])
 
   const minimize = useCallback(() => {
@@ -145,24 +156,11 @@ export function Window({ id, children }: WindowProps) {
               onClick={minimize}
             />
             <button
-              className={styles.maximizeControl}
-              data-window-control={win.isMaximized ? 'restore' : 'maximize'}
-              aria-label={win.isMaximized ? 'Restore window' : 'Maximize window'}
+              aria-label={win.isMaximized ? 'Restore' : 'Maximize'}
               aria-keyshortcuts="Alt+F10"
               onMouseDown={(event) => event.stopPropagation()}
               onClick={() => toggleMaximizeWindow(id)}
-            >
-              {win.isMaximized ? (
-                <svg className={styles.windowControlGlyph} data-window-control-glyph="restore" viewBox="0 0 16 16" aria-hidden="true">
-                  <rect x="5" y="3" width="8" height="8" />
-                  <path d="M3 5v8h8" />
-                </svg>
-              ) : (
-                <svg className={styles.windowControlGlyph} data-window-control-glyph="maximize" viewBox="0 0 16 16" aria-hidden="true">
-                  <rect x="4" y="4" width="8" height="8" />
-                </svg>
-              )}
-            </button>
+            />
             <button
               aria-label="Close"
               aria-keyshortcuts="Escape"
