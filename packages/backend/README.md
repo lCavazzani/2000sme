@@ -87,3 +87,11 @@ Every public `POST /api/guestbook` submission must include a bounded `turnstileT
 ```bash
 pnpm --filter backend deploy
 ```
+
+## Public Projects Catalog contract
+
+`GET /api/projects` exposes the published project catalog as compact cards. Cards are ordered by `sort_order` ascending, then `project_year` descending and `slug` ascending as a deterministic tie-breaker. Each card contains only `slug`, `name`, `summary`, `year`, `thumbnail`, and ordered `technologies`; it intentionally omits the longer description and external links.
+
+`GET /api/projects/:slug` returns the same published-card fields plus `description` and ordered `links`. Both endpoints query the `published_projects` view rather than the base table, so draft records cannot enter the public response. Unknown and unpublished slugs return the same structured `404` response with `code: "project_not_found"`; no response reveals whether a private project exists.
+
+Successful catalog responses use `Cache-Control: public, max-age=300, stale-while-revalidate=86400`. The existing global CORS and security-header middleware applies to the catalog unchanged. `test/projects.test.ts` is the BE-7 Workers-runtime baseline; TEST-9 adds the broader fixture and contract-regression suite.
