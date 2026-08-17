@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useCallback, useMemo, useState, type ReactNode } from 'react'
 import { marked } from 'marked'
 import resumeContent from '../content/resume.md?raw'
 import { openPrintWindow } from '../utils/pdfGenerator'
@@ -7,84 +7,120 @@ import styles from './WordPad.module.css'
 marked.use({ gfm: true, breaks: false })
 
 const FONT_SIZES = [8, 9, 10, 11, 12, 14, 16, 18, 20, 24, 28, 36, 48, 72]
+const MENU_ITEMS = ['File', 'Edit', 'View', 'Insert', 'Format', 'Help']
+const TOOLBAR_ITEMS = [
+  { label: 'New', icon: '📄' },
+  { label: 'Open', icon: '📁' },
+  { label: 'Save', icon: '💾' },
+  { label: 'Print', icon: '⏎' },
+  { label: 'Print Preview', icon: '🔎' },
+  { label: 'Find', icon: '🔍' },
+  { label: 'Cut', icon: '✂' },
+  { label: 'Copy', icon: '📋' },
+  { label: 'Paste', icon: '📌' },
+  { label: 'Undo', icon: '↩' },
+  { label: 'Date / Time', icon: '🕰' },
+] as const
+
+function DisabledPreviewButton({ label, children }: { label: string; children: ReactNode }) {
+  return (
+    <button type="button" disabled aria-label={`${label} (unavailable in resume preview)`} title={`${label} is unavailable in this read-only preview`}>
+      {children}
+    </button>
+  )
+}
 
 export function WordPad() {
   const html = useMemo(() => marked.parse(resumeContent) as string, [])
+  const [downloadStatus, setDownloadStatus] = useState<string | null>(null)
+
+  const downloadResume = useCallback(() => {
+    const didOpen = openPrintWindow(html)
+    setDownloadStatus(
+      didOpen
+        ? 'The resume print dialog opened in a new window. Choose Save as PDF to download it.'
+        : 'The resume download could not open. Allow pop-ups for this site, then try again.',
+    )
+  }, [html])
 
   return (
-    <div className={styles.root}>
-      {/* ── Menu bar ── */}
-      <div className={styles.menuBar}>
-        {['File', 'Edit', 'View', 'Insert', 'Format', 'Help'].map((item) => (
-          <button key={item} className={styles.menuItem}>
+    <section className={styles.root} aria-label="Resume viewer">
+      <div className={styles.menuBar} aria-label="WordPad preview menu">
+        {MENU_ITEMS.map((item) => (
+          <button key={item} type="button" className={styles.menuItem} disabled title={`${item} is unavailable in this read-only preview`}>
             {item}
           </button>
         ))}
       </div>
 
-      {/* ── Main toolbar ── */}
-      <div className={styles.toolbarRow}>
-        <button title="New">&#128196;</button>
-        <button title="Open">&#128193;</button>
-        <button title="Save">&#128190;</button>
-        <div role="separator" />
-        <button title="Print">&#9113;</button>
-        <button title="Print Preview">&#128270;</button>
-        <div role="separator" />
+      <div className={styles.primaryActionBar} aria-label="Resume download">
         <button
-          title="Download as PDF"
-          className={styles.pdfBtn}
-          onClick={() => openPrintWindow(html)}
+          type="button"
+          className={styles.primaryDownload}
+          onClick={downloadResume}
+          aria-describedby="resume-download-help"
         >
-          &#11015; PDF
+          <span aria-hidden="true" className={styles.downloadIcon}>↓</span>
+          Download resume (PDF)
         </button>
+      </div>
+      <p id="resume-download-help" className={styles.srOnly}>Opens the resume in a print dialog where you can save it as a PDF.</p>
+      {downloadStatus && (
+        <p className={styles.downloadStatus} role={downloadStatus.startsWith('The resume download could') ? 'alert' : 'status'}>
+          {downloadStatus}
+        </p>
+      )}
+
+      <div className={styles.toolbarRow} aria-label="Read-only document toolbar">
+        {TOOLBAR_ITEMS.slice(0, 3).map((item) => (
+          <DisabledPreviewButton key={item.label} label={item.label}>{item.icon}</DisabledPreviewButton>
+        ))}
         <div role="separator" />
-        <button title="Find">&#128269;</button>
+        {TOOLBAR_ITEMS.slice(3, 5).map((item) => (
+          <DisabledPreviewButton key={item.label} label={item.label}>{item.icon}</DisabledPreviewButton>
+        ))}
         <div role="separator" />
-        <button title="Cut">&#9988;</button>
-        <button title="Copy">&#128203;</button>
-        <button title="Paste">&#128204;</button>
-        <button title="Undo">&#8617;</button>
+        {TOOLBAR_ITEMS.slice(5, 6).map((item) => (
+          <DisabledPreviewButton key={item.label} label={item.label}>{item.icon}</DisabledPreviewButton>
+        ))}
         <div role="separator" />
-        <button title="Date / Time">&#128336;</button>
+        {TOOLBAR_ITEMS.slice(6, 10).map((item) => (
+          <DisabledPreviewButton key={item.label} label={item.label}>{item.icon}</DisabledPreviewButton>
+        ))}
+        <div role="separator" />
+        {TOOLBAR_ITEMS.slice(10).map((item) => (
+          <DisabledPreviewButton key={item.label} label={item.label}>{item.icon}</DisabledPreviewButton>
+        ))}
       </div>
 
-      {/* ── Format toolbar ── */}
-      <div className={styles.toolbarRow}>
+      <div className={styles.toolbarRow} aria-label="Read-only format toolbar">
         <label className={styles.toolbarLabel} htmlFor="wordpad-font">Font</label>
-        <select id="wordpad-font" className={styles.fontSelect} defaultValue="Times New Roman" title="Font">
-          {['Arial', 'Times New Roman', 'Courier New', 'Verdana', 'Georgia'].map((f) => (
-            <option key={f}>{f}</option>
+        <select id="wordpad-font" className={styles.fontSelect} defaultValue="Times New Roman" disabled>
+          {['Arial', 'Times New Roman', 'Courier New', 'Verdana', 'Georgia'].map((font) => (
+            <option key={font}>{font}</option>
           ))}
         </select>
         <label className={styles.toolbarLabel} htmlFor="wordpad-size">Size</label>
-        <select id="wordpad-size" className={styles.sizeSelect} defaultValue="12" title="Size">
-          {FONT_SIZES.map((s) => (
-            <option key={s}>{s}</option>
+        <select id="wordpad-size" className={styles.sizeSelect} defaultValue="12" disabled>
+          {FONT_SIZES.map((size) => (
+            <option key={size}>{size}</option>
           ))}
         </select>
         <div role="separator" />
-        <button title="Bold" className={styles.fmtBtn}>
-          <b>B</b>
-        </button>
-        <button title="Italic" className={styles.fmtBtn}>
-          <i>I</i>
-        </button>
-        <button title="Underline" className={styles.fmtBtn}>
-          <u>U</u>
-        </button>
+        <DisabledPreviewButton label="Bold"><b>B</b></DisabledPreviewButton>
+        <DisabledPreviewButton label="Italic"><i>I</i></DisabledPreviewButton>
+        <DisabledPreviewButton label="Underline"><u>U</u></DisabledPreviewButton>
         <div role="separator" />
-        <button title="Colour" className={`${styles.fmtBtn} ${styles.colourBtn}`}>A</button>
+        <DisabledPreviewButton label="Colour"><span className={styles.colourBtn}>A</span></DisabledPreviewButton>
         <div role="separator" />
-        <button title="Align Left" className={styles.fmtBtn}>&#8676;</button>
-        <button title="Centre" className={styles.fmtBtn}>&#8596;</button>
-        <button title="Align Right" className={styles.fmtBtn}>&#8677;</button>
+        <DisabledPreviewButton label="Align Left">⇤</DisabledPreviewButton>
+        <DisabledPreviewButton label="Centre">↔</DisabledPreviewButton>
+        <DisabledPreviewButton label="Align Right">⇥</DisabledPreviewButton>
         <div role="separator" />
-        <button title="Bullet List" className={styles.fmtBtn}>&#8801;</button>
+        <DisabledPreviewButton label="Bullet List">≡</DisabledPreviewButton>
       </div>
 
-      {/* ── Document area ── */}
-      <div className={styles.docArea}>
+      <div className={styles.docArea} data-resume-document-area>
         <div
           className={styles.page}
           // eslint-disable-next-line react/no-danger
@@ -92,11 +128,22 @@ export function WordPad() {
         />
       </div>
 
-      {/* ── Status bar ── */}
-      <div className="status-bar">
-        <p className="status-bar-field">For Help, press F1</p>
-        <p className="status-bar-field">NUM</p>
+      <button
+        type="button"
+        className={styles.floatingDownload}
+        onClick={downloadResume}
+        aria-describedby="resume-download-help"
+        aria-label="Download resume (PDF) — persistent action"
+        title="Download resume (PDF)"
+      >
+        <span aria-hidden="true" className={styles.downloadIcon}>↓</span>
+        Download PDF
+      </button>
+
+      <div className="status-bar" aria-label="WordPad preview status">
+        <p className="status-bar-field">Read-only resume preview</p>
+        <p className="status-bar-field">PDF ready</p>
       </div>
-    </div>
+    </section>
   )
 }
