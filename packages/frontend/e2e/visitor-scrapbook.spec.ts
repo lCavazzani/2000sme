@@ -73,3 +73,42 @@ test('keeps scrapbook tabs and composer readable at a narrow viewport', async ({
   expect(submitBox!.height).toBeGreaterThanOrEqual(36)
   await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBeTruthy()
 })
+
+test('keeps deterministic scrapbook decoration while loading older notes and returning to the newest note', async ({ page }) => {
+  await page.route('**/api/guestbook?*', async (route) => {
+    const requestUrl = new URL(route.request().url())
+    const cursor = requestUrl.searchParams.get('cursor')
+    const body = cursor
+      ? {
+          entries: [{ id: 1, name: 'Grace Hopper', message: 'An older archived note.', created_at: '2026-08-16T12:00:00.000Z' }],
+          page: { limit: 20, next_cursor: null },
+        }
+      : {
+          entries: [{ id: 2, name: 'Ada Lovelace', message: 'A newest note with a stable visual identity.', created_at: '2026-08-17T12:00:00.000Z' }],
+          page: { limit: 20, next_cursor: 'older-page' },
+        }
+    await route.fulfill({ contentType: 'application/json', body: JSON.stringify(body) })
+  })
+  await page.goto('/#/apps/guestbook')
+
+  const newest = page.getByRole('article', { name: 'Ada Lovelace' })
+  const firstDecoration = await newest.evaluate((element) => ({
+    paper: element.getAttribute('data-paper'),
+    tape: element.getAttribute('data-tape'),
+    tilt: element.getAttribute('data-tilt'),
+    corner: element.getAttribute('data-corner'),
+    accent: element.getAttribute('data-accent'),
+  }))
+
+  await page.getByRole('button', { name: 'Load older notes' }).click()
+  await expect(page.getByRole('article', { name: 'Grace Hopper' })).toBeVisible()
+  await expect(page.getByRole('button', { name: 'Jump to newest' })).toBeVisible()
+  await expect(newest).toHaveAttribute('data-paper', firstDecoration.paper ?? '')
+  await expect(newest).toHaveAttribute('data-tape', firstDecoration.tape ?? '')
+  await expect(newest).toHaveAttribute('data-tilt', firstDecoration.tilt ?? '')
+
+  const feed = page.getByRole('list', { name: 'Visitor notes in chronological order' })
+  await feed.evaluate((element) => { element.scrollTop = 80 })
+  await page.getByRole('button', { name: 'Jump to newest' }).click()
+  await expect.poll(() => feed.evaluate((element) => element.scrollTop)).toBe(0)
+})

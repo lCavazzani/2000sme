@@ -3,12 +3,15 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 const { queryState, mutationState } = vi.hoisted(() => ({
   queryState: {
-    data: undefined as { entries: Array<{ id: number; name: string; message: string; created_at: string }> } | undefined,
+    data: undefined as { pages: Array<{ entries: Array<{ id: number; name: string; message: string; created_at: string }>; page: { limit: number; next_cursor: string | null } }> } | undefined,
     isError: false,
     error: undefined as unknown,
     isPending: false,
     isFetching: false,
+    isFetchingNextPage: false,
+    hasNextPage: false,
     refetch: vi.fn(),
+    fetchNextPage: vi.fn(),
   },
   mutationState: {
     isPending: false,
@@ -18,7 +21,7 @@ const { queryState, mutationState } = vi.hoisted(() => ({
 
 vi.mock('../api/guestbook', () => ({
   guestbookErrorMessage: (error: unknown) => error instanceof Error ? error.message : 'Unable to load notes.',
-  useGuestbookEntries: () => queryState,
+  useInfiniteGuestbookEntries: () => queryState,
   useCreateGuestbookEntry: () => mutationState,
 }))
 
@@ -30,16 +33,24 @@ import { Guestbook } from './Guestbook'
 
 function resetStates() {
   queryState.data = {
-    entries: [
-      { id: 12, name: 'Ada Lovelace', message: 'Wonderful work on the portfolio.', created_at: '2026-08-17T12:00:00.000Z' },
-      { id: 11, name: 'Grace Hopper', message: 'The scrapbook is easy to read.', created_at: '2026-08-16T12:00:00.000Z' },
+    pages: [
+      {
+        entries: [
+          { id: 12, name: 'Ada Lovelace', message: 'Wonderful work on the portfolio.', created_at: '2026-08-17T12:00:00.000Z' },
+          { id: 11, name: 'Grace Hopper', message: 'The scrapbook is easy to read.', created_at: '2026-08-16T12:00:00.000Z' },
+        ],
+        page: { limit: 20, next_cursor: null },
+      },
     ],
   }
   queryState.isError = false
   queryState.error = undefined
   queryState.isPending = false
   queryState.isFetching = false
+  queryState.isFetchingNextPage = false
+  queryState.hasNextPage = false
   queryState.refetch.mockReset()
+  queryState.fetchNextPage.mockReset()
   mutationState.isPending = false
   mutationState.mutateAsync.mockReset()
 }
@@ -63,6 +74,42 @@ describe('Visitor Scrapbook', () => {
     expect(screen.getByRole('tab', { name: 'Leave a note' })).toHaveAttribute('aria-selected', 'true')
     expect(screen.getByLabelText('Your name')).toHaveFocus()
     expect(screen.getByRole('button', { name: 'Add note to scrapbook' })).toBeDisabled()
+  })
+
+  it('keeps a stored entry visual identity deterministic across rerenders', () => {
+    const { rerender } = render(<Guestbook />)
+    const article = screen.getByRole('article', { name: 'Ada Lovelace' })
+    const firstIdentity = {
+      paper: article.getAttribute('data-paper'),
+      tape: article.getAttribute('data-tape'),
+      tilt: article.getAttribute('data-tilt'),
+      corner: article.getAttribute('data-corner'),
+      accent: article.getAttribute('data-accent'),
+    }
+
+    rerender(<Guestbook />)
+    const rerenderedArticle = screen.getByRole('article', { name: 'Ada Lovelace' })
+    expect({
+      paper: rerenderedArticle.getAttribute('data-paper'),
+      tape: rerenderedArticle.getAttribute('data-tape'),
+      tilt: rerenderedArticle.getAttribute('data-tilt'),
+      corner: rerenderedArticle.getAttribute('data-corner'),
+      accent: rerenderedArticle.getAttribute('data-accent'),
+    }).toEqual(firstIdentity)
+  })
+
+  it('loads older notes through the typed infinite feed and offers a user-controlled jump to newest', () => {
+    queryState.hasNextPage = true
+    queryState.data!.pages.push({
+      entries: [{ id: 10, name: 'Margaret Hamilton', message: 'An older note.', created_at: '2026-08-15T12:00:00.000Z' }],
+      page: { limit: 20, next_cursor: 'older-cursor' },
+    })
+
+    render(<Guestbook />)
+
+    fireEvent.click(screen.getByRole('button', { name: 'Load older notes' }))
+    expect(queryState.fetchNextPage).toHaveBeenCalledOnce()
+    expect(screen.getByRole('button', { name: 'Jump to newest' })).toBeVisible()
   })
 
   it('uses inline field errors instead of making an invalid submission', () => {
