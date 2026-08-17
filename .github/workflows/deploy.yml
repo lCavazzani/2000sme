@@ -70,6 +70,24 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Apply production D1 migrations
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: pnpm --dir packages/backend exec wrangler d1 migrations apply portfolio-db --remote
+
+      - name: Verify production Guestbook schema
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          schema=$(pnpm --dir packages/backend exec wrangler d1 execute portfolio-db --remote --command "SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'guestbook';")
+          echo "$schema"
+          echo "$schema" | grep -q 'guestbook' || {
+            echo 'Expected guestbook table was not found in the configured production D1 database.' >&2
+            exit 1
+          }
+
       - name: Deploy to Cloudflare Workers
         uses: cloudflare/wrangler-action@v3
         with:
@@ -77,6 +95,13 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           workingDirectory: packages/backend
           command: deploy --minify
+
+      - name: Smoke test public backend
+        env:
+          BACKEND_SMOKE_ORIGIN: https://00sbackedn.cavazzanileonardo.workers.dev
+        run: |
+          sleep 5
+          pnpm --dir packages/backend run smoke:remote
 
   deploy-frontend:
     name: Deploy Frontend
