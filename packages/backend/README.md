@@ -95,3 +95,7 @@ pnpm --filter backend deploy
 `GET /api/projects/:slug` returns the same published-card fields plus `description` and ordered `links`. Both endpoints query the `published_projects` view rather than the base table, so draft records cannot enter the public response. Unknown and unpublished slugs return the same structured `404` response with `code: "project_not_found"`; no response reveals whether a private project exists.
 
 Successful catalog responses use `Cache-Control: public, max-age=300, stale-while-revalidate=86400`. The existing global CORS and security-header middleware applies to the catalog unchanged. `test/projects.test.ts` is the BE-7 Workers-runtime baseline; TEST-9 adds the broader fixture and contract-regression suite.
+
+### Projects Catalog contract regressions
+
+`test/project-catalog.contract.test.ts` runs through the configured Workers D1 binding with isolated records. It compares list and detail responses to `test/fixtures/project-catalog.json`, so removing or renaming a public field, changing technology/link order, leaking a draft, changing cache headers, or loosening CORS fails before a frontend adapter consumes the API. The JSON fixture is intentionally production-independent and can be used by future client adapters as a stable response example.
