@@ -8,7 +8,7 @@ const ACTIVE_THEMES = [
 const CORE_APPLICATIONS = [
   { shortcut: 'Alt+1', windowName: 'My Portfolio window' },
   { shortcut: 'Alt+3', windowName: 'resume.md - WordPad window' },
-  { shortcut: 'Alt+4', windowName: 'Guestbook window' },
+  { shortcut: 'Alt+4', windowName: 'Visitor Scrapbook window' },
   { shortcut: 'Alt+5', windowName: 'About Me window' },
   { shortcut: 'Alt+6', windowName: 'Appearance & Themes window' },
 ] as const
@@ -117,7 +117,7 @@ test.describe('supported theme compatibility', () => {
       await expect(mobileLauncher.getByRole('link')).toHaveCount(7)
       await expect(mobileLauncher.getByRole('link', { name: /Portfolio/ })).toBeVisible()
       await expect(mobileLauncher.getByRole('link', { name: /Resume/ })).toBeVisible()
-      await expect(mobileLauncher.getByRole('link', { name: /Guestbook/ })).toBeVisible()
+      await expect(mobileLauncher.getByRole('link', { name: /Scrapbook/ })).toBeVisible()
       await expect(mobileLauncher.getByRole('link', { name: /About/ })).toBeVisible()
       await expect(mobileLauncher.getByRole('link', { name: /Themes/ })).toBeVisible()
     })
