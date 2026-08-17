@@ -1,5 +1,6 @@
 /* Fill window-body (same negative-margin trick as FileExplorer) */
 .root {
+  position: relative;
   margin: -8px;
   height: calc(100% + 16px);
   display: flex;
@@ -128,6 +129,52 @@
   background: #787878;
   padding: 20px 24px;
   box-sizing: border-box;
+}
+
+/* The action is intentionally window-scoped. Direct routes retain the
+   full-width primary action bar rather than a viewport overlay. */
+.floatingDownload {
+  display: none;
+}
+
+:global(.window-body) .docArea {
+  padding-bottom: 82px;
+}
+
+:global(.window-body) .floatingDownload {
+  position: absolute;
+  z-index: 2;
+  bottom: 28px;
+  left: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 36px;
+  min-width: 144px;
+  padding: 7px 12px;
+  border: 2px solid var(--os-control-border);
+  background: var(--os-app-selection-bg);
+  color: var(--os-app-selection-fg);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: url('/arrow.cur'), pointer;
+  box-shadow: 2px 2px 0 color-mix(in srgb, #000 45%, transparent);
+}
+
+:global(.window-body) .floatingDownload:hover {
+  filter: brightness(1.08);
+}
+
+:global(.window-body) .floatingDownload:active {
+  transform: translate(1px, 1px);
+  box-shadow: none;
+}
+
+:global(.window-body) .floatingDownload:focus-visible {
+  outline: 2px solid var(--os-focus-ring);
+  outline-offset: 2px;
 }
 
 /* White "paper" page */

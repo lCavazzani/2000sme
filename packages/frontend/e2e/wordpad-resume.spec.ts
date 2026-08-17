@@ -37,3 +37,39 @@ test('keeps the primary PDF action readable and touch-sized on the narrow resume
   expect(box!.height).toBeGreaterThanOrEqual(34)
   await expect(page.locator('[aria-label="Read-only document toolbar"]')).toHaveCSS('overflow-x', 'auto')
 })
+
+
+test('keeps the persistent PDF action bottom-left inside the desktop WordPad window while the resume scrolls', async ({ page }) => {
+  await page.goto('/')
+  await page.getByRole('button', { name: 'Open Resume' }).dblclick()
+
+  const resumeWindow = page.getByRole('dialog', { name: 'resume.md - WordPad window' })
+  const persistentDownload = resumeWindow.getByRole('button', {
+    name: 'Download resume (PDF) — persistent action',
+  })
+  const documentArea = resumeWindow.locator('[data-resume-document-area]')
+
+  await expect(resumeWindow).toBeVisible()
+  await expect(persistentDownload).toBeVisible()
+  await expect(persistentDownload).toHaveCSS('position', 'absolute')
+  await expect(documentArea).toHaveCSS('overflow-y', 'auto')
+
+  const beforeScroll = await persistentDownload.boundingBox()
+  expect(beforeScroll).not.toBeNull()
+
+  await documentArea.evaluate((area) => {
+    area.scrollTop = area.scrollHeight
+  })
+
+  const afterScroll = await persistentDownload.boundingBox()
+  const windowBox = await resumeWindow.boundingBox()
+  expect(afterScroll).not.toBeNull()
+  expect(windowBox).not.toBeNull()
+  expect(afterScroll!.x).toBeCloseTo(beforeScroll!.x, 0)
+  expect(afterScroll!.y).toBeCloseTo(beforeScroll!.y, 0)
+  expect(afterScroll!.x).toBeGreaterThanOrEqual(windowBox!.x)
+  expect(afterScroll!.y).toBeGreaterThan(windowBox!.y)
+
+  await persistentDownload.focus()
+  await expect(persistentDownload).toBeFocused()
+})

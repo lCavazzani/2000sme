@@ -50,7 +50,7 @@ test.describe('supported-theme accessibility regression coverage', () => {
     await expectNoSeriousOrCriticalViolations(page, '[role="dialog"]')
   })
 
-  test('scans the direct Guestbook route and its verification status', async ({ page }) => {
+  test('scans the direct Visitor Scrapbook route and its verification status', async ({ page }) => {
     await page.route(/\/api\/guestbook(?:\?.*)?$/, async (route) => {
       await route.fulfill({
         contentType: 'application/json',
@@ -59,12 +59,13 @@ test.describe('supported-theme accessibility regression coverage', () => {
     })
     await visitInTheme(page, 'winxp', '/#/apps/guestbook')
 
-    const guestbookRoute = page.getByRole('main', { name: 'Guestbook direct route' })
-    await expect(guestbookRoute).toBeVisible()
-    await expect(guestbookRoute.locator('h1')).toHaveText('Guestbook')
-    await expect(guestbookRoute.getByLabel('Name')).toBeVisible()
-    await expect(guestbookRoute.getByLabel('Message')).toBeVisible()
-    await expect(guestbookRoute.getByRole('button', { name: 'Sign Guestbook' })).toBeDisabled()
-    await expectNoSeriousOrCriticalViolations(page, 'main[aria-label="Guestbook direct route"]')
+    const scrapbookRoute = page.getByRole('main', { name: 'Visitor Scrapbook direct route' })
+    await expect(scrapbookRoute).toBeVisible()
+    await expect(scrapbookRoute.locator('h1')).toHaveText('Visitor Scrapbook')
+    await scrapbookRoute.getByRole('tab', { name: 'Leave a note' }).click()
+    await expect(scrapbookRoute.getByLabel('Your name')).toBeVisible()
+    await expect(scrapbookRoute.getByLabel('Your note')).toBeVisible()
+    await expect(scrapbookRoute.getByRole('button', { name: 'Add note to scrapbook' })).toBeDisabled()
+    await expectNoSeriousOrCriticalViolations(page, 'main[aria-label="Visitor Scrapbook direct route"]')
   })
 })
