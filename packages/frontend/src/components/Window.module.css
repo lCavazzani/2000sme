@@ -21,3 +21,31 @@
   margin-right: 4px;
   image-rendering: pixelated;
 }
+
+.maximizeControl {
+  display: inline-grid;
+  place-items: center;
+  color: var(--os-control-fg);
+}
+
+.maximizeControl::before,
+.maximizeControl::after {
+  content: none !important;
+}
+
+.windowControlGlyph {
+  width: 12px;
+  height: 12px;
+  display: block;
+  fill: none;
+  stroke: currentcolor;
+  stroke-width: 1.75;
+  shape-rendering: crispEdges;
+  vector-effect: non-scaling-stroke;
+}
+
+.maximizeControl:hover,
+.maximizeControl:focus-visible,
+.maximizeControl:active {
+  color: var(--os-control-fg);
+}
