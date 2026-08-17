@@ -44,7 +44,9 @@ test.describe('supported theme compatibility', () => {
       }
 
       await page.getByRole('button', { name: 'Start' }).click()
+      const firstStartMenuItem = page.getByRole('menuitem', { name: 'My Portfolio' })
       const myComputerMenuItem = page.getByRole('menuitem', { name: 'My Computer' })
+      await expect(firstStartMenuItem).toBeFocused()
       await page.keyboard.press('Tab')
       await expect(myComputerMenuItem).toBeFocused()
       await page.keyboard.press('Enter')
