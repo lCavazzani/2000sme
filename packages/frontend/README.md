@@ -51,7 +51,7 @@ FE-16 uses `@tanstack/react-query` only for remote API data. The shared `src/api
 
 Use `useQuery` for remote reads and `useMutation` for remote writes. New catalog queries should define keys under their own domain module, receive the `AbortSignal` supplied by TanStack Query, set an intentional `staleTime` and retry policy, and invalidate or safely reconcile affected queries after a mutation. Do not place form inputs, theme selection, desktop windows, drag state, or other UI-only state in the query cache; those remain local React state or in the existing window/theme providers.
 
-`VITE_GUESTBOOK_API_ORIGIN` remains intentionally public browser configuration and contains only the API origin, never a credential.
+`VITE_GUESTBOOK_API_ORIGIN` remains intentionally public browser configuration and contains only the API origin, never a credential. Production defaults to the same-origin `/api/guestbook` path when this variable is absent; a configured production origin must be public HTTPS and cannot be localhost, loopback, or a private-network address. Vite development may deliberately use `http://localhost:8787`. After `pnpm --filter 00sfrontend build`, run `pnpm --filter 00sfrontend assert:production-api-origin` to prove that the shipped artifact contains no localhost or private-network API endpoint.
 
 ## Semantic theme contract
 

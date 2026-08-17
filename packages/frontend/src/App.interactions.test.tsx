@@ -56,18 +56,18 @@ describe('desktop shell interactions', () => {
     startButton.focus()
     await user.keyboard('{Enter}')
 
-    const startMenu = await screen.findByRole('menu', { name: 'Start menu' })
-    const portfolioShortcut = screen.getByRole('menuitem', { name: 'My Portfolio' })
+    const startMenu = await screen.findByRole('navigation', { name: 'Start menu' })
+    const portfolioShortcut = screen.getByRole('button', { name: 'My Portfolio' })
     await waitFor(() => expect(portfolioShortcut).toHaveFocus())
 
     fireEvent.keyDown(startMenu, { key: 'Escape' })
-    await waitFor(() => expect(screen.queryByRole('menu', { name: 'Start menu' })).not.toBeInTheDocument())
+    await waitFor(() => expect(screen.queryByRole('navigation', { name: 'Start menu' })).not.toBeInTheDocument())
     await waitFor(() => expect(startButton).toHaveFocus())
 
     await user.keyboard('{Enter}')
-    await user.click(screen.getByRole('menuitem', { name: 'My Portfolio' }))
+    await user.click(screen.getByRole('button', { name: 'My Portfolio' }))
 
-    expect(screen.queryByRole('menu', { name: 'Start menu' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('navigation', { name: 'Start menu' })).not.toBeInTheDocument()
     expect(screen.getByLabelText('My Portfolio window')).toBeInTheDocument()
   })
 })

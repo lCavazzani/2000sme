@@ -118,9 +118,9 @@
   z-index: 10001;
   bottom: 39px;
   left: 3px;
-  width: min(248px, calc(100vw - 6px));
+  width: min(560px, calc(100vw - 6px));
   display: grid;
-  grid-template-columns: 30px 1fr;
+  grid-template-columns: 30px minmax(0, 1fr);
   color: var(--os-start-menu-fg);
   background: var(--os-start-menu-bg);
   border: var(--os-start-menu-border-width) solid;
@@ -142,6 +142,36 @@
   background: var(--os-start-menu-banner-bg);
 }
 
+.startMenuColumns {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  padding: 10px;
+}
+
+.startMenuGroup {
+  min-width: 0;
+  display: grid;
+  align-content: start;
+  gap: 4px;
+}
+
+.startMenuGroup + .startMenuGroup {
+  padding-left: 14px;
+  border-left: 1px solid var(--os-app-divider);
+}
+
+.startMenuGroupHeading {
+  margin: 0 0 3px;
+  padding: 0 8px;
+  color: var(--os-start-menu-fg);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
 .startMenuItem {
   width: 100%;
   min-height: 42px;
@@ -155,6 +185,24 @@
 .startMenuItem:focus-visible {
   color: var(--os-control-selected-fg);
   background: var(--os-control-selected-bg);
+}
+
+@media (max-width: 780px) {
+  .startMenu {
+    width: min(320px, calc(100vw - 6px));
+  }
+
+  .startMenuColumns {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .startMenuGroup + .startMenuGroup {
+    padding-top: 10px;
+    padding-left: 0;
+    border-top: 1px solid var(--os-app-divider);
+    border-left: 0;
+  }
 }
 
 @media (max-width: 640px) {

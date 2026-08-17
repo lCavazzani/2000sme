@@ -29,10 +29,10 @@ test.describe('supported-theme accessibility regression coverage', () => {
     await startButton.focus()
     await page.keyboard.press('Enter')
 
-    const startMenu = page.getByRole('menu', { name: 'Start menu' })
+    const startMenu = page.getByRole('navigation', { name: 'Start menu' })
     await expect(startMenu).toBeVisible()
-    await expect(page.getByRole('menuitem', { name: 'My Portfolio' })).toBeFocused()
-    await expectNoSeriousOrCriticalViolations(page, '[role="menu"]')
+    await expect(startMenu.getByRole('button', { name: 'My Portfolio' })).toBeFocused()
+    await expectNoSeriousOrCriticalViolations(page, '#start-menu')
 
     await page.keyboard.press('Escape')
     await expect(startMenu).toBeHidden()
@@ -51,7 +51,7 @@ test.describe('supported-theme accessibility regression coverage', () => {
   })
 
   test('scans the direct Guestbook route and its verification status', async ({ page }) => {
-    await page.route('http://localhost:8787/api/guestbook**', async (route) => {
+    await page.route(/\/api\/guestbook(?:\?.*)?$/, async (route) => {
       await route.fulfill({
         contentType: 'application/json',
         body: JSON.stringify({ entries: [], page: { limit: 20, next_cursor: null } }),
