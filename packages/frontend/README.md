@@ -55,8 +55,14 @@ Use `useQuery` for remote reads and `useMutation` for remote writes. New catalog
 
 ## Semantic theme contract
 
-THEME-10 keeps the existing runtime stylesheet swap and adds a semantic token layer for shared desktop chrome. Shared shell components use `--os-*` tokens rather than Windows-98-specific palette names, allowing the same markup to render either the sharp Windows 98 bevel grammar or rounded Windows XP/Luna chrome. The complete token, capability, state, and reduced-effects contract is documented in [`src/theme/SEMANTIC_TOKENS.md`](./src/theme/SEMANTIC_TOKENS.md).
+THEME-10 keeps the existing runtime stylesheet swap and adds a semantic token layer for shared desktop chrome. Shared shell components use `--os-*` tokens rather than Windows-98-specific palette names, allowing the same markup to render either the sharp Windows 98 bevel grammar or rounded Windows XP/Luna chrome. THEME-3 extends this contract to core application toolbars, dividers, selections, tags, and links through `--os-app-*` tokens, so shared content does not leak Windows 98 chrome while XP is active.
+
+Windows XP is the first-visit and invalid-preference fallback release theme; Windows 98 is the fully supported alternate. The `/themes/7.css` asset remains a dormant technical preview only: it is not selectable in the release UI and carries no compatibility or visual-parity promise. Run `pnpm --filter 00sfrontend test:theme` for the supported-theme browser matrix. The detailed evidence, CSS-conflict record, and manual release review are in [`../../docs/quality/theme-compatibility-qa.md`](../../docs/quality/theme-compatibility-qa.md). The complete token, capability, state, and reduced-effects contract is documented in [`src/theme/SEMANTIC_TOKENS.md`](./src/theme/SEMANTIC_TOKENS.md).
 
 ## Responsive fallback release validation
 
 FE-12 keeps the desktop metaphor for larger screens while exposing the registry-driven mobile launcher at `640px` and below. Before a release, verify each primary route—Portfolio, Resume, Guestbook, About, Contact, and Themes—at narrow widths with touch simulation and keyboard navigation. Confirm that every launcher card can receive focus and open its hash route, no essential mobile action needs hover, dragging, or double-clicking, and the direct-route return control remains reachable.
+
+## Browser accessibility regression checks
+
+Run `pnpm --filter 00sfrontend test:a11y` to execute the Chromium Playwright suite with `@axe-core/playwright`. It scans the Windows XP first-visit desktop and Start menu, a Windows 98 stored-preference window, and the direct Guestbook route. The suite blocks new serious or critical automated findings; pair it with the required manual review in [`../../docs/quality/accessibility-release-checklist.md`](../../docs/quality/accessibility-release-checklist.md).

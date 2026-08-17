@@ -9,7 +9,8 @@
     "db:migrate:remote": "wrangler d1 migrations apply portfolio-db --remote",
     "db:seed:local": "wrangler d1 execute portfolio-db --local --file=seeds/projects.sql",
     "db:seed:remote": "wrangler d1 execute portfolio-db --remote --file=seeds/projects.sql",
-    "test": "vitest run --config vitest.config.ts"
+    "test": "vitest run --config vitest.config.ts",
+    "test:security": "vitest run --config vitest.config.ts test/guestbook.test.ts test/security-headers.test.ts test/turnstile-guestbook.test.ts test/turnstile.service.test.ts"
   },
   "dependencies": {
     "hono": "^4.13.1"

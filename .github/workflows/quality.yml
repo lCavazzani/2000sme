@@ -28,8 +28,17 @@ jobs:
       - name: Lint frontend
         run: pnpm --filter 00sfrontend lint
 
+      - name: Run API security regression tests
+        run: pnpm --filter backend test:security
+
       - name: Run workspace tests
         run: pnpm test
+
+      - name: Install Chromium for accessibility tests
+        run: pnpm --filter 00sfrontend exec playwright install --with-deps chromium
+
+      - name: Run browser accessibility tests
+        run: pnpm --filter 00sfrontend test:a11y
 
       - name: Build frontend
         run: pnpm --filter 00sfrontend build

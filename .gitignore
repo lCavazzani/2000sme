@@ -42,6 +42,9 @@ pnpm-debug.log*
 # Testing
 coverage/
 .nyc_output/
+packages/frontend/test-results/
+packages/frontend/playwright-report/
+packages/frontend/blob-report/
 
 # OS
 .DS_Store
