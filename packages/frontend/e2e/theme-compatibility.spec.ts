@@ -57,6 +57,22 @@ test.describe('supported theme compatibility', () => {
       await expect(page.locator('link[data-os-theme]')).toHaveCount(1)
     })
 
+    test(`${theme.id} renders distinct maximize and restore control glyphs`, async ({ page }) => {
+      await visitInTheme(page, theme.id)
+      await page.keyboard.press('Alt+1')
+
+      const maximizeControl = page.getByRole('button', { name: 'Maximize window' })
+      await expect(maximizeControl.locator('svg[data-window-control-glyph="maximize"] rect')).toBeVisible()
+      await maximizeControl.hover()
+      await maximizeControl.focus()
+      await expect(maximizeControl.locator('svg[data-window-control-glyph="maximize"]')).toHaveCSS('stroke', /rgb\(/)
+
+      await maximizeControl.click()
+      const restoreControl = page.getByRole('button', { name: 'Restore window' })
+      await expect(restoreControl.locator('svg[data-window-control-glyph="restore"] rect')).toBeVisible()
+      await expect(restoreControl.locator('svg[data-window-control-glyph="restore"] path')).toBeVisible()
+    })
+
     test(`${theme.id} exposes the same responsive primary routes`, async ({ page }) => {
       await page.setViewportSize({ width: 390, height: 844 })
       await visitInTheme(page, theme.id)
