@@ -63,10 +63,10 @@ test.describe('supported theme compatibility', () => {
       await page.keyboard.press('Alt+1')
 
       const maximizeControl = page.getByRole('button', { name: 'Maximize window' })
-      await expect(maximizeControl.locator('svg[data-window-control-glyph="maximize"] rect')).toBeVisible()
+      await expect(maximizeControl.locator('svg[data-window-control-glyph="Maximize"] rect')).toBeVisible()
       await maximizeControl.hover()
       await maximizeControl.focus()
-      await expect(maximizeControl.locator('svg[data-window-control-glyph="maximize"]')).toHaveCSS('stroke', /rgb\(/)
+      await expect(maximizeControl.locator('svg[data-window-control-glyph="Maximize"]')).toHaveCSS('stroke', /rgb\(/)
 
       await maximizeControl.click()
       const restoreControl = page.getByRole('button', { name: 'Restore window' })
