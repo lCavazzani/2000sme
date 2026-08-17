@@ -1,5 +1,6 @@
 /* Fill window-body (same negative-margin trick as FileExplorer) */
 .root {
+  position: relative;
   margin: -8px;
   height: calc(100% + 16px);
   display: flex;
@@ -130,6 +131,52 @@
   box-sizing: border-box;
 }
 
+/* The action is intentionally window-scoped. Direct routes retain the
+   full-width primary action bar rather than a viewport overlay. */
+.floatingDownload {
+  display: none;
+}
+
+:global(.window-body) .docArea {
+  padding-bottom: 82px;
+}
+
+:global(.window-body) .floatingDownload {
+  position: absolute;
+  z-index: 2;
+  bottom: 28px;
+  left: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 36px;
+  min-width: 144px;
+  padding: 7px 12px;
+  border: 2px solid var(--os-control-border);
+  background: var(--os-app-selection-bg);
+  color: var(--os-app-selection-fg);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: url('/arrow.cur'), pointer;
+  box-shadow: 2px 2px 0 color-mix(in srgb, #000 45%, transparent);
+}
+
+:global(.window-body) .floatingDownload:hover {
+  filter: brightness(1.08);
+}
+
+:global(.window-body) .floatingDownload:active {
+  transform: translate(1px, 1px);
+  box-shadow: none;
+}
+
+:global(.window-body) .floatingDownload:focus-visible {
+  outline: 2px solid var(--os-focus-ring);
+  outline-offset: 2px;
+}
+
 /* White "paper" page */
 .page {
   background: var(--os-app-content-surface);
@@ -257,4 +304,131 @@
 .page :global(th) {
   background: #f0f0f0;
   font-weight: bold;
+}
+
+/* ── Primary resume action ───────────────────────────── */
+.primaryActionBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-shrink: 0;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--os-app-divider);
+  background: var(--os-app-inset-surface);
+}
+
+.previewEyebrow,
+.downloadHint,
+.downloadStatus {
+  margin: 0;
+}
+
+.previewEyebrow {
+  color: var(--os-control-fg);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.downloadHint {
+  margin-top: 2px;
+  color: var(--os-control-fg);
+  font-size: 10px;
+}
+
+.primaryDownload {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 34px;
+  min-width: 182px;
+  padding: 6px 12px;
+  border: 2px solid var(--os-control-border);
+  background: var(--os-app-selection-bg);
+  color: var(--os-app-selection-fg);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1px;
+  cursor: url('/arrow.cur'), pointer;
+  box-shadow: inset 1px 1px 0 color-mix(in srgb, var(--os-app-content-surface) 45%, transparent);
+}
+
+.primaryDownload:hover {
+  filter: brightness(1.08);
+}
+
+.primaryDownload:active {
+  transform: translate(1px, 1px);
+  box-shadow: none;
+}
+
+.primaryDownload:focus-visible {
+  outline: 2px solid var(--os-focus-ring);
+  outline-offset: 2px;
+}
+
+.downloadIcon {
+  font-size: 17px;
+  line-height: 1;
+}
+
+.downloadStatus {
+  flex-shrink: 0;
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--os-app-divider);
+  background: var(--os-app-content-surface);
+  color: var(--os-control-fg);
+  font-size: 11px;
+}
+
+.menuItem:disabled,
+.toolbarRow button:disabled,
+.fontSelect:disabled,
+.sizeSelect:disabled {
+  cursor: default;
+  opacity: 0.58;
+}
+
+.toolbarRow button:disabled {
+  color: var(--os-control-fg);
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 680px) {
+  .primaryActionBar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .primaryDownload {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .toolbarRow {
+    overflow-x: auto;
+    scrollbar-gutter: stable;
+  }
+
+  .docArea {
+    padding: 12px;
+  }
+
+  .page {
+    padding: 28px 22px;
+    font-size: 11pt;
+  }
 }

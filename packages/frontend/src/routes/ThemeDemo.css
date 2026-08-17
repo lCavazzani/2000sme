@@ -1,3 +1,0 @@
-.themeDemo { min-height: 100vh; display: grid; place-items: center; padding: 24px; background: var(--bg-primary); }
-.themeDemoWindow { width: min(560px, 100%); }
-.themeDemoWindow .window-body, .themeOptions { display: grid; gap: 12px; }

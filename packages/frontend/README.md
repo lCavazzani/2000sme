@@ -66,3 +66,17 @@ FE-12 keeps the desktop metaphor for larger screens while exposing the registry-
 ## Browser accessibility regression checks
 
 Run `pnpm --filter 00sfrontend test:a11y` to execute the Chromium Playwright suite with `@axe-core/playwright`. It scans the Windows XP first-visit desktop and Start menu, a Windows 98 stored-preference window, and the direct Guestbook route. The suite blocks new serious or critical automated findings; pair it with the required manual review in [`../../docs/quality/accessibility-release-checklist.md`](../../docs/quality/accessibility-release-checklist.md).
+
+
+## Resume PDF action
+
+FE-23 treats WordPad as a read-only presentation of the approved resume content. `Download resume (PDF)` is its single working document command and opens a print dialog for saving that rendered resume as PDF. The legacy WordPad menus, document buttons, and format controls remain intentionally visible for the OS metaphor but are semantically disabled; do not make a new toolbar command interactive unless it performs the indicated behavior. The primary action must remain visible, keyboard-focusable, and readable on both active themes and narrow direct routes. `src/components/WordPad.test.tsx` and `e2e/wordpad-resume.spec.ts` protect this contract.
+## Visitor Scrapbook
+
+FE-17 presents the Guestbook application as **Visitor Scrapbook** while preserving the `guestbook` application ID and `#/apps/guestbook` route. It consumes only `useGuestbookEntries` and `useCreateGuestbookEntry` from `src/api/guestbook.ts`; presentation components must not call `fetch`, construct API URLs, or parse raw response data. The interface uses Read notes and Leave a note tabs, an ordered feed with article, heading, message, and time semantics, typed-query loading/error/retry states, inline client validation, Turnstile-gated duplicate-submit prevention, and an effects-independent live/status contract.
+
+Keep the direct route readable at narrow widths and preserve the larger desktop window bounds in the registry. `src/components/Guestbook.test.tsx` and `e2e/visitor-scrapbook.spec.ts` cover the semantic feed, composer focus/validation, typed error retry, active theme compatibility, and mobile layout.
+
+## Resume PDF action
+
+FE-23 treats WordPad as a read-only presentation of the approved resume content. `Download resume (PDF)` is its single working document command and opens a print dialog for saving that rendered resume as PDF. The legacy WordPad menus, document buttons, and format controls remain intentionally visible for the OS metaphor but are semantically disabled; do not make a new toolbar command interactive unless it performs the indicated behavior. The primary action remains visible, keyboard-focusable, and readable on both active themes and narrow direct routes. When WordPad is open as a desktop window, an additional bottom-left persistent action stays within the window while the document scrolls; it invokes the same approved PDF workflow without covering draggable chrome or the status bar. `src/components/WordPad.test.tsx` and `e2e/wordpad-resume.spec.ts` protect this contract.
