@@ -20,7 +20,7 @@ describe('WordPad resume viewer', () => {
 
     const download = screen.getByRole('button', { name: 'Download resume (PDF)' })
     expect(download).toBeEnabled()
-    expect(screen.getAllByText('Read-only resume preview')).toHaveLength(2)
+    expect(screen.getByText('Read-only resume preview')).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'New (unavailable in resume preview)' })).toBeDisabled()
     expect(screen.getByRole('button', { name: 'Print (unavailable in resume preview)' })).toBeDisabled()
     expect(screen.getByLabelText('Font')).toBeDisabled()
