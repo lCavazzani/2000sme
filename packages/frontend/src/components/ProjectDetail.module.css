@@ -11,7 +11,7 @@
   align-items: center;
   gap: 10px;
   padding-bottom: 8px;
-  border-bottom: 1px solid var(--border-dark, #808080);
+  border-bottom: 1px solid var(--os-app-divider);
 }
 
 .icon {
@@ -42,9 +42,10 @@
 
 .tag {
   padding: 1px 6px;
-  background: var(--w98-silver, #c0c0c0);
-  border: 1px solid var(--border-dark, #808080);
-  box-shadow: inset -1px -1px 0 #808080, inset 1px 1px 0 #fff;
+  color: var(--os-control-fg);
+  background: var(--os-app-toolbar-surface);
+  border: 1px solid var(--os-app-divider);
+  box-shadow: var(--os-app-inset-shadow);
   font-size: 11px;
   white-space: nowrap;
 }
@@ -59,7 +60,7 @@
 }
 
 .links a {
-  color: #000080;
+  color: var(--os-app-link-fg);
   text-decoration: none;
 }
 

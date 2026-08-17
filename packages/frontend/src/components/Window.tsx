@@ -123,6 +123,7 @@ export function Window({ id, children }: WindowProps) {
         className={`window ${styles.window}`}
         data-window-active={isActive}
         tabIndex={-1}
+        role="dialog"
         aria-label={`${win.title} window`}
         aria-keyshortcuts="Alt+F9 Alt+F10 Alt+Home Escape"
         onFocus={() => focusWindow(id)}

@@ -43,3 +43,7 @@ Every new shared-shell token consumer must preserve these states under both acti
 ## Boundaries
 
 Do not edit the generated `public/themes/98.css` or `public/themes/xp.css` files for semantic shell work. Add or adjust theme-owned overrides in `semantic-overrides.css` instead. Application-specific document content may retain domain styling until a separate ticket moves it into the shared theme contract.
+
+## Application-content tokens
+
+THEME-3 adds `--os-app-*` tokens for reusable surfaces inside a window: toolbar surface, content surface, divider, inset treatment, selection, selection hover, and document links. File Explorer, WordPad, and Project Detail must use these tokens rather than `--w98-*`, `--border-dark`, or fixed Windows 98 navy values. The active theme owns the values: XP uses lighter Luna-compatible surfaces and blue selection, while Windows 98 retains silver bevels and navy selection.

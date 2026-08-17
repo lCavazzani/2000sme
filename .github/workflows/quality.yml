@@ -31,5 +31,11 @@ jobs:
       - name: Run workspace tests
         run: pnpm test
 
+      - name: Install Chromium for accessibility tests
+        run: pnpm --filter 00sfrontend exec playwright install --with-deps chromium
+
+      - name: Run browser accessibility tests
+        run: pnpm --filter 00sfrontend test:a11y
+
       - name: Build frontend
         run: pnpm --filter 00sfrontend build
