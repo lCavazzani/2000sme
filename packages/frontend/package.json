@@ -9,6 +9,7 @@
     "lint": "oxlint",
     "test": "vitest run",
     "test:a11y": "playwright test",
+    "test:theme": "playwright test e2e/theme-compatibility.spec.ts",
     "preview": "vite preview"
   },
   "dependencies": {

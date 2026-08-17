@@ -42,6 +42,15 @@
   --os-icon-label-shadow: 1px 1px #123867;
   --os-icon-selected-shadow: drop-shadow(1px 0 #316ac5) drop-shadow(-1px 0 #316ac5)
     drop-shadow(0 1px #316ac5) drop-shadow(0 -1px #316ac5);
+  --os-app-toolbar-surface: var(--os-control-bg);
+  --os-app-content-surface: #fff;
+  --os-app-divider: #5d8cd3;
+  --os-app-inset-shadow: inset 0 1px 2px rgb(0 0 0 / 24%);
+  --os-app-selection-bg: var(--os-control-selected-bg);
+  --os-app-selection-fg: var(--os-control-selected-fg);
+  --os-app-selection-hover: rgb(49 106 197 / 12%);
+  --os-app-link-fg: #0645ad;
+  --os-app-link-hover-fg: #003a99;
   --os-gloss-overlay: linear-gradient(rgb(255 255 255 / 38%), transparent 50%);
   --os-crt-opacity: 0;
   --os-motion-duration: 160ms;
@@ -91,6 +100,15 @@
   --os-icon-label-shadow: 1px 1px #000;
   --os-icon-selected-shadow: drop-shadow(1px 0 #000080) drop-shadow(-1px 0 #000080)
     drop-shadow(0 1px #000080) drop-shadow(0 -1px #000080);
+  --os-app-toolbar-surface: var(--os-control-bg);
+  --os-app-content-surface: #fff;
+  --os-app-divider: #808080;
+  --os-app-inset-shadow: inset -1px -1px 0 #fff, inset 1px 1px 0 #808080;
+  --os-app-selection-bg: var(--os-control-selected-bg);
+  --os-app-selection-fg: var(--os-control-selected-fg);
+  --os-app-selection-hover: rgb(0 0 128 / 10%);
+  --os-app-link-fg: #000080;
+  --os-app-link-hover-fg: #0000ee;
   --os-gloss-overlay: none;
 }
 

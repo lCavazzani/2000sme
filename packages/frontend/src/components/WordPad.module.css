@@ -7,15 +7,15 @@
   overflow: hidden;
   font-family: var(--sans, 'MS Sans Serif', Arial, sans-serif);
   font-size: 11px;
-  background: var(--w98-silver, #c0c0c0);
+  background: var(--os-app-toolbar-surface);
 }
 
 /* ── Menu bar ─────────────────────────────────────────── */
 .menuBar {
   display: flex;
   flex-shrink: 0;
-  background: var(--w98-silver, #c0c0c0);
-  border-bottom: 1px solid var(--border-dark, #808080);
+  background: var(--os-app-toolbar-surface);
+  border-bottom: 1px solid var(--os-app-divider);
   padding: 1px 0;
 }
 
@@ -29,8 +29,8 @@
 }
 
 .menuItem:hover {
-  background: #000080;
-  color: #fff;
+  background: var(--os-app-selection-bg);
+  color: var(--os-app-selection-fg);
   border-color: transparent;
 }
 
@@ -43,10 +43,10 @@
   width: 100%;
   padding: 2px 4px;
   gap: 2px;
-  border-bottom: 1px solid var(--border-dark, #808080);
+  border-bottom: 1px solid var(--os-app-divider);
   flex-wrap: nowrap;
   overflow: hidden;
-  background: var(--w98-silver, #c0c0c0);
+  background: var(--os-app-toolbar-surface);
   box-sizing: border-box;
 }
 
@@ -59,10 +59,10 @@
   background:
     linear-gradient(
       to right,
-      var(--border-dark, #808080) 0px,
-      var(--border-dark, #808080) 1px,
-      #fff 1px,
-      #fff 2px
+      var(--os-app-divider) 0px,
+      var(--os-app-divider) 1px,
+      var(--os-app-content-surface) 1px,
+      var(--os-app-content-surface) 2px
     );
   flex-shrink: 0;
 }
@@ -132,12 +132,12 @@
 
 /* White "paper" page */
 .page {
-  background: #fff;
+  background: var(--os-app-content-surface);
   max-width: 740px;
   margin: 0 auto;
   padding: 48px 64px;
   box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.45);
-  color: #000;
+  color: var(--os-control-fg);
   font-family: Georgia, 'Times New Roman', Times, serif;
   font-size: 12pt;
   line-height: 1.65;
@@ -178,12 +178,12 @@
 }
 
 .page :global(a) {
-  color: #000080;
+  color: var(--os-app-link-fg);
   text-decoration: underline;
 }
 
 .page :global(a:hover) {
-  color: #0000ee;
+  color: var(--os-app-link-hover-fg);
 }
 
 .page :global(hr) {
