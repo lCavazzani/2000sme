@@ -16,7 +16,7 @@ export const securityHeaders = secureHeaders({
     imgSrc: ["'self'", 'data:'],
     fontSrc: ["'self'", 'data:'],
     frameSrc: ['https://challenges.cloudflare.com'],
-    connectSrc: ["'self'", 'http://localhost:8787', 'https://00sbackedn.cavazzanileonardo.workers.dev'],
+    connectSrc: ["'self'", 'https://00sbackedn.cavazzanileonardo.workers.dev'],
     objectSrc: ["'none'"],
   },
   permissionsPolicy: {

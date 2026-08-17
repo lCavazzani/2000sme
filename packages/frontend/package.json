@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "assert:production-api-origin": "node scripts/assert-production-api-origin.mjs",
     "lint": "oxlint",
     "test": "vitest run",
     "test:a11y": "playwright test",

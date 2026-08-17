@@ -45,7 +45,7 @@ describe('guestbook API client', () => {
       page: { limit: 10, next_cursor: 'next-page' },
     })
     expect(fetchMock).toHaveBeenCalledWith(
-      'http://localhost:8787/api/guestbook?limit=10&cursor=first-page',
+      '/api/guestbook?limit=10&cursor=first-page',
       { signal: controller.signal },
     )
   })
