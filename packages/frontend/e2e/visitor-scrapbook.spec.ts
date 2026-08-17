@@ -41,6 +41,24 @@ for (const theme of ['winxp', 'win98'] as const) {
   })
 }
 
+test('keeps the desktop-window composer fields editable after the window receives focus', async ({ page }) => {
+  await page.goto('/')
+  await page.getByRole('button', { name: 'Open Visitor Scrapbook' }).dblclick()
+
+  const scrapbookWindow = page.getByRole('dialog', { name: 'Visitor Scrapbook window' })
+  await expect(scrapbookWindow).toBeVisible()
+  await scrapbookWindow.getByRole('tab', { name: 'Leave a note' }).click()
+
+  const name = scrapbookWindow.getByLabel('Your name')
+  const note = scrapbookWindow.getByLabel('Your note')
+  await name.fill('Leonardo')
+  await note.fill('Windowed composer input remains available.')
+
+  await expect(name).toHaveValue('Leonardo')
+  await expect(note).toHaveValue('Windowed composer input remains available.')
+  await expect(scrapbookWindow.getByText('42/280 characters')).toBeVisible()
+})
+
 test('keeps scrapbook tabs and composer readable at a narrow viewport', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 })
   await stubGuestbook(page)
