@@ -19,6 +19,8 @@ describe('security headers', () => {
     expect(csp).toContain('script-src')
     expect(csp).toContain('https://challenges.cloudflare.com')
     expect(csp).toContain('frame-src')
+    expect(csp).not.toContain('localhost')
+    expect(csp).not.toContain('127.0.0.1')
     expect(response.headers.get('Content-Security-Policy')).toBeNull()
     expect(response.headers.get('Strict-Transport-Security')).toBeNull()
   })

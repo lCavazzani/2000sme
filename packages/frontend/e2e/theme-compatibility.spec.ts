@@ -14,7 +14,7 @@ const CORE_APPLICATIONS = [
 ] as const
 
 async function stubGuestbook(page: Page) {
-  await page.route('http://localhost:8787/api/guestbook**', async (route) => {
+  await page.route(/\/api\/guestbook(?:\?.*)?$/, async (route) => {
     await route.fulfill({
       contentType: 'application/json',
       body: JSON.stringify({ entries: [], page: { limit: 20, next_cursor: null } }),

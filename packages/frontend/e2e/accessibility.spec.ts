@@ -51,7 +51,7 @@ test.describe('supported-theme accessibility regression coverage', () => {
   })
 
   test('scans the direct Guestbook route and its verification status', async ({ page }) => {
-    await page.route('http://localhost:8787/api/guestbook**', async (route) => {
+    await page.route(/\/api\/guestbook(?:\?.*)?$/, async (route) => {
       await route.fulfill({
         contentType: 'application/json',
         body: JSON.stringify({ entries: [], page: { limit: 20, next_cursor: null } }),
