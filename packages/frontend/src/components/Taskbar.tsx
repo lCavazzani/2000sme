@@ -38,10 +38,17 @@ export function Taskbar() {
     if (!isStartMenuOpen) return
 
     window.requestAnimationFrame(() => {
-      startMenuRef.current?.querySelector<HTMLButtonElement>('[role="menuitem"]')?.focus()
+      startMenuRef.current?.querySelector<HTMLButtonElement>('[data-window-launcher]')?.focus()
     })
   }, [isStartMenuOpen])
 
+  const startMenuApplications = applicationsForSurface('start-menu')
+  const primaryStartMenuApplications = startMenuApplications.filter((application) =>
+    ['portfolio', 'my-computer', 'resume', 'guestbook'].includes(application.id),
+  )
+  const supportingStartMenuApplications = startMenuApplications.filter((application) =>
+    ['about-me', 'contact', 'appearance-themes'].includes(application.id),
+  )
   const openWindows = windows.filter((windowState) => windowState.isOpen)
   const activeWindowId = openWindows
     .filter((windowState) => !windowState.isMinimized)
@@ -86,28 +93,45 @@ export function Taskbar() {
   return (
     <>
       {isStartMenuOpen && (
-        <div
+        <nav
           ref={startMenuRef}
           id="start-menu"
           className={styles.startMenu}
-          role="menu"
           aria-label="Start menu"
           onKeyDown={handleStartMenuKeyDown}
         >
           <div className={styles.startMenuBanner}>2000sme</div>
-          {applicationsForSurface('start-menu').map((application) => (
-            <button
-              className={styles.startMenuItem}
-              role="menuitem"
-              key={application.id}
-              data-window-launcher={application.id}
-              onClick={() => launchApplication(application.id)}
-            >
-              <img src={application.icon} alt="" width={20} height={20} />
-              {application.label}
-            </button>
-          ))}
-        </div>
+          <div className={styles.startMenuColumns}>
+            <section className={styles.startMenuGroup} role="group" aria-labelledby="start-menu-applications">
+              <h2 id="start-menu-applications" className={styles.startMenuGroupHeading}>Applications</h2>
+              {primaryStartMenuApplications.map((application) => (
+                <button
+                  className={styles.startMenuItem}
+                  key={application.id}
+                  data-window-launcher={application.id}
+                  onClick={() => launchApplication(application.id)}
+                >
+                  <img src={application.icon} alt="" width={20} height={20} />
+                  {application.label}
+                </button>
+              ))}
+            </section>
+            <section className={styles.startMenuGroup} role="group" aria-labelledby="start-menu-profile-settings">
+              <h2 id="start-menu-profile-settings" className={styles.startMenuGroupHeading}>Profile &amp; settings</h2>
+              {supportingStartMenuApplications.map((application) => (
+                <button
+                  className={styles.startMenuItem}
+                  key={application.id}
+                  data-window-launcher={application.id}
+                  onClick={() => launchApplication(application.id)}
+                >
+                  <img src={application.icon} alt="" width={20} height={20} />
+                  {application.label}
+                </button>
+              ))}
+            </section>
+          </div>
+        </nav>
       )}
       <footer className={styles.taskbar} aria-label="Windows taskbar">
         <button

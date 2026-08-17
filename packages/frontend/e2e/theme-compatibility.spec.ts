@@ -44,8 +44,9 @@ test.describe('supported theme compatibility', () => {
       }
 
       await page.getByRole('button', { name: 'Start' }).click()
-      const firstStartMenuItem = page.getByRole('menuitem', { name: 'My Portfolio' })
-      const myComputerMenuItem = page.getByRole('menuitem', { name: 'My Computer' })
+      const startMenu = page.getByRole('navigation', { name: 'Start menu' })
+      const firstStartMenuItem = startMenu.getByRole('button', { name: 'My Portfolio' })
+      const myComputerMenuItem = startMenu.getByRole('button', { name: 'My Computer' })
       await expect(firstStartMenuItem).toBeFocused()
       await page.keyboard.press('Tab')
       await expect(myComputerMenuItem).toBeFocused()
@@ -71,6 +72,40 @@ test.describe('supported theme compatibility', () => {
       const restoreControl = page.getByRole('button', { name: 'Restore window' })
       await expect(restoreControl.locator('svg[data-window-control-glyph="restore"] rect')).toBeVisible()
       await expect(restoreControl.locator('svg[data-window-control-glyph="restore"] path')).toBeVisible()
+    })
+
+    test(`${theme.id} presents an accessible two-column Start menu with a narrow fallback`, async ({ page }) => {
+      await page.setViewportSize({ width: 800, height: 600 })
+      await visitInTheme(page, theme.id)
+      await page.getByRole('button', { name: 'Start' }).click()
+
+      const startMenu = page.getByRole('navigation', { name: 'Start menu' })
+      const applicationsGroup = startMenu.getByRole('group', { name: 'Applications' })
+      const profileGroup = startMenu.getByRole('group', { name: 'Profile & settings' })
+      await expect(applicationsGroup).toBeVisible()
+      await expect(profileGroup).toBeVisible()
+      await expect(applicationsGroup.getByRole('button')).toHaveCount(4)
+      await expect(profileGroup.getByRole('button')).toHaveCount(3)
+      await expect(applicationsGroup.getByRole('button', { name: 'My Portfolio' })).toBeFocused()
+      await page.keyboard.press('Tab')
+      await expect(applicationsGroup.getByRole('button', { name: 'My Computer' })).toBeFocused()
+
+      const applicationsBox = await applicationsGroup.boundingBox()
+      const profileBox = await profileGroup.boundingBox()
+      expect(applicationsBox).not.toBeNull()
+      expect(profileBox).not.toBeNull()
+      expect(profileBox!.x).toBeGreaterThan(applicationsBox!.x)
+      expect(await startMenu.evaluate((element) => element.scrollWidth <= element.clientWidth)).toBe(true)
+
+      await page.keyboard.press('Escape')
+      await page.setViewportSize({ width: 760, height: 600 })
+      await page.getByRole('button', { name: 'Start' }).click()
+      const narrowApplicationsBox = await applicationsGroup.boundingBox()
+      const narrowProfileBox = await profileGroup.boundingBox()
+      expect(narrowApplicationsBox).not.toBeNull()
+      expect(narrowProfileBox).not.toBeNull()
+      expect(narrowProfileBox!.y).toBeGreaterThan(narrowApplicationsBox!.y)
+      await expect(startMenu).toHaveCSS('overflow-x', 'hidden')
     })
 
     test(`${theme.id} exposes the same responsive primary routes`, async ({ page }) => {

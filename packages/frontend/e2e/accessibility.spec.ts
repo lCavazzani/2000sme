@@ -29,10 +29,10 @@ test.describe('supported-theme accessibility regression coverage', () => {
     await startButton.focus()
     await page.keyboard.press('Enter')
 
-    const startMenu = page.getByRole('menu', { name: 'Start menu' })
+    const startMenu = page.getByRole('navigation', { name: 'Start menu' })
     await expect(startMenu).toBeVisible()
-    await expect(page.getByRole('menuitem', { name: 'My Portfolio' })).toBeFocused()
-    await expectNoSeriousOrCriticalViolations(page, '[role="menu"]')
+    await expect(startMenu.getByRole('button', { name: 'My Portfolio' })).toBeFocused()
+    await expectNoSeriousOrCriticalViolations(page, '#start-menu')
 
     await page.keyboard.press('Escape')
     await expect(startMenu).toBeHidden()
