@@ -32,6 +32,20 @@ describe('WordPad resume viewer', () => {
     expect(screen.getByRole('status')).toHaveTextContent('The resume print dialog opened in a new window')
   })
 
+  it('keeps a distinct persistent download action available for the desktop window', () => {
+    openPrintWindowMock.mockReturnValue(true)
+    render(<WordPad />)
+
+    const persistentDownload = screen.getByRole('button', { name: 'Download resume (PDF) — persistent action' })
+    expect(persistentDownload).toBeEnabled()
+    expect(persistentDownload).toHaveTextContent('Download PDF')
+
+    fireEvent.click(persistentDownload)
+
+    expect(openPrintWindowMock).toHaveBeenCalledWith(expect.stringContaining('Leonardo Cavazzani'))
+    expect(screen.getByRole('status')).toHaveTextContent('The resume print dialog opened in a new window')
+  })
+
   it('explains the recovery path when a browser blocks the PDF dialog', () => {
     openPrintWindowMock.mockReturnValue(false)
     render(<WordPad />)

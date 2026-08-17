@@ -124,13 +124,25 @@ export function WordPad() {
         <DisabledPreviewButton label="Bullet List">≡</DisabledPreviewButton>
       </div>
 
-      <div className={styles.docArea}>
+      <div className={styles.docArea} data-resume-document-area>
         <div
           className={styles.page}
           // eslint-disable-next-line react/no-danger
           dangerouslySetInnerHTML={{ __html: html }}
         />
       </div>
+
+      <button
+        type="button"
+        className={styles.floatingDownload}
+        onClick={downloadResume}
+        aria-describedby="resume-download-help"
+        aria-label="Download resume (PDF) — persistent action"
+        title="Download resume (PDF)"
+      >
+        <span aria-hidden="true" className={styles.downloadIcon}>↓</span>
+        Download PDF
+      </button>
 
       <div className="status-bar" aria-label="WordPad preview status">
         <p className="status-bar-field">Read-only resume preview</p>
