@@ -80,3 +80,10 @@ Keep the direct route readable at narrow widths and preserve the larger desktop 
 ## Resume PDF action
 
 FE-23 treats WordPad as a read-only presentation of the approved resume content. `Download resume (PDF)` is its single working document command and opens a print dialog for saving that rendered resume as PDF. The legacy WordPad menus, document buttons, and format controls remain intentionally visible for the OS metaphor but are semantically disabled; do not make a new toolbar command interactive unless it performs the indicated behavior. The primary action remains visible, keyboard-focusable, and readable on both active themes and narrow direct routes. When WordPad is open as a desktop window, an additional bottom-left persistent action stays within the window while the document scrolls; it invokes the same approved PDF workflow without covering draggable chrome or the status bar. `src/components/WordPad.test.tsx` and `e2e/wordpad-resume.spec.ts` protect this contract.
+
+
+## Visitor Scrapbook feed
+
+FE-18 extends Visitor Scrapbook through the typed `useInfiniteGuestbookEntries` hook rather than local page state. `Load older notes` follows the backend cursor and appends older records without changing the reader’s current scroll position. After older pages are loaded, `Jump to newest` is a user-controlled scroll action. New notes use an optimistic client identity only until the server returns its persistent record, then all guestbook query consumers are invalidated to reconcile with backend truth.
+
+Paper, tape, tilt, fold, pin, and accent treatment is derived from a stable hash of entry ID and timestamp in `src/components/scrapbookDecorations.ts`; no visual identity uses `Math.random()` or depends on rerender order. Decoration spans are `aria-hidden`, note text remains semantic and selectable, and `[data-effects='reduced']` suppresses nonessential decoration without hiding content. `Guestbook.test.tsx` and `e2e/visitor-scrapbook.spec.ts` protect stable decoration and cursor-pagination behavior.

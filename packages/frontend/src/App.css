@@ -3,7 +3,9 @@
   width: 100%;
   min-height: 100vh;
   overflow: hidden;
-  background: var(--os-desktop-surface);
+  background-color: var(--os-desktop-surface);
+  background-image: var(--os-desktop-grid);
+  background-size: var(--os-desktop-grid-size);
   padding: 16px 16px 52px;
   box-sizing: border-box;
 }
@@ -21,7 +23,9 @@
   min-height: 100vh;
   box-sizing: border-box;
   padding: 24px;
-  background: var(--os-desktop-surface);
+  background-color: var(--os-desktop-surface);
+  background-image: var(--os-desktop-grid);
+  background-size: var(--os-desktop-grid-size);
   color: var(--os-desktop-fg);
 }
 
@@ -63,4 +67,103 @@
     min-height: 100dvh;
     padding: 20px 16px;
   }
+}
+
+:root[data-os-theme='win98'] .desktop {
+  padding: 8px 8px 42px;
+}
+
+:root[data-os-theme='win98'] .desktopIcons {
+  grid-template-columns: repeat(auto-fill, 72px);
+  grid-auto-rows: 78px;
+  gap: 6px 10px;
+  padding: 8px;
+}
+
+:root[data-os-theme='win98'] .directRoute {
+  padding: 18px;
+}
+
+:root[data-os-theme='win98'] .directRouteBack {
+  border: 2px solid;
+  border-color: #fff #000 #000 #fff;
+  border-radius: 0;
+  box-shadow: inset -1px -1px #808080, inset 1px 1px #dfdfdf;
+  font-family: 'MS Sans Serif', Tahoma, Arial, sans-serif;
+  font-size: 11px;
+}
+
+:root[data-os-theme='win98'] .directRouteBack:active {
+  border-color: #000 #fff #fff #000;
+  box-shadow: inset -1px -1px #fff, inset 1px 1px #808080;
+}
+
+:root[data-os-theme='win98'] .desktop {
+  padding: 6px 6px 36px;
+  background-color: #008080;
+  background-image: none;
+}
+
+:root[data-os-theme='win98'] .desktopIcons {
+  grid-template-columns: repeat(auto-fill, 74px);
+  grid-auto-rows: 82px;
+  gap: 4px 8px;
+  padding: 6px;
+}
+
+:root[data-os-theme='win98'] .directRoute {
+  padding: 14px;
+  background-color: #008080;
+  background-image: none;
+  font-family: 'MS Sans Serif', Tahoma, Arial, sans-serif;
+}
+
+:root[data-os-theme='win98'] .directRouteBack:hover {
+  background: #dfdfdf;
+}
+
+/* An original CSS-native landscape keeps the XP sky-and-horizon hierarchy without shipping the reference wallpaper. */
+:root[data-os-theme='winxp'] .desktop {
+  padding: 14px 16px 52px;
+  background-color: #4d9be7;
+  background-image:
+    radial-gradient(ellipse 58% 15% at 57% 96%, rgb(46 111 22 / 46%), transparent 71%),
+    radial-gradient(ellipse 68% 20% at 18% 100%, #6fb240 0 42%, transparent 43%),
+    linear-gradient(168deg, transparent 0 54%, #67af35 54.4% 67%, #458d27 67.4% 100%),
+    radial-gradient(ellipse 20% 8% at 72% 22%, rgb(255 255 255 / 81%) 0 33%, transparent 34%),
+    radial-gradient(ellipse 16% 7% at 61% 17%, rgb(255 255 255 / 72%) 0 33%, transparent 34%),
+    linear-gradient(180deg, #5aaeff 0%, #91c9ef 47%, #b8dddf 54%, #78b93f 55%);
+  background-size: cover;
+}
+
+:root[data-os-theme='winxp'] .desktopIcons {
+  grid-template-columns: repeat(auto-fill, 88px);
+  grid-auto-rows: 94px;
+  gap: 8px 14px;
+  padding: 14px;
+}
+
+:root[data-os-theme='winxp'] .directRoute {
+  padding: 24px;
+  background-color: #4d9be7;
+  background-image:
+    linear-gradient(168deg, transparent 0 57%, #67af35 57.4% 70%, #458d27 70.4% 100%),
+    linear-gradient(180deg, #5aaeff 0%, #91c9ef 55%, #78b93f 56%);
+  background-size: cover;
+}
+
+:root[data-os-theme='winxp'] .directRouteBack {
+  border: 1px solid #2d67ad;
+  border-radius: 4px;
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 78%), transparent 42%),
+    linear-gradient(#eaf4ff, #c6dcf5);
+  box-shadow: inset 0 1px #fff, 0 1px 2px rgb(0 39 112 / 24%);
+  font-family: Tahoma, Verdana, Arial, sans-serif;
+}
+
+:root[data-os-theme='winxp'] .directRouteBack:hover {
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 82%), transparent 42%),
+    linear-gradient(#f5faff, #d7e8fb);
 }

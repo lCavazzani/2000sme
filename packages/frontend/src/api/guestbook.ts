@@ -1,11 +1,11 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { type InfiniteData, useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { guestbookApiUrl } from '../config/api'
 import { ApiError, isApiError, requestJson } from './client'
 
 export const DEFAULT_GUESTBOOK_PAGE_LIMIT = 20
 
 export type GuestbookEntry = {
-  id: number
+  id: number | string
   name: string
   message: string
   created_at: string
@@ -30,14 +30,20 @@ export type CreateGuestbookEntryInput = {
   turnstileToken: string
 }
 
+type GuestbookFeedData = InfiniteData<GuestbookPage, string | null>
+
+let optimisticSequence = 0
+
 export const guestbookQueryKeys = {
   all: ['guestbook'] as const,
   page: (request: GuestbookPageRequest = {}) => [
-    ...guestbookQueryKeys.all,
+    'guestbook',
     'page',
     request.limit ?? DEFAULT_GUESTBOOK_PAGE_LIMIT,
     request.cursor ?? null,
   ] as const,
+  feedRoot: ['guestbook', 'feed'] as const,
+  feed: (limit = DEFAULT_GUESTBOOK_PAGE_LIMIT) => ['guestbook', 'feed', limit] as const,
 }
 
 export async function getGuestbookEntries(
@@ -77,13 +83,69 @@ export function useGuestbookEntries(request: GuestbookPageRequest = {}) {
   })
 }
 
+export function useInfiniteGuestbookEntries(limit = DEFAULT_GUESTBOOK_PAGE_LIMIT) {
+  return useInfiniteQuery({
+    queryKey: guestbookQueryKeys.feed(limit),
+    initialPageParam: null as string | null,
+    queryFn: ({ pageParam, signal }) => getGuestbookEntries({ limit, cursor: pageParam ?? undefined }, signal),
+    getNextPageParam: (lastPage) => lastPage.page.next_cursor,
+    staleTime: 30_000,
+    retry: (failureCount, error) => shouldRetryGuestbookQuery(failureCount, error),
+  })
+}
+
 export function useCreateGuestbookEntry() {
   const queryClient = useQueryClient()
 
   return useMutation({
     mutationFn: createGuestbookEntry,
     retry: false,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: guestbookQueryKeys.all }),
+    onMutate: async (input) => {
+      await queryClient.cancelQueries({ queryKey: guestbookQueryKeys.feedRoot })
+      const previousFeeds = queryClient.getQueriesData<GuestbookFeedData>({ queryKey: guestbookQueryKeys.feedRoot })
+      const optimisticId = `optimistic-${Date.now()}-${++optimisticSequence}`
+      const optimisticEntry: GuestbookEntry = {
+        id: optimisticId,
+        name: input.name,
+        message: input.message,
+        created_at: new Date().toISOString(),
+      }
+
+      queryClient.setQueriesData<GuestbookFeedData>({ queryKey: guestbookQueryKeys.feedRoot }, (current) => {
+        if (!current || current.pages.length === 0) return current
+        const [firstPage, ...remainingPages] = current.pages
+        return {
+          ...current,
+          pages: [
+            {
+              ...firstPage,
+              entries: [optimisticEntry, ...firstPage.entries].slice(0, firstPage.page.limit),
+            },
+            ...remainingPages,
+          ],
+        }
+      })
+
+      return { optimisticId, previousFeeds }
+    },
+    onError: (_error, _input, context) => {
+      context?.previousFeeds.forEach(([queryKey, data]) => queryClient.setQueryData(queryKey, data))
+    },
+    onSuccess: (entry, _input, context) => {
+      queryClient.setQueriesData<GuestbookFeedData>({ queryKey: guestbookQueryKeys.feedRoot }, (current) => {
+        if (!current) return current
+        return {
+          ...current,
+          pages: current.pages.map((page) => ({
+            ...page,
+            entries: page.entries.map((candidate) => candidate.id === context?.optimisticId ? entry : candidate),
+          })),
+        }
+      })
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: guestbookQueryKeys.all })
+    },
   })
 }
 

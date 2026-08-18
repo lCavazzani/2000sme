@@ -53,6 +53,20 @@
   --os-app-link-hover-fg: #003a99;
   --os-gloss-overlay: linear-gradient(rgb(255 255 255 / 38%), transparent 50%);
   --os-crt-opacity: 0;
+  --os-desktop-grid: radial-gradient(rgb(255 255 255 / 10%) 1px, transparent 1px);
+  --os-desktop-grid-size: 24px 24px;
+  --os-control-radius: 4px;
+  --os-control-border-width: 1px;
+  --os-control-elevation: inset 0 1px rgb(255 255 255 / 50%);
+  --os-task-button-bg: linear-gradient(#5fa9f9, #2f6fe1 60%, #2454bd);
+  --os-task-button-border: #174aaf;
+  --os-task-button-active-bg: linear-gradient(#a9c9fa, #719fe9);
+  --os-task-button-active-border: #174aaf;
+  --os-start-button-bg: linear-gradient(#74bf4b, #3b8c2e 60%, #286f21);
+  --os-start-button-border: #1d621c;
+  --os-start-button-fg: #fff;
+  --os-tray-radius: 4px;
+  --os-app-toolbar-highlight: inset 0 1px rgb(255 255 255 / 55%);
   --os-motion-duration: 160ms;
 }
 
@@ -110,6 +124,20 @@
   --os-app-link-fg: #000080;
   --os-app-link-hover-fg: #0000ee;
   --os-gloss-overlay: none;
+  --os-desktop-grid: none;
+  --os-desktop-grid-size: auto;
+  --os-control-radius: 0;
+  --os-control-border-width: 2px;
+  --os-control-elevation: inset -1px -1px #000, inset 1px 1px #fff;
+  --os-task-button-bg: #c0c0c0;
+  --os-task-button-border: #fff #000 #000 #fff;
+  --os-task-button-active-bg: #dfdfdf;
+  --os-task-button-active-border: #000 #fff #fff #000;
+  --os-start-button-bg: #c0c0c0;
+  --os-start-button-border: #fff #000 #000 #fff;
+  --os-start-button-fg: #000;
+  --os-tray-radius: 0;
+  --os-app-toolbar-highlight: inset -1px -1px #808080, inset 1px 1px #fff;
 }
 
 :root[data-theme-gloss='on'] .title-bar::before {
@@ -164,4 +192,158 @@
     --os-gloss-overlay: none;
     --os-crt-opacity: 0;
   }
+}
+
+:root[data-os-theme='win98'] .window {
+  font-family: 'MS Sans Serif', Tahoma, Arial, sans-serif;
+}
+
+:root[data-os-theme='win98'] .title-bar {
+  min-height: 18px;
+  padding: 2px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+:root[data-os-theme='win98'] .title-bar-controls button {
+  min-width: 16px;
+  min-height: 14px;
+  border-radius: 0;
+}
+
+:root[data-os-theme='win98'] .window-body {
+  border-top: 1px solid #808080;
+}
+
+/* Windows 98 classic frame: layered bevels keep the shell legible at small sizes. */
+:root[data-os-theme='win98'] .window {
+  padding: 2px;
+  border: 2px solid;
+  border-color: #fff #000 #000 #fff;
+  background: #c0c0c0;
+  box-shadow: inset -1px -1px #808080, inset 1px 1px #dfdfdf, 2px 2px #000;
+}
+
+:root[data-os-theme='win98'] .title-bar {
+  min-height: 20px;
+  padding: 2px 3px;
+  box-shadow: none;
+  font-size: 11px;
+  line-height: 14px;
+  letter-spacing: 0;
+}
+
+:root[data-os-theme='win98'] .title-bar-text {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  min-width: 0;
+}
+
+:root[data-os-theme='win98'] .title-bar-controls {
+  gap: 2px;
+}
+
+:root[data-os-theme='win98'] .title-bar-controls button {
+  min-width: 16px;
+  min-height: 14px;
+  padding: 0;
+  border: 1px solid;
+  border-color: #fff #000 #000 #fff;
+  border-radius: 0;
+  background-color: #c0c0c0;
+  box-shadow: inset -1px -1px #808080, inset 1px 1px #dfdfdf;
+}
+
+:root[data-os-theme='win98'] .title-bar-controls button:active {
+  border-color: #000 #fff #fff #000;
+  box-shadow: inset -1px -1px #fff, inset 1px 1px #808080;
+}
+
+:root[data-os-theme='win98'] .title-bar-controls button:focus-visible {
+  outline: 1px dotted #000;
+  outline-offset: -4px;
+}
+
+:root[data-os-theme='win98'] .window-body {
+  border: 2px solid;
+  border-color: #808080 #fff #fff #808080;
+  background: #c0c0c0;
+  box-shadow: inset -1px -1px #dfdfdf, inset 1px 1px #000;
+}
+
+/* XP/Luna frame: layered blues and rounded utility controls, without importing reference artwork. */
+:root[data-os-theme='winxp'] .window {
+  padding: 2px 3px 3px;
+  border: 1px solid #0b3b9a;
+  border-radius: 8px 8px 4px 4px;
+  background:
+    linear-gradient(90deg, #174bc0, #3f87ea 8%, #0f55c4 92%, #123fa5);
+  box-shadow: 0 4px 14px rgb(0 30 105 / 44%), inset 0 1px rgb(255 255 255 / 62%);
+  font-family: Tahoma, Verdana, Arial, sans-serif;
+}
+
+:root[data-os-theme='winxp'] .title-bar {
+  min-height: 25px;
+  padding: 3px 5px 2px 7px;
+  border: 1px solid #0e4cae;
+  border-radius: 6px 6px 0 0;
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 44%), transparent 25%),
+    linear-gradient(180deg, #3a95f7 0%, #176dd2 35%, #0b57c4 72%, #124aa9 100%);
+  box-shadow: inset 0 1px rgb(255 255 255 / 72%);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 18px;
+  text-shadow: 1px 1px #0a3585;
+}
+
+:root[data-os-theme='winxp'] .window[data-window-active='false'] .title-bar {
+  border-color: #6c88a8;
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 31%), transparent 30%),
+    linear-gradient(180deg, #9eb7d0, #6d89a5 64%, #5d7895);
+  text-shadow: 1px 1px #536a83;
+}
+
+:root[data-os-theme='winxp'] .title-bar-controls {
+  gap: 2px;
+}
+
+:root[data-os-theme='winxp'] .title-bar-controls button {
+  min-width: 21px;
+  min-height: 19px;
+  padding: 0;
+  border: 1px solid #0a479e;
+  border-radius: 3px;
+  /* Leave the vendor SVG glyph background image intact. */
+  background-color: #2168ce;
+  box-shadow: inset 0 1px rgb(255 255 255 / 75%);
+}
+
+:root[data-os-theme='winxp'] .title-bar-controls button:last-child {
+  border-color: #a12022;
+  /* Only the close-control colour changes; its glyph remains vendor-provided. */
+  background-color: #d23732;
+}
+
+:root[data-os-theme='winxp'] .title-bar-controls button:hover {
+  filter: brightness(1.12);
+}
+
+:root[data-os-theme='winxp'] .title-bar-controls button:active {
+  transform: translateY(1px);
+  box-shadow: inset 0 2px 3px rgb(0 32 103 / 38%);
+}
+
+:root[data-os-theme='winxp'] .title-bar-controls button:focus-visible {
+  outline: 1px dotted #fff;
+  outline-offset: -4px;
+}
+
+:root[data-os-theme='winxp'] .window-body {
+  border: 1px solid #2c66b7;
+  border-top: 0;
+  background: #ece9d8;
+  box-shadow: inset 0 1px rgb(255 255 255 / 64%);
 }

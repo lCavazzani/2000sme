@@ -72,7 +72,7 @@ test.describe('supported theme compatibility', () => {
       await expect(restoreControl).toHaveCSS('background-image', /url\(/)
     })
 
-    test(`${theme.id} presents an accessible two-column Start menu with a narrow fallback`, async ({ page }) => {
+    test(`${theme.id} presents an accessible icon-led Start menu with its intended layout`, async ({ page }) => {
       await page.setViewportSize({ width: 800, height: 600 })
       await visitInTheme(page, theme.id)
       await page.getByRole('button', { name: 'Start' }).click()
@@ -92,9 +92,21 @@ test.describe('supported theme compatibility', () => {
       const profileBox = await profileGroup.boundingBox()
       expect(applicationsBox).not.toBeNull()
       expect(profileBox).not.toBeNull()
-      expect(profileBox!.x).toBeGreaterThan(applicationsBox!.x)
       expect(await startMenu.evaluate((element) => element.scrollWidth <= element.clientWidth)).toBe(true)
 
+      const portfolioImages = applicationsGroup.getByRole('button', { name: 'My Portfolio' }).locator('img')
+      await expect(portfolioImages.nth(theme.id === 'win98' ? 1 : 0)).toHaveAttribute(
+        'src',
+        new RegExp(`/theme-assets/${theme.id}/portfolio\\.ico$`),
+      )
+
+      if (theme.id === 'win98') {
+        expect(profileBox!.y).toBeGreaterThan(applicationsBox!.y)
+        await expect(startMenu).toHaveCSS('overflow-x', 'hidden')
+        return
+      }
+
+      expect(profileBox!.x).toBeGreaterThan(applicationsBox!.x)
       await page.keyboard.press('Escape')
       await page.setViewportSize({ width: 760, height: 600 })
       await page.getByRole('button', { name: 'Start' }).click()
@@ -120,6 +132,20 @@ test.describe('supported theme compatibility', () => {
       await expect(mobileLauncher.getByRole('link', { name: /Themes/ })).toBeVisible()
     })
   }
+
+  test('gives Windows 98 a sharp, beveled taskbar and Start-menu grammar', async ({ page }) => {
+    await visitInTheme(page, 'win98')
+
+    const startButton = page.getByRole('button', { name: 'Start' })
+    const taskbar = page.locator('footer[aria-label="Windows taskbar"]')
+    await expect(startButton).toHaveCSS('border-radius', '0px')
+    await expect(taskbar).toHaveCSS('border-top-width', '2px')
+
+    await startButton.click()
+    const startMenu = page.getByRole('navigation', { name: 'Start menu' })
+    await expect(startMenu).toHaveCSS('border-radius', '0px')
+    await expect(startMenu.getByRole('button', { name: 'My Portfolio' })).toBeVisible()
+  })
 
   test('keeps the Windows 7 stylesheet available but dormant outside the release UI', async ({ page, request }) => {
     await page.goto('/')
