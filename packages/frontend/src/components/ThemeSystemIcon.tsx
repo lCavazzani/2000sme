@@ -1,4 +1,4 @@
-import { useTheme } from '../theme/ThemeProvider'
+import styles from './ThemeSystemIcon.module.css'
 
 type ThemeSystemIconName = 'my-computer'
 
@@ -11,20 +11,25 @@ type ThemeSystemIconProps = {
 }
 
 const SYSTEM_ICON_SOURCES = {
-  win98: {
-    'my-computer': '/theme-assets/win98/my-computer.ico',
-  },
-  winxp: {
-    'my-computer': '/theme-assets/winxp/my-computer.ico',
+  'my-computer': {
+    win98: '/theme-assets/win98/my-computer.ico',
+    winxp: '/theme-assets/winxp/my-computer.ico',
   },
 } as const
 
 /**
- * Keeps a small number of documented system-affordance icons theme-specific
- * while portfolio application icons remain registry-owned and original.
+ * Renders both documented theme variants and lets the root data attribute pick
+ * the visible asset. This keeps icon changes synchronous with stylesheet swaps
+ * and avoids adding theme-context requirements to isolated shell tests.
  */
 export function ThemeSystemIcon({ name, alt = '', width, height, className }: ThemeSystemIconProps) {
-  const { theme } = useTheme()
+  const source = SYSTEM_ICON_SOURCES[name]
+  const commonClassName = `${styles.icon} ${className ?? ''}`.trim()
 
-  return <img src={SYSTEM_ICON_SOURCES[theme][name]} alt={alt} width={width} height={height} className={className} />
+  return (
+    <span className={styles.root} aria-hidden={alt === '' ? true : undefined}>
+      <img src={source.winxp} alt={alt} width={width} height={height} className={`${commonClassName} ${styles.winxp}`} />
+      <img src={source.win98} alt="" width={width} height={height} className={`${commonClassName} ${styles.win98}`} />
+    </span>
+  )
 }

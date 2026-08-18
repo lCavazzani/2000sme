@@ -97,3 +97,13 @@
   color: #fff;
   background: #000080;
 }
+
+:global(:root[data-os-theme='win98']) .desktopIcon {
+  border: 1px solid transparent !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+:global(:root[data-os-theme='win98']) .desktopIcon:active {
+  transform: none;
+}
