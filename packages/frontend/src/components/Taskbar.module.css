@@ -241,13 +241,13 @@
 }
 
 .startMenuGroupHeading {
-  margin: 0 0 3px;
-  padding: 0 8px;
-  color: #28528e;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
 }
 
 .startMenuItem {
@@ -401,7 +401,7 @@
 :global(:root[data-os-theme='win98']) .startMenu {
   bottom: 29px;
   left: 2px;
-  width: min(386px, calc(100vw - 4px));
+  width: min(266px, calc(100vw - 4px));
   grid-template-columns: 25px minmax(0, 1fr);
   grid-template-rows: minmax(0, 1fr);
   color: #000;
@@ -434,41 +434,36 @@
 }
 
 :global(:root[data-os-theme='win98']) .startMenuColumns {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0;
-  padding: 4px;
+  display: block;
+  padding: 3px;
   background: #c0c0c0;
 }
 
 :global(:root[data-os-theme='win98']) .startMenuGroup {
-  gap: 1px;
-  padding: 2px;
+  display: grid;
+  gap: 0;
+  padding: 0;
 }
 
 :global(:root[data-os-theme='win98']) .startMenuGroup + .startMenuGroup {
+  margin-top: 3px;
+  padding-top: 3px;
   background: #c0c0c0;
-  border-left: 1px solid #808080;
-  box-shadow: inset 1px 0 #fff;
-}
-
-:global(:root[data-os-theme='win98']) .startMenuGroupHeading {
-  margin-bottom: 1px;
-  padding: 1px 4px;
-  color: #000080;
-  font-size: 10px;
-  letter-spacing: 0;
+  border-top: 1px solid #808080;
+  border-left: 0;
+  box-shadow: inset 0 1px #fff;
 }
 
 :global(:root[data-os-theme='win98']) .startMenuItem {
-  min-height: 31px;
-  padding: 3px 4px;
+  min-height: 34px;
+  padding: 4px 5px;
   border-radius: 0;
   font-size: 11px;
 }
 
 :global(:root[data-os-theme='win98']) .startMenuItem img {
-  width: 18px;
-  height: 18px;
+  width: 24px;
+  height: 24px;
   image-rendering: pixelated;
 }
 
@@ -482,16 +477,6 @@
 
 @media (max-width: 780px) {
   :global(:root[data-os-theme='win98']) .startMenu {
-    width: min(300px, calc(100vw - 4px));
-  }
-
-  :global(:root[data-os-theme='win98']) .startMenuColumns {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  :global(:root[data-os-theme='win98']) .startMenuGroup + .startMenuGroup {
-    border-top: 1px solid #808080;
-    border-left: 0;
-    box-shadow: inset 0 1px #fff;
+    width: min(266px, calc(100vw - 4px));
   }
 }

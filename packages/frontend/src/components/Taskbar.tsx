@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState, type KeyboardEvent } from 'react'
-import { applicationsForSurface, type ApplicationId } from '../config/applicationRegistry'
+import { applicationsForSurface, findApplication, type ApplicationId } from '../config/applicationRegistry'
 import { useWindows } from '../store/windows'
 import type { WindowState } from '../types/window'
-import { ThemeSystemIcon } from './ThemeSystemIcon'
+import { ThemeAssetIcon } from './ThemeSystemIcon'
 import styles from './Taskbar.module.css'
 
 function formatTime(date: Date) {
@@ -119,11 +119,7 @@ export function Taskbar() {
                   data-window-launcher={application.id}
                   onClick={() => launchApplication(application.id)}
                 >
-                  {application.id === 'my-computer' ? (
-                    <ThemeSystemIcon name="my-computer" width={20} height={20} />
-                  ) : (
-                    <img src={application.icon} alt="" width={20} height={20} />
-                  )}
+                  <ThemeAssetIcon name={application.id} width={20} height={20} />
                   {application.label}
                 </button>
               ))}
@@ -137,11 +133,7 @@ export function Taskbar() {
                   data-window-launcher={application.id}
                   onClick={() => launchApplication(application.id)}
                 >
-                  {application.id === 'my-computer' ? (
-                    <ThemeSystemIcon name="my-computer" width={20} height={20} />
-                  ) : (
-                    <img src={application.icon} alt="" width={20} height={20} />
-                  )}
+                  <ThemeAssetIcon name={application.id} width={20} height={20} />
                   {application.label}
                 </button>
               ))}
@@ -157,12 +149,13 @@ export function Taskbar() {
           aria-controls="start-menu"
           onClick={() => setIsStartMenuOpen((isOpen) => !isOpen)}
         >
-          <PortfolioMark />
+          <ThemeAssetIcon name="start" width={18} height={18} />
           <span>Start</span>
         </button>
         <div className={styles.windowList} role="group" aria-label="Open windows">
           {openWindows.map((windowState) => {
             const isActive = windowState.id === activeWindowId
+            const application = findApplication(windowState.id)
             return (
               <button
                 className={`${styles.windowButton} ${isActive ? styles.activeWindowButton : ''}`}
@@ -171,8 +164,8 @@ export function Taskbar() {
                 data-window-taskbar={windowState.id}
                 onClick={() => toggleWindow(windowState)}
               >
-                {windowState.id === 'my-computer' ? (
-                  <ThemeSystemIcon name="my-computer" width={16} height={16} />
+                {application ? (
+                  <ThemeAssetIcon name={application.id} width={16} height={16} />
                 ) : (
                   windowState.icon && <img src={windowState.icon} alt="" width={16} height={16} />
                 )}

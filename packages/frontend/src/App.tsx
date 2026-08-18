@@ -99,6 +99,7 @@ function Desktop() {
             key={application.id}
             label={application.label}
             icon={application.icon}
+            applicationId={application.id}
             windowId={application.id}
             isSelected={selectedWindowId === application.id}
             onSelect={setSelectedWindowId}
