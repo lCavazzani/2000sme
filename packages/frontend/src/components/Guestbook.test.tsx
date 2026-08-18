@@ -29,7 +29,16 @@ vi.mock('./TurnstileWidget', () => ({
   TurnstileWidget: () => <div data-testid="turnstile-widget" />,
 }))
 
+import { ThemeProvider } from '../theme/ThemeProvider'
 import { Guestbook } from './Guestbook'
+
+function renderGuestbook() {
+  return render(
+    <ThemeProvider>
+      <Guestbook />
+    </ThemeProvider>,
+  )
+}
 
 function resetStates() {
   queryState.data = {
@@ -61,7 +70,7 @@ describe('Visitor Scrapbook', () => {
   })
 
   it('renders a chronological semantic note list and gives keyboard users a direct composer path', () => {
-    render(<Guestbook />)
+    renderGuestbook()
 
     expect(screen.getByRole('heading', { name: 'Notes from visitors', level: 2 })).toBeVisible()
     expect(screen.getByRole('tab', { name: 'Read notes' })).toHaveAttribute('aria-selected', 'true')
@@ -77,7 +86,7 @@ describe('Visitor Scrapbook', () => {
   })
 
   it('keeps a stored entry visual identity deterministic across rerenders', () => {
-    const { rerender } = render(<Guestbook />)
+    const { rerender } = renderGuestbook()
     const article = screen.getByRole('article', { name: 'Ada Lovelace' })
     const firstIdentity = {
       paper: article.getAttribute('data-paper'),
@@ -87,7 +96,11 @@ describe('Visitor Scrapbook', () => {
       accent: article.getAttribute('data-accent'),
     }
 
-    rerender(<Guestbook />)
+    rerender(
+      <ThemeProvider>
+        <Guestbook />
+      </ThemeProvider>,
+    )
     const rerenderedArticle = screen.getByRole('article', { name: 'Ada Lovelace' })
     expect({
       paper: rerenderedArticle.getAttribute('data-paper'),
@@ -105,7 +118,7 @@ describe('Visitor Scrapbook', () => {
       page: { limit: 20, next_cursor: 'older-cursor' },
     })
 
-    render(<Guestbook />)
+    renderGuestbook()
 
     fireEvent.click(screen.getByRole('button', { name: 'Load older notes' }))
     expect(queryState.fetchNextPage).toHaveBeenCalledOnce()
@@ -113,7 +126,7 @@ describe('Visitor Scrapbook', () => {
   })
 
   it('uses inline field errors instead of making an invalid submission', () => {
-    render(<Guestbook />)
+    renderGuestbook()
     fireEvent.click(screen.getByRole('tab', { name: 'Leave a note' }))
 
     const form = screen.getByLabelText('Your name').closest('form')
@@ -128,7 +141,7 @@ describe('Visitor Scrapbook', () => {
     queryState.data = undefined
     queryState.isError = true
     queryState.error = new Error('Visitor notes are unavailable.')
-    render(<Guestbook />)
+    renderGuestbook()
 
     expect(screen.getByRole('alert')).toHaveTextContent('Visitor notes are unavailable.')
     fireEvent.click(screen.getByRole('button', { name: 'Try again' }))

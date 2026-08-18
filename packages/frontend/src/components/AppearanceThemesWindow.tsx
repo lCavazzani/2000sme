@@ -1,4 +1,4 @@
-import { type ActiveThemeId, useTheme } from '../theme/ThemeProvider'
+import { type ActiveThemeId, type EffectsPreference, useTheme } from '../theme/ThemeProvider'
 import styles from './AppearanceThemesWindow.module.css'
 
 const options: Array<{ id: ActiveThemeId; label: string; description: string; preview: string }> = [
@@ -6,8 +6,13 @@ const options: Array<{ id: ActiveThemeId; label: string; description: string; pr
   { id: 'win98', label: 'Windows 98', description: 'Historic desktop — active release theme.', preview: styles.win98 },
 ]
 
+const effectsOptions: Array<{ id: EffectsPreference; label: string; description: string }> = [
+  { id: 'system', label: 'Follow device preference', description: 'Use the operating system reduced-motion setting.' },
+  { id: 'reduced', label: 'Reduce scrapbook effects', description: 'Keep notes fully usable while removing optional motion and decoration.' },
+]
+
 export function AppearanceThemesWindow() {
-  const { theme, setTheme } = useTheme()
+  const { theme, setTheme, effectsPreference, setEffectsPreference } = useTheme()
 
   return (
     <section className={styles.appearance} aria-labelledby="appearance-heading">
@@ -29,6 +34,25 @@ export function AppearanceThemesWindow() {
               <span />
             </span>
             <span className={styles.copy}>
+              <strong>{option.label}</strong>
+              <small>{option.description}</small>
+            </span>
+          </label>
+        ))}
+      </fieldset>
+      <fieldset className={styles.effects}>
+        <legend>Visitor Scrapbook effects</legend>
+        <p>Effects never change note content, form controls, or keyboard behavior.</p>
+        {effectsOptions.map((option) => (
+          <label className={styles.effectOption} key={option.id}>
+            <input
+              type="radio"
+              name="scrapbook-effects"
+              value={option.id}
+              checked={effectsPreference === option.id}
+              onChange={() => setEffectsPreference(option.id)}
+            />
+            <span>
               <strong>{option.label}</strong>
               <small>{option.description}</small>
             </span>

@@ -1,3 +1,4 @@
+import { AnimatePresence, MotionConfig, motion } from 'motion/react'
 import { useCallback, useEffect, useMemo, useRef, useState, type FormEvent } from 'react'
 import {
   guestbookErrorMessage,
@@ -5,6 +6,7 @@ import {
   useInfiniteGuestbookEntries,
 } from '../api/guestbook'
 import { turnstileSiteKey } from '../config/turnstile'
+import { useTheme } from '../theme/ThemeProvider'
 import { decorationForEntry } from './scrapbookDecorations'
 import { TurnstileWidget } from './TurnstileWidget'
 import styles from './Guestbook.module.css'
@@ -33,6 +35,7 @@ function validateEntry(name: string, message: string): FieldErrors {
 }
 
 export function Guestbook() {
+  const { effects } = useTheme()
   const [activePane, setActivePane] = useState<ScrapbookPane>('notes')
   const [name, setName] = useState('')
   const [message, setMessage] = useState('')
@@ -74,9 +77,9 @@ export function Guestbook() {
   }, [])
 
   const jumpToNewest = useCallback(() => {
-    feedRef.current?.scrollTo({ top: 0, behavior: 'smooth' })
+    feedRef.current?.scrollTo({ top: 0, behavior: effects === 'reduced' ? 'auto' : 'smooth' })
     notesHeadingRef.current?.focus()
-  }, [])
+  }, [effects])
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -118,7 +121,8 @@ export function Guestbook() {
   }
 
   return (
-    <section className={styles.scrapbook} aria-labelledby="scrapbook-heading">
+    <MotionConfig reducedMotion={effects === 'reduced' ? 'always' : 'never'}>
+      <section className={styles.scrapbook} aria-labelledby="scrapbook-heading">
       <header className={styles.header}>
         <span className={styles.titleTile} aria-hidden="true" />
         <p className={styles.eyebrow}>Visitor log</p>
@@ -198,32 +202,44 @@ export function Guestbook() {
           {!isLoading && !loadError && entries.length > 0 && (
             <>
               <ol className={styles.entryList} aria-label="Visitor notes in chronological order">
-                {entries.map((entry) => {
-                  const decoration = decorationForEntry(entry)
-                  return (
-                    <li key={entry.id}>
-                      <article
-                        className={styles.entry}
-                        aria-labelledby={`scrapbook-note-${entry.id}`}
-                        data-paper={decoration.paper}
-                        data-tape={decoration.tape}
-                        data-tilt={decoration.tilt}
-                        data-corner={decoration.corner}
-                        data-accent={decoration.accent}
+                <AnimatePresence initial={false}>
+                  {entries.map((entry) => {
+                    const visualKey = entry.visualKey ?? String(entry.id)
+                    const decoration = decorationForEntry(entry)
+                    return (
+                      <motion.li
+                        key={visualKey}
+                        initial={{ opacity: 0, y: 12 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0 }}
+                        whileHover={{ y: -2 }}
+                        transition={{ duration: 0.18, ease: [0.2, 0.72, 0.28, 1] }}
                       >
-                        <span className={styles.tape} aria-hidden="true" />
-                        <span className={styles.cornerDecoration} aria-hidden="true" />
-                        <span className={styles.accentDecoration} aria-hidden="true" />
-                        <header>
-                          <h3 id={`scrapbook-note-${entry.id}`}>{entry.name}</h3>
-                          <time dateTime={entry.created_at}>{formatEntryDate(entry.created_at)}</time>
-                        </header>
-                        <p>{entry.message}</p>
-                        <span className={styles.dateStamp} aria-hidden="true">Visitor note</span>
-                      </article>
-                    </li>
-                  )
-                })}
+                        <motion.article
+                          className={styles.entry}
+                          aria-labelledby={`scrapbook-note-${visualKey}`}
+                          tabIndex={0}
+                          data-paper={decoration.paper}
+                          data-tape={decoration.tape}
+                          data-tilt={decoration.tilt}
+                          data-corner={decoration.corner}
+                          data-accent={decoration.accent}
+                          whileFocus={{ scale: 1.01 }}
+                        >
+                          <span className={styles.tape} aria-hidden="true" />
+                          <span className={styles.cornerDecoration} aria-hidden="true" />
+                          <span className={styles.accentDecoration} aria-hidden="true" />
+                          <header>
+                            <h3 id={`scrapbook-note-${visualKey}`}>{entry.name}</h3>
+                            <time dateTime={entry.created_at}>{formatEntryDate(entry.created_at)}</time>
+                          </header>
+                          <p>{entry.message}</p>
+                          <span className={styles.dateStamp} aria-hidden="true">Visitor note</span>
+                        </motion.article>
+                      </motion.li>
+                    )
+                  })}
+                </AnimatePresence>
               </ol>
               {guestbookFeed.hasNextPage && (
                 <div className={styles.feedFooter}>
@@ -324,6 +340,7 @@ export function Guestbook() {
           {submitError && <p className={styles.errorPanel} role="alert">{submitError}</p>}
         </form>
       </section>
-    </section>
+      </section>
+    </MotionConfig>
   )
 }

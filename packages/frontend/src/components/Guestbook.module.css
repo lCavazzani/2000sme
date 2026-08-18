@@ -308,15 +308,15 @@
   z-index: 1;
 }
 
-:global([data-effects='reduced']) .titleTile,
-:global([data-effects='reduced']) .tape,
-:global([data-effects='reduced']) .cornerDecoration,
-:global([data-effects='reduced']) .accentDecoration,
-:global([data-effects='reduced']) .dateStamp {
+:global([data-theme-effects='reduced']) .titleTile,
+:global([data-theme-effects='reduced']) .tape,
+:global([data-theme-effects='reduced']) .cornerDecoration,
+:global([data-theme-effects='reduced']) .accentDecoration,
+:global([data-theme-effects='reduced']) .dateStamp {
   display: none;
 }
 
-:global([data-effects='reduced']) .entry[data-tilt] {
+:global([data-theme-effects='reduced']) .entry[data-tilt] {
   transform: none;
 }
 
@@ -745,8 +745,13 @@
   background: var(--scrapbook-card-surface);
 }
 
-:global([data-effects='reduced']) .entry,
-:global([data-effects='reduced']) .entry[data-tilt] {
+:global([data-theme-effects='reduced']) .entry,
+:global([data-theme-effects='reduced']) .entry[data-tilt] {
   transform: none;
   transition: none;
+}
+
+.entry:focus-visible {
+  outline: 2px solid var(--scrapbook-focus, var(--os-focus-ring));
+  outline-offset: 3px;
 }
