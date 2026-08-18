@@ -61,3 +61,39 @@
 :global(:root[data-os-theme='win98']) .selected span {
   padding: 1px 3px;
 }
+
+:global(:root[data-os-theme='win98']) .desktopIcon {
+  width: 74px;
+  min-height: 78px;
+  gap: 2px;
+  padding: 3px 1px;
+  line-height: 1.1;
+  text-align: center;
+}
+
+:global(:root[data-os-theme='win98']) .desktopIcon img {
+  width: 32px;
+  height: 32px;
+}
+
+:global(:root[data-os-theme='win98']) .desktopIcon span {
+  max-width: 72px;
+  padding: 1px 2px;
+  text-shadow: 1px 1px #000;
+}
+
+:global(:root[data-os-theme='win98']) .desktopIcon:hover,
+:global(:root[data-os-theme='win98']) .desktopIcon:focus-visible,
+:global(:root[data-os-theme='win98']) .selected {
+  outline: 1px dotted #fff;
+  outline-offset: -2px;
+}
+
+:global(:root[data-os-theme='win98']) .selected img {
+  filter: none;
+}
+
+:global(:root[data-os-theme='win98']) .selected span {
+  color: #fff;
+  background: #000080;
+}

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type KeyboardEvent } from 'react'
 import { applicationsForSurface, type ApplicationId } from '../config/applicationRegistry'
 import { useWindows } from '../store/windows'
 import type { WindowState } from '../types/window'
+import { ThemeSystemIcon } from './ThemeSystemIcon'
 import styles from './Taskbar.module.css'
 
 function formatTime(date: Date) {
@@ -100,7 +101,14 @@ export function Taskbar() {
           aria-label="Start menu"
           onKeyDown={handleStartMenuKeyDown}
         >
-          <div className={styles.startMenuBanner}>2000sme</div>
+          <div className={styles.startMenuBanner} aria-hidden="true">2000sme</div>
+          <div className={styles.startMenuUser} aria-hidden="true">
+            <PortfolioMark />
+            <div>
+              <strong>Leonardo Cavazzani</strong>
+              <span>Senior Frontend Developer</span>
+            </div>
+          </div>
           <div className={styles.startMenuColumns}>
             <section className={styles.startMenuGroup} role="group" aria-labelledby="start-menu-applications">
               <h2 id="start-menu-applications" className={styles.startMenuGroupHeading}>Applications</h2>
@@ -111,7 +119,11 @@ export function Taskbar() {
                   data-window-launcher={application.id}
                   onClick={() => launchApplication(application.id)}
                 >
-                  <img src={application.icon} alt="" width={20} height={20} />
+                  {application.id === 'my-computer' ? (
+                    <ThemeSystemIcon name="my-computer" width={20} height={20} />
+                  ) : (
+                    <img src={application.icon} alt="" width={20} height={20} />
+                  )}
                   {application.label}
                 </button>
               ))}
@@ -125,7 +137,11 @@ export function Taskbar() {
                   data-window-launcher={application.id}
                   onClick={() => launchApplication(application.id)}
                 >
-                  <img src={application.icon} alt="" width={20} height={20} />
+                  {application.id === 'my-computer' ? (
+                    <ThemeSystemIcon name="my-computer" width={20} height={20} />
+                  ) : (
+                    <img src={application.icon} alt="" width={20} height={20} />
+                  )}
                   {application.label}
                 </button>
               ))}
@@ -155,7 +171,11 @@ export function Taskbar() {
                 data-window-taskbar={windowState.id}
                 onClick={() => toggleWindow(windowState)}
               >
-                {windowState.icon && <img src={windowState.icon} alt="" width={16} height={16} />}
+                {windowState.id === 'my-computer' ? (
+                  <ThemeSystemIcon name="my-computer" width={16} height={16} />
+                ) : (
+                  windowState.icon && <img src={windowState.icon} alt="" width={16} height={16} />
+                )}
                 <span>{windowState.title}</span>
               </button>
             )

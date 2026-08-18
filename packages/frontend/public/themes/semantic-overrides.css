@@ -214,3 +214,60 @@
 :root[data-os-theme='win98'] .window-body {
   border-top: 1px solid #808080;
 }
+
+/* Windows 98 classic frame: layered bevels keep the shell legible at small sizes. */
+:root[data-os-theme='win98'] .window {
+  padding: 2px;
+  border: 2px solid;
+  border-color: #fff #000 #000 #fff;
+  background: #c0c0c0;
+  box-shadow: inset -1px -1px #808080, inset 1px 1px #dfdfdf, 2px 2px #000;
+}
+
+:root[data-os-theme='win98'] .title-bar {
+  min-height: 20px;
+  padding: 2px 3px;
+  box-shadow: none;
+  font-size: 11px;
+  line-height: 14px;
+  letter-spacing: 0;
+}
+
+:root[data-os-theme='win98'] .title-bar-text {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  min-width: 0;
+}
+
+:root[data-os-theme='win98'] .title-bar-controls {
+  gap: 2px;
+}
+
+:root[data-os-theme='win98'] .title-bar-controls button {
+  min-width: 16px;
+  min-height: 14px;
+  padding: 0;
+  border: 1px solid;
+  border-color: #fff #000 #000 #fff;
+  border-radius: 0;
+  background-color: #c0c0c0;
+  box-shadow: inset -1px -1px #808080, inset 1px 1px #dfdfdf;
+}
+
+:root[data-os-theme='win98'] .title-bar-controls button:active {
+  border-color: #000 #fff #fff #000;
+  box-shadow: inset -1px -1px #fff, inset 1px 1px #808080;
+}
+
+:root[data-os-theme='win98'] .title-bar-controls button:focus-visible {
+  outline: 1px dotted #000;
+  outline-offset: -4px;
+}
+
+:root[data-os-theme='win98'] .window-body {
+  border: 2px solid;
+  border-color: #808080 #fff #fff #808080;
+  background: #c0c0c0;
+  box-shadow: inset -1px -1px #dfdfdf, inset 1px 1px #000;
+}
