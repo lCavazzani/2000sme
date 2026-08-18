@@ -9,3 +9,9 @@ The visual result retains the existing accessible semantic groups and keyboard l
 ## Validation note
 
 The focused Windows 98 visual review is paired with the browser contract in `e2e/theme-compatibility.spec.ts`, which asserts the intended vertical menu layout and the supplied theme-specific portfolio icon path.
+
+## Windows XP review
+
+The rebased XP review confirms that the taskbar Start control now uses the supplied XP asset and that desktop launchers, Start-menu rows, and active task buttons resolve through the same theme-specific mapping. XP retains the intentional two-pane Start-menu hierarchy because that is its native menu anatomy; however, the former generic row imagery is replaced by the supplied icon set in both the applications and profile/settings panes.
+
+The XP Start menu retains the existing user header, responsive one-column fallback, and keyboard focus order. This keeps the Windows 98 menu deliberately single-column and traditional while preserving an independently recognisable XP/Luna Start-menu composition.
