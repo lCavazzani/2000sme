@@ -587,3 +587,166 @@
 :global(:root[data-os-theme='winxp']) .composer textarea:focus-visible {
   outline-color: #316ac5;
 }
+
+/* THEME-19: one shared semantic scrapbook. Theme-specific values live in
+   semantic-overrides.css and alter material only, never the guestbook DOM. */
+.scrapbook {
+  color: var(--scrapbook-ink);
+}
+
+.header,
+.panel,
+.composer,
+.feed,
+.entry,
+.empty,
+.errorPanel,
+.success {
+  border-color: var(--scrapbook-border);
+  border-radius: var(--scrapbook-radius);
+}
+
+.header {
+  color: var(--scrapbook-ink);
+  background: var(--scrapbook-header-surface);
+}
+
+.eyebrow,
+.entry time,
+.fieldMeta,
+.composerFooter p,
+.field small,
+.feedFooter {
+  color: var(--scrapbook-muted-ink);
+}
+
+.titleTile {
+  border-color: var(--scrapbook-border);
+  background: var(--scrapbook-inset-surface);
+  display: var(--scrapbook-decoration-display);
+}
+
+.tabs {
+  border-color: var(--scrapbook-border);
+  border-radius: var(--scrapbook-radius);
+  background: var(--scrapbook-inset-surface);
+}
+
+.tabs button,
+.primaryAction,
+.secondaryAction {
+  border-color: var(--scrapbook-control-border);
+  border-radius: var(--scrapbook-radius);
+}
+
+.tabs button,
+.secondaryAction {
+  color: var(--scrapbook-ink);
+  background: var(--scrapbook-control-surface);
+}
+
+.tabs button[aria-selected='true'],
+.primaryAction {
+  color: #fff;
+  background: var(--scrapbook-control-active-surface);
+}
+
+.tabs button:focus-visible,
+.primaryAction:focus-visible,
+.secondaryAction:focus-visible,
+.composer input:focus-visible,
+.composer textarea:focus-visible {
+  outline-color: var(--scrapbook-focus);
+}
+
+.panel,
+.composer input,
+.composer textarea {
+  color: var(--scrapbook-ink);
+  background: var(--scrapbook-surface);
+}
+
+.panelHeader {
+  border-bottom-color: var(--scrapbook-divider);
+}
+
+.entry {
+  border-color: var(--scrapbook-border);
+  box-shadow: var(--scrapbook-card-shadow);
+  background: var(--scrapbook-card-surface);
+  transition: box-shadow var(--scrapbook-motion-duration) var(--scrapbook-motion-ease);
+}
+
+.entry[data-paper='ivory'] { background: var(--scrapbook-paper-ivory); }
+.entry[data-paper='cream'] { background: var(--scrapbook-paper-cream); }
+.entry[data-paper='blue'] { background: var(--scrapbook-paper-blue); }
+.entry[data-tilt='left'] { transform: rotate(var(--scrapbook-left-tilt, -0.35deg)); }
+.entry[data-tilt='right'] { transform: rotate(var(--scrapbook-right-tilt, 0.35deg)); }
+
+.tape,
+.cornerDecoration,
+.accentDecoration,
+.dateStamp {
+  display: var(--scrapbook-decoration-display);
+  opacity: var(--scrapbook-decoration-opacity);
+}
+
+.tape { opacity: var(--scrapbook-tape-opacity); }
+
+:global(:root[data-os-theme='win98']) .scrapbook {
+  --scrapbook-left-tilt: 0deg;
+  --scrapbook-right-tilt: 0deg;
+}
+
+:global(:root[data-os-theme='win98']) .header,
+:global(:root[data-os-theme='win98']) .composer,
+:global(:root[data-os-theme='win98']) .feed,
+:global(:root[data-os-theme='win98']) .entry,
+:global(:root[data-os-theme='win98']) .empty,
+:global(:root[data-os-theme='win98']) .errorPanel,
+:global(:root[data-os-theme='win98']) .success {
+  border: 2px solid;
+  border-color: var(--scrapbook-border);
+  border-radius: var(--scrapbook-radius);
+  box-shadow: var(--scrapbook-card-shadow);
+}
+
+:global(:root[data-os-theme='win98']) .header {
+  background: var(--scrapbook-header-surface);
+}
+
+:global(:root[data-os-theme='win98']) .entry {
+  background: var(--scrapbook-card-surface);
+}
+
+:global(:root[data-os-theme='win98']) .tabs button,
+:global(:root[data-os-theme='win98']) .primaryAction,
+:global(:root[data-os-theme='win98']) .secondaryAction {
+  border-color: var(--scrapbook-control-border);
+  background: var(--scrapbook-control-surface);
+}
+
+:global(:root[data-os-theme='win98']) .tabs button[aria-selected='true'],
+:global(:root[data-os-theme='win98']) .primaryAction {
+  color: #fff;
+  background: var(--scrapbook-control-active-surface);
+}
+
+:global(:root[data-os-theme='winxp']) .scrapbook {
+  --scrapbook-left-tilt: -0.35deg;
+  --scrapbook-right-tilt: 0.35deg;
+}
+
+:global(:root[data-os-theme='winxp']) .header {
+  background: var(--scrapbook-header-surface);
+}
+
+:global(:root[data-os-theme='winxp']) .entry {
+  background: var(--scrapbook-card-surface);
+}
+
+:global([data-effects='reduced']) .entry,
+:global([data-effects='reduced']) .entry[data-tilt] {
+  transform: none;
+  transition: none;
+}
