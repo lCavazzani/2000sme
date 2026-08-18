@@ -1,10 +1,11 @@
-import { useCallback, useEffect, useRef, useState, type FormEvent } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState, type FormEvent } from 'react'
 import {
   guestbookErrorMessage,
   useCreateGuestbookEntry,
-  useGuestbookEntries,
+  useInfiniteGuestbookEntries,
 } from '../api/guestbook'
 import { turnstileSiteKey } from '../config/turnstile'
+import { decorationForEntry } from './scrapbookDecorations'
 import { TurnstileWidget } from './TurnstileWidget'
 import styles from './Guestbook.module.css'
 
@@ -42,14 +43,16 @@ export function Guestbook() {
   const [turnstileResetKey, setTurnstileResetKey] = useState(0)
   const nameInputRef = useRef<HTMLInputElement>(null)
   const notesHeadingRef = useRef<HTMLHeadingElement>(null)
-  const guestbookQuery = useGuestbookEntries()
+  const feedRef = useRef<HTMLDivElement>(null)
+  const guestbookFeed = useInfiniteGuestbookEntries()
   const createEntry = useCreateGuestbookEntry()
 
   const turnstileConfigured = Boolean(turnstileSiteKey)
-  const entries = guestbookQuery.data?.entries ?? []
-  const loadError = guestbookQuery.isError ? guestbookErrorMessage(guestbookQuery.error) : null
+  const entries = useMemo(() => guestbookFeed.data?.pages.flatMap((page) => page.entries) ?? [], [guestbookFeed.data])
+  const loadError = guestbookFeed.isError ? guestbookErrorMessage(guestbookFeed.error) : null
   const isSubmitting = createEntry.isPending
-  const isLoading = guestbookQuery.isPending
+  const isLoading = guestbookFeed.isPending
+  const hasLoadedOlderNotes = (guestbookFeed.data?.pages.length ?? 0) > 1
 
   useEffect(() => {
     if (activePane === 'compose') nameInputRef.current?.focus()
@@ -68,6 +71,11 @@ export function Guestbook() {
   const handleTurnstileFailure = useCallback((error: string) => {
     setTurnstileToken(null)
     setSubmitError(error)
+  }, [])
+
+  const jumpToNewest = useCallback(() => {
+    feedRef.current?.scrollTo({ top: 0, behavior: 'smooth' })
+    notesHeadingRef.current?.focus()
   }, [])
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -97,7 +105,10 @@ export function Guestbook() {
       setFieldErrors({})
       setSuccessMessage('Thanks for leaving a note. It is now visible in the Visitor Scrapbook.')
       setActivePane('notes')
-      window.requestAnimationFrame(() => notesHeadingRef.current?.focus())
+      window.requestAnimationFrame(() => {
+        feedRef.current?.scrollTo({ top: 0 })
+        notesHeadingRef.current?.focus()
+      })
     } catch (error) {
       setSubmitError(guestbookErrorMessage(error))
     } finally {
@@ -109,6 +120,7 @@ export function Guestbook() {
   return (
     <section className={styles.scrapbook} aria-labelledby="scrapbook-heading">
       <header className={styles.header}>
+        <span className={styles.titleTile} aria-hidden="true" />
         <p className={styles.eyebrow}>Visitor log</p>
         <h2 id="scrapbook-heading">Notes from visitors</h2>
         <p>Read notes from past visitors or leave a thoughtful note for the next one.</p>
@@ -151,19 +163,26 @@ export function Guestbook() {
             <h2 ref={notesHeadingRef} tabIndex={-1}>Recent notes</h2>
             <p>Newest notes appear first.</p>
           </div>
-          <button type="button" className={styles.secondaryAction} onClick={() => selectPane('compose')}>
-            Leave a note
-          </button>
+          <div className={styles.panelActions}>
+            {hasLoadedOlderNotes && (
+              <button type="button" className={styles.secondaryAction} onClick={jumpToNewest}>
+                Jump to newest
+              </button>
+            )}
+            <button type="button" className={styles.secondaryAction} onClick={() => selectPane('compose')}>
+              Leave a note
+            </button>
+          </div>
         </div>
 
-        <div className={styles.feed} aria-live="polite" aria-busy={isLoading || guestbookQuery.isFetching}>
+        <div ref={feedRef} className={styles.feed} aria-live="polite" aria-busy={isLoading || guestbookFeed.isFetching}>
           {successMessage && <p className={styles.success} role="status">{successMessage}</p>}
           {isLoading && <p className={styles.loading} role="status">Loading visitor notes…</p>}
           {loadError && (
             <div className={styles.errorPanel} role="alert">
               <p>{loadError}</p>
-              <button type="button" className={styles.secondaryAction} onClick={() => void guestbookQuery.refetch()} disabled={guestbookQuery.isFetching}>
-                {guestbookQuery.isFetching ? 'Retrying…' : 'Try again'}
+              <button type="button" className={styles.secondaryAction} onClick={() => void guestbookFeed.refetch()} disabled={guestbookFeed.isFetching}>
+                {guestbookFeed.isFetching ? 'Retrying…' : 'Try again'}
               </button>
             </div>
           )}
@@ -177,19 +196,49 @@ export function Guestbook() {
             </div>
           )}
           {!isLoading && !loadError && entries.length > 0 && (
-            <ol className={styles.entryList} aria-label="Visitor notes in chronological order">
-              {entries.map((entry) => (
-                <li key={entry.id}>
-                  <article className={styles.entry} aria-labelledby={`scrapbook-note-${entry.id}`}>
-                    <header>
-                      <h3 id={`scrapbook-note-${entry.id}`}>{entry.name}</h3>
-                      <time dateTime={entry.created_at}>{formatEntryDate(entry.created_at)}</time>
-                    </header>
-                    <p>{entry.message}</p>
-                  </article>
-                </li>
-              ))}
-            </ol>
+            <>
+              <ol className={styles.entryList} aria-label="Visitor notes in chronological order">
+                {entries.map((entry) => {
+                  const decoration = decorationForEntry(entry)
+                  return (
+                    <li key={entry.id}>
+                      <article
+                        className={styles.entry}
+                        aria-labelledby={`scrapbook-note-${entry.id}`}
+                        data-paper={decoration.paper}
+                        data-tape={decoration.tape}
+                        data-tilt={decoration.tilt}
+                        data-corner={decoration.corner}
+                        data-accent={decoration.accent}
+                      >
+                        <span className={styles.tape} aria-hidden="true" />
+                        <span className={styles.cornerDecoration} aria-hidden="true" />
+                        <span className={styles.accentDecoration} aria-hidden="true" />
+                        <header>
+                          <h3 id={`scrapbook-note-${entry.id}`}>{entry.name}</h3>
+                          <time dateTime={entry.created_at}>{formatEntryDate(entry.created_at)}</time>
+                        </header>
+                        <p>{entry.message}</p>
+                        <span className={styles.dateStamp} aria-hidden="true">Visitor note</span>
+                      </article>
+                    </li>
+                  )
+                })}
+              </ol>
+              {guestbookFeed.hasNextPage && (
+                <div className={styles.feedFooter}>
+                  <button
+                    type="button"
+                    className={styles.secondaryAction}
+                    onClick={() => void guestbookFeed.fetchNextPage()}
+                    disabled={guestbookFeed.isFetchingNextPage}
+                  >
+                    {guestbookFeed.isFetchingNextPage ? 'Loading older notes…' : 'Load older notes'}
+                  </button>
+                  <p>Loading older notes leaves your current reading position unchanged.</p>
+                </div>
+              )}
+            </>
           )}
         </div>
       </section>
