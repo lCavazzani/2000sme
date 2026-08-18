@@ -1,0 +1,43 @@
+{
+  "list": {
+    "projects": [
+      {
+        "slug": "atlas",
+        "name": "Atlas",
+        "summary": "A published project card.",
+        "year": 2026,
+        "thumbnail": "/desktop-icons/my-computer.svg",
+        "technologies": [
+          { "name": "React" },
+          { "name": "TypeScript" }
+        ]
+      },
+      {
+        "slug": "beacon",
+        "name": "Beacon",
+        "summary": "A second published project card.",
+        "year": 2025,
+        "thumbnail": "/desktop-icons/my-computer.svg",
+        "technologies": [
+          { "name": "Hono" }
+        ]
+      }
+    ]
+  },
+  "detail": {
+    "slug": "atlas",
+    "name": "Atlas",
+    "summary": "A published project card.",
+    "description": "The complete published Atlas project detail.",
+    "year": 2026,
+    "thumbnail": "/desktop-icons/my-computer.svg",
+    "technologies": [
+      { "name": "React" },
+      { "name": "TypeScript" }
+    ],
+    "links": [
+      { "label": "Live", "url": "https://example.test/atlas" },
+      { "label": "GitHub", "url": "https://github.com/example/atlas" }
+    ]
+  }
+}
