@@ -8,3 +8,45 @@
 .winxp { background: linear-gradient(#7fb3ec, #3a6ea5); border-radius: 4px; }.winxp span { background: #3f79c8; border-radius: 6px 6px 2px 2px; }
 .deferred { margin: 0; padding: 8px; border: 1px dotted currentColor; font-size: 0.875rem; line-height: 1.4; }
 @media (prefers-reduced-motion: reduce) { .preview { transition: none; } }
+
+:global(:root[data-os-theme='winxp']) .appearance {
+  padding: 3px;
+  font-family: Tahoma, Verdana, Arial, sans-serif;
+}
+
+:global(:root[data-os-theme='winxp']) .option {
+  padding: 8px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background: linear-gradient(180deg, #fff, #edf4fc);
+}
+
+:global(:root[data-os-theme='winxp']) .option:hover {
+  border-color: #a0bee0;
+  background: #e9f3ff;
+}
+
+:global(:root[data-os-theme='winxp']) .option:has(input:checked) {
+  border-color: #4f80bd;
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 74%), transparent 46%),
+    linear-gradient(#d8eaff, #bcd8f4);
+  box-shadow: inset 0 1px #fff;
+}
+
+:global(:root[data-os-theme='winxp']) .preview {
+  border-color: #315e9c;
+  border-radius: 5px;
+  box-shadow: inset 0 1px rgb(255 255 255 / 62%), 0 1px 2px rgb(0 48 126 / 28%);
+}
+
+:global(:root[data-os-theme='winxp']) .winxp {
+  background:
+    linear-gradient(168deg, transparent 0 57%, #65ab38 57.4% 72%, #438d26 72.4% 100%),
+    linear-gradient(#59aefe, #a5d0ef 58%, #81b840 59%);
+}
+
+:global(:root[data-os-theme='winxp']) .winxp span {
+  background: linear-gradient(#3f91ed, #2158bd);
+  border-radius: 0 7px 7px 0;
+}
