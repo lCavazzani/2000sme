@@ -3,7 +3,9 @@
   width: 100%;
   min-height: 100vh;
   overflow: hidden;
-  background: var(--os-desktop-surface);
+  background-color: var(--os-desktop-surface);
+  background-image: var(--os-desktop-grid);
+  background-size: var(--os-desktop-grid-size);
   padding: 16px 16px 52px;
   box-sizing: border-box;
 }
@@ -21,7 +23,9 @@
   min-height: 100vh;
   box-sizing: border-box;
   padding: 24px;
-  background: var(--os-desktop-surface);
+  background-color: var(--os-desktop-surface);
+  background-image: var(--os-desktop-grid);
+  background-size: var(--os-desktop-grid-size);
   color: var(--os-desktop-fg);
 }
 
@@ -63,4 +67,57 @@
     min-height: 100dvh;
     padding: 20px 16px;
   }
+}
+
+:root[data-os-theme='win98'] .desktop {
+  padding: 8px 8px 42px;
+}
+
+:root[data-os-theme='win98'] .desktopIcons {
+  grid-template-columns: repeat(auto-fill, 72px);
+  grid-auto-rows: 78px;
+  gap: 6px 10px;
+  padding: 8px;
+}
+
+:root[data-os-theme='win98'] .directRoute {
+  padding: 18px;
+}
+
+:root[data-os-theme='win98'] .directRouteBack {
+  border: 2px solid;
+  border-color: #fff #000 #000 #fff;
+  border-radius: 0;
+  box-shadow: inset -1px -1px #808080, inset 1px 1px #dfdfdf;
+  font-family: 'MS Sans Serif', Tahoma, Arial, sans-serif;
+  font-size: 11px;
+}
+
+:root[data-os-theme='win98'] .directRouteBack:active {
+  border-color: #000 #fff #fff #000;
+  box-shadow: inset -1px -1px #fff, inset 1px 1px #808080;
+}
+
+:root[data-os-theme='win98'] .desktop {
+  padding: 6px 6px 36px;
+  background-color: #008080;
+  background-image: none;
+}
+
+:root[data-os-theme='win98'] .desktopIcons {
+  grid-template-columns: repeat(auto-fill, 74px);
+  grid-auto-rows: 82px;
+  gap: 4px 8px;
+  padding: 6px;
+}
+
+:root[data-os-theme='win98'] .directRoute {
+  padding: 14px;
+  background-color: #008080;
+  background-image: none;
+  font-family: 'MS Sans Serif', Tahoma, Arial, sans-serif;
+}
+
+:root[data-os-theme='win98'] .directRouteBack:hover {
+  background: #dfdfdf;
 }

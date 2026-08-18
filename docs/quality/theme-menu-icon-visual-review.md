@@ -1,0 +1,11 @@
+# Taskbar, Start-menu, and supplied-icon visual review
+
+## Windows 98 review
+
+The local Windows 98 review confirms that the desktop launchers now use the owner-supplied 16-colour icon set rather than the earlier original SVG placeholders. The taskbar Start control displays the supplied Windows 98 desktop asset, and the opened Start menu is now a single narrow vertical menu with a blue vertical rail, icon-led rows, classic bevels, a separator before supporting entries, and no visible generic two-column headings.
+
+The visual result retains the existing accessible semantic groups and keyboard launch order while presenting them as a traditional menu. The menu is compact, left-anchored above the 98 taskbar, and does not introduce horizontal overflow.
+
+## Validation note
+
+The focused Windows 98 visual review is paired with the browser contract in `e2e/theme-compatibility.spec.ts`, which asserts the intended vertical menu layout and the supplied theme-specific portfolio icon path.

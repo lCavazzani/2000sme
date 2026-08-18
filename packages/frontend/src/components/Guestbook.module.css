@@ -433,3 +433,51 @@
     transform: none !important;
   }
 }
+
+:global(:root[data-os-theme='win98']) .header,
+:global(:root[data-os-theme='win98']) .composer,
+:global(:root[data-os-theme='win98']) .feed,
+:global(:root[data-os-theme='win98']) .entry,
+:global(:root[data-os-theme='win98']) .empty,
+:global(:root[data-os-theme='win98']) .errorPanel {
+  border: 2px solid;
+  border-color: #fff #808080 #808080 #fff;
+  box-shadow: inset -1px -1px #000, inset 1px 1px #dfdfdf;
+}
+
+:global(:root[data-os-theme='win98']) .titleTile,
+:global(:root[data-os-theme='win98']) .tape,
+:global(:root[data-os-theme='win98']) .cornerFold,
+:global(:root[data-os-theme='win98']) .pinDecoration,
+:global(:root[data-os-theme='win98']) .accentDecoration,
+:global(:root[data-os-theme='win98']) .dateStamp {
+  display: none;
+}
+
+:global(:root[data-os-theme='win98']) .entry {
+  transform: none !important;
+  border-radius: 0;
+  box-shadow: inset -1px -1px #000, inset 1px 1px #dfdfdf;
+}
+
+:global(:root[data-os-theme='win98']) .tabs,
+:global(:root[data-os-theme='win98']) .tabs button,
+:global(:root[data-os-theme='win98']) .primaryAction,
+:global(:root[data-os-theme='win98']) .secondaryAction {
+  border-radius: 0;
+}
+
+:global(:root[data-os-theme='win98']) .tabs button,
+:global(:root[data-os-theme='win98']) .primaryAction,
+:global(:root[data-os-theme='win98']) .secondaryAction {
+  border: 2px solid;
+  border-color: #fff #000 #000 #fff;
+  box-shadow: inset -1px -1px #808080, inset 1px 1px #dfdfdf;
+}
+
+:global(:root[data-os-theme='win98']) .composer input,
+:global(:root[data-os-theme='win98']) .composer textarea {
+  border: 2px solid;
+  border-color: #808080 #fff #fff #808080;
+  border-radius: 0;
+}

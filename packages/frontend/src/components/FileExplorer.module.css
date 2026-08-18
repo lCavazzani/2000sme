@@ -232,3 +232,48 @@
   image-rendering: pixelated;
   flex-shrink: 0;
 }
+
+:global(:root[data-os-theme='win98']) .root {
+  font-family: 'MS Sans Serif', Tahoma, Arial, sans-serif;
+}
+
+:global(:root[data-os-theme='win98']) .toolbar {
+  gap: 2px;
+  padding: 2px;
+  border-bottom-color: #808080;
+  box-shadow: var(--os-app-toolbar-highlight);
+}
+
+:global(:root[data-os-theme='win98']) .navBtn,
+:global(:root[data-os-theme='win98']) .viewToggle button {
+  border: 2px solid;
+  border-color: #fff #000 #000 #fff;
+  border-radius: 0;
+  background: #c0c0c0;
+  box-shadow: inset -1px -1px #808080, inset 1px 1px #dfdfdf;
+}
+
+:global(:root[data-os-theme='win98']) .navBtn:active,
+:global(:root[data-os-theme='win98']) .viewToggle button:active,
+:global(:root[data-os-theme='win98']) .viewActive {
+  border-color: #000 #fff #fff #000;
+  box-shadow: inset -1px -1px #fff, inset 1px 1px #808080 !important;
+}
+
+:global(:root[data-os-theme='win98']) .addressInput {
+  border: 2px solid;
+  border-color: #808080 #fff #fff #808080;
+  box-shadow: none;
+}
+
+:global(:root[data-os-theme='win98']) .divider {
+  width: 4px;
+  border-left-color: #808080;
+  border-right-color: #fff;
+}
+
+:global(:root[data-os-theme='win98']) .listTable th {
+  border: 2px solid;
+  border-color: #fff #808080 #808080 #fff;
+  box-shadow: inset -1px -1px #000, inset 1px 1px #dfdfdf;
+}

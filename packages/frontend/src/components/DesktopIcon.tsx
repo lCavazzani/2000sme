@@ -1,10 +1,13 @@
 import { type KeyboardEvent } from 'react'
+import type { ApplicationId } from '../config/applicationRegistry'
 import { useWindows } from '../store/windows'
+import { ThemeAssetIcon } from './ThemeSystemIcon'
 import styles from './DesktopIcon.module.css'
 
 type DesktopIconProps = {
   label: string
   icon: string
+  applicationId?: ApplicationId
   windowId: string
   isSelected: boolean
   onSelect: (windowId: string) => void
@@ -13,6 +16,7 @@ type DesktopIconProps = {
 export function DesktopIcon({
   label,
   icon,
+  applicationId,
   windowId,
   isSelected,
   onSelect,
@@ -41,7 +45,11 @@ export function DesktopIcon({
       aria-label={`Open ${label}`}
       data-window-launcher={windowId}
     >
-      <img src={icon} alt="" width={32} height={32} draggable={false} />
+      {applicationId ? (
+        <ThemeAssetIcon name={applicationId} width={32} height={32} />
+      ) : (
+        <img src={icon} alt="" width={32} height={32} draggable={false} />
+      )}
       <span>{label}</span>
     </button>
   )
