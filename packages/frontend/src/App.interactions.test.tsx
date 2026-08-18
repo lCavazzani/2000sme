@@ -71,3 +71,25 @@ describe('desktop shell interactions', () => {
     expect(screen.getByLabelText('My Portfolio window')).toBeInTheDocument()
   })
 })
+
+
+it('switches between direct routes and desktop mode while restoring a meaningful desktop focus target', async () => {
+  const user = userEvent.setup()
+  window.location.hash = '#/apps/resume'
+  render(<App />)
+
+  expect(screen.getByRole('main', { name: 'Resume direct route' })).toBeInTheDocument()
+  await user.click(screen.getByRole('button', { name: 'Open desktop' }))
+
+  const desktop = screen.getByRole('main', { name: 'Desktop' })
+  await waitFor(() => expect(desktop).toHaveFocus())
+  expect(window.location.hash).toBe('')
+
+  window.location.hash = '#/apps/about-me'
+  fireEvent(window, new HashChangeEvent('hashchange'))
+  expect(screen.getByRole('main', { name: 'About Me direct route' })).toBeInTheDocument()
+
+  window.location.hash = ''
+  fireEvent(window, new HashChangeEvent('hashchange'))
+  expect(screen.getByRole('main', { name: 'Desktop' })).toBeInTheDocument()
+})
