@@ -11,9 +11,9 @@ function formatTime(date: Date) {
   }).format(date)
 }
 
-function WindowsLogo() {
+function PortfolioMark() {
   return (
-    <span className={styles.windowsLogo} aria-hidden="true">
+    <span className={styles.portfolioMark} aria-hidden="true">
       <span />
       <span />
       <span />
@@ -141,7 +141,7 @@ export function Taskbar() {
           aria-controls="start-menu"
           onClick={() => setIsStartMenuOpen((isOpen) => !isOpen)}
         >
-          <WindowsLogo />
+          <PortfolioMark />
           <span>Start</span>
         </button>
         <div className={styles.windowList} role="group" aria-label="Open windows">

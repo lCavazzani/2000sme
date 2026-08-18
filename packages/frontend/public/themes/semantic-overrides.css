@@ -53,6 +53,20 @@
   --os-app-link-hover-fg: #003a99;
   --os-gloss-overlay: linear-gradient(rgb(255 255 255 / 38%), transparent 50%);
   --os-crt-opacity: 0;
+  --os-desktop-grid: radial-gradient(rgb(255 255 255 / 10%) 1px, transparent 1px);
+  --os-desktop-grid-size: 24px 24px;
+  --os-control-radius: 4px;
+  --os-control-border-width: 1px;
+  --os-control-elevation: inset 0 1px rgb(255 255 255 / 50%);
+  --os-task-button-bg: linear-gradient(#5fa9f9, #2f6fe1 60%, #2454bd);
+  --os-task-button-border: #174aaf;
+  --os-task-button-active-bg: linear-gradient(#a9c9fa, #719fe9);
+  --os-task-button-active-border: #174aaf;
+  --os-start-button-bg: linear-gradient(#74bf4b, #3b8c2e 60%, #286f21);
+  --os-start-button-border: #1d621c;
+  --os-start-button-fg: #fff;
+  --os-tray-radius: 4px;
+  --os-app-toolbar-highlight: inset 0 1px rgb(255 255 255 / 55%);
   --os-motion-duration: 160ms;
 }
 
@@ -110,6 +124,20 @@
   --os-app-link-fg: #000080;
   --os-app-link-hover-fg: #0000ee;
   --os-gloss-overlay: none;
+  --os-desktop-grid: none;
+  --os-desktop-grid-size: auto;
+  --os-control-radius: 0;
+  --os-control-border-width: 2px;
+  --os-control-elevation: inset -1px -1px #000, inset 1px 1px #fff;
+  --os-task-button-bg: #c0c0c0;
+  --os-task-button-border: #fff #000 #000 #fff;
+  --os-task-button-active-bg: #dfdfdf;
+  --os-task-button-active-border: #000 #fff #fff #000;
+  --os-start-button-bg: #c0c0c0;
+  --os-start-button-border: #fff #000 #000 #fff;
+  --os-start-button-fg: #000;
+  --os-tray-radius: 0;
+  --os-app-toolbar-highlight: inset -1px -1px #808080, inset 1px 1px #fff;
 }
 
 :root[data-theme-gloss='on'] .title-bar::before {
@@ -164,4 +192,25 @@
     --os-gloss-overlay: none;
     --os-crt-opacity: 0;
   }
+}
+
+:root[data-os-theme='win98'] .window {
+  font-family: 'MS Sans Serif', Tahoma, Arial, sans-serif;
+}
+
+:root[data-os-theme='win98'] .title-bar {
+  min-height: 18px;
+  padding: 2px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+:root[data-os-theme='win98'] .title-bar-controls button {
+  min-width: 16px;
+  min-height: 14px;
+  border-radius: 0;
+}
+
+:root[data-os-theme='win98'] .window-body {
+  border-top: 1px solid #808080;
 }

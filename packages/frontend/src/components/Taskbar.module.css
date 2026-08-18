@@ -34,6 +34,11 @@
 
 .startButton {
   padding: 2px 8px 2px 5px;
+  color: var(--os-start-button-fg);
+  border: var(--os-control-border-width) solid var(--os-start-button-border);
+  border-radius: var(--os-control-radius);
+  background: var(--os-start-button-bg);
+  box-shadow: var(--os-control-elevation);
   font-weight: 700;
 }
 
@@ -44,30 +49,34 @@
   outline-offset: var(--os-focus-offset);
 }
 
-.windowsLogo {
+.portfolioMark {
   width: 16px;
   height: 16px;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: repeat(2, 1fr);
-  gap: 1px;
-  transform: skewY(-8deg);
+  gap: 2px;
+  transform: rotate(-5deg);
 }
 
-.windowsLogo span:nth-child(1) {
-  background: #f25022;
+.portfolioMark span {
+  border-radius: 1px;
 }
 
-.windowsLogo span:nth-child(2) {
-  background: #7fba00;
+.portfolioMark span:nth-child(1) {
+  background: #ff8f5a;
 }
 
-.windowsLogo span:nth-child(3) {
-  background: #00a4ef;
+.portfolioMark span:nth-child(2) {
+  background: #f7d04a;
 }
 
-.windowsLogo span:nth-child(4) {
-  background: #ffb900;
+.portfolioMark span:nth-child(3) {
+  background: #57b9c8;
+}
+
+.portfolioMark span:nth-child(4) {
+  background: #9270d8;
 }
 
 .windowList {
@@ -83,9 +92,18 @@
   min-width: 110px;
   justify-content: flex-start;
   padding: 2px 8px;
+  color: var(--os-taskbar-fg);
+  border: var(--os-control-border-width) solid var(--os-task-button-border);
+  border-radius: var(--os-control-radius);
+  background: var(--os-task-button-bg);
+  box-shadow: var(--os-control-elevation);
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+}
+
+.windowButton:hover {
+  filter: brightness(1.07);
 }
 
 .windowButton span {
@@ -95,10 +113,10 @@
 
 .activeWindowButton {
   color: var(--os-control-fg);
-  background: var(--os-control-pressed-bg);
-  border: 1px solid;
-  border-color: var(--os-control-border-color);
+  border-color: var(--os-task-button-active-border);
+  background: var(--os-task-button-active-bg);
   box-shadow: var(--os-control-inset);
+  filter: none;
 }
 
 .systemTray {
@@ -110,6 +128,8 @@
   background: var(--os-tray-bg);
   border: var(--os-tray-border-width) solid;
   border-color: var(--os-tray-border-color);
+  border-radius: var(--os-tray-radius);
+  box-shadow: var(--os-control-elevation);
   white-space: nowrap;
 }
 
@@ -218,5 +238,120 @@
 
   .windowButton span {
     max-width: 110px;
+  }
+}
+
+:global(:root[data-os-theme='win98']) .taskbar {
+  min-height: 34px;
+  gap: 2px;
+  padding: 2px;
+  font-family: 'MS Sans Serif', Tahoma, Arial, sans-serif;
+  font-size: 11px;
+}
+
+:global(:root[data-os-theme='win98']) .startButton,
+:global(:root[data-os-theme='win98']) .windowButton,
+:global(:root[data-os-theme='win98']) .systemTray {
+  border-radius: 0;
+}
+
+:global(:root[data-os-theme='win98']) .startButton {
+  min-height: 24px;
+  padding: 1px 7px 1px 4px;
+}
+
+:global(:root[data-os-theme='win98']) .portfolioMark {
+  width: 14px;
+  height: 14px;
+  gap: 1px;
+  transform: none;
+}
+
+:global(:root[data-os-theme='win98']) .portfolioMark span {
+  border-radius: 0;
+}
+
+:global(:root[data-os-theme='win98']) .windowList {
+  gap: 2px;
+}
+
+:global(:root[data-os-theme='win98']) .windowButton {
+  min-width: 96px;
+  min-height: 24px;
+  padding: 1px 6px;
+  font-weight: 400;
+}
+
+:global(:root[data-os-theme='win98']) .windowButton:hover {
+  filter: none;
+}
+
+:global(:root[data-os-theme='win98']) .activeWindowButton {
+  box-shadow: inset 1px 1px #808080, inset -1px -1px #fff;
+}
+
+:global(:root[data-os-theme='win98']) .systemTray {
+  min-height: 24px;
+  padding: 1px 6px;
+  box-shadow: inset 1px 1px #808080, inset -1px -1px #fff;
+}
+
+:global(:root[data-os-theme='win98']) .startMenu {
+  bottom: 35px;
+  width: min(430px, calc(100vw - 4px));
+  grid-template-columns: 24px minmax(0, 1fr);
+  font-family: 'MS Sans Serif', Tahoma, Arial, sans-serif;
+  font-size: 11px;
+}
+
+:global(:root[data-os-theme='win98']) .startMenuBanner {
+  padding: 5px 3px;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+}
+
+:global(:root[data-os-theme='win98']) .startMenuColumns {
+  gap: 8px;
+  padding: 6px;
+}
+
+:global(:root[data-os-theme='win98']) .startMenuGroup {
+  gap: 2px;
+}
+
+:global(:root[data-os-theme='win98']) .startMenuGroup + .startMenuGroup {
+  padding-left: 8px;
+  border-left: 1px solid #808080;
+  box-shadow: inset 1px 0 #fff;
+}
+
+:global(:root[data-os-theme='win98']) .startMenuGroupHeading {
+  margin-bottom: 1px;
+  padding: 0 4px;
+  font-size: 10px;
+  letter-spacing: 0;
+}
+
+:global(:root[data-os-theme='win98']) .startMenuItem {
+  min-height: 32px;
+  padding: 4px 6px;
+}
+
+:global(:root[data-os-theme='win98']) .startMenuItem:hover,
+:global(:root[data-os-theme='win98']) .startMenuItem:focus-visible {
+  outline-offset: -2px;
+}
+
+@media (max-width: 780px) {
+  :global(:root[data-os-theme='win98']) .startMenu {
+    width: min(300px, calc(100vw - 4px));
+  }
+
+  :global(:root[data-os-theme='win98']) .startMenuGroup + .startMenuGroup {
+    padding-top: 6px;
+    padding-left: 0;
+    border-top: 1px solid #808080;
+    border-left: 0;
+    box-shadow: inset 0 1px #fff;
   }
 }

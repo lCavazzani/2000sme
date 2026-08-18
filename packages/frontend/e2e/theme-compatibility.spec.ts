@@ -121,6 +121,20 @@ test.describe('supported theme compatibility', () => {
     })
   }
 
+  test('gives Windows 98 a sharp, beveled taskbar and Start-menu grammar', async ({ page }) => {
+    await visitInTheme(page, 'win98')
+
+    const startButton = page.getByRole('button', { name: 'Start' })
+    const taskbar = page.locator('footer[aria-label="Windows taskbar"]')
+    await expect(startButton).toHaveCSS('border-radius', '0px')
+    await expect(taskbar).toHaveCSS('border-top-width', '2px')
+
+    await startButton.click()
+    const startMenu = page.getByRole('navigation', { name: 'Start menu' })
+    await expect(startMenu).toHaveCSS('border-radius', '0px')
+    await expect(startMenu.getByRole('button', { name: 'My Portfolio' })).toBeVisible()
+  })
+
   test('keeps the Windows 7 stylesheet available but dormant outside the release UI', async ({ page, request }) => {
     await page.goto('/')
 

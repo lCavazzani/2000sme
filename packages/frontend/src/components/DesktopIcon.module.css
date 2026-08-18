@@ -42,3 +42,22 @@
   color: var(--os-icon-label-fg);
   background: var(--os-control-selected-bg);
 }
+
+:global(:root[data-os-theme='win98']) .desktopIcon {
+  width: 72px;
+  min-height: 72px;
+  gap: 3px;
+  padding: 3px 2px;
+  font-family: 'MS Sans Serif', Tahoma, Arial, sans-serif;
+  font-size: 11px;
+}
+
+:global(:root[data-os-theme='win98']) .desktopIcon:hover,
+:global(:root[data-os-theme='win98']) .desktopIcon:focus-visible,
+:global(:root[data-os-theme='win98']) .selected {
+  outline-offset: -2px;
+}
+
+:global(:root[data-os-theme='win98']) .selected span {
+  padding: 1px 3px;
+}
