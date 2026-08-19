@@ -112,3 +112,48 @@ test('keeps deterministic scrapbook decoration while loading older notes and ret
   await page.getByRole('button', { name: 'Jump to newest' }).click()
   await expect.poll(() => feed.evaluate((element) => element.scrollTop)).toBe(0)
 })
+
+
+test('adapts one semantic Visitor Scrapbook DOM through distinct XP and Windows 98 material tokens', async ({ page }) => {
+  await stubGuestbook(page)
+  const observed: Array<{ theme: string; cardSurface: string; articleClass: string; heading: string }> = []
+
+  await page.goto('/')
+
+  for (const theme of ['winxp', 'win98'] as const) {
+    await page.evaluate((selectedTheme) => {
+      window.localStorage.setItem('2000sme:theme', selectedTheme)
+    }, theme)
+    await page.reload()
+    await page.goto('/#/apps/guestbook')
+
+    const article = page.getByRole('article', { name: 'Ada Lovelace' })
+    await expect(article).toBeVisible()
+    observed.push(await page.evaluate(() => {
+      const articleElement = document.querySelector<HTMLElement>('[aria-labelledby^="scrapbook-note-"]')
+      return {
+        theme: document.documentElement.dataset.osTheme ?? '',
+        cardSurface: getComputedStyle(document.documentElement).getPropertyValue('--scrapbook-card-surface').trim(),
+        articleClass: articleElement?.className ?? '',
+        heading: articleElement?.querySelector('h3')?.textContent ?? '',
+      }
+    }))
+  }
+
+  expect(observed[0]).toMatchObject({ theme: 'winxp', heading: 'Ada Lovelace' })
+  expect(observed[1]).toMatchObject({ theme: 'win98', heading: 'Ada Lovelace' })
+  expect(observed[0].articleClass).toBe(observed[1].articleClass)
+  expect(observed[0].cardSurface).not.toBe(observed[1].cardSurface)
+})
+
+test('suppresses optional scrapbook decoration without changing the semantic feed under reduced effects', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+  await stubGuestbook(page)
+  await page.goto('/#/apps/guestbook')
+
+  const article = page.getByRole('article', { name: 'Ada Lovelace' })
+  await expect(article).toBeVisible()
+  await expect(page.locator('html')).toHaveAttribute('data-theme-effects', 'reduced')
+  await expect(article.locator('[aria-hidden="true"]').first()).toHaveCSS('display', 'none')
+  await expect(article).toHaveCSS('transform', 'none')
+})
