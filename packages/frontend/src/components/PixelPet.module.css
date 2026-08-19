@@ -1,0 +1,120 @@
+.root {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto auto;
+  min-height: 0;
+  height: 100%;
+  color: var(--os-ink);
+  background: var(--os-panel);
+  font-family: var(--os-font-stack);
+}
+
+.scene {
+  position: relative;
+  display: grid;
+  min-height: 0;
+  place-items: center;
+  overflow: hidden;
+  padding: 14px;
+  border-bottom: var(--pixelos-bevel-width) solid var(--os-edge);
+  background: #0b0715;
+  box-shadow: inset 1px 1px 0 var(--pixelos-bevel-highlight), inset -2px -2px 0 #000;
+}
+
+.catImage {
+  display: block;
+  max-width: min(100%, 232px);
+  max-height: 100%;
+  border: var(--pixelos-bevel-width) solid var(--os-edge);
+  box-shadow: 2px 2px 0 #000, -1px -1px 0 var(--pixelos-bevel-highlight);
+  image-rendering: pixelated;
+  animation: mittens-bob 1.2s steps(2, end) infinite;
+}
+
+.hearts {
+  position: absolute;
+  top: 18px;
+  right: 22px;
+  display: flex;
+  gap: 3px;
+  color: var(--os-magenta);
+  font-size: 1.25rem;
+  line-height: 1;
+  text-shadow: 1px 1px 0 #000;
+}
+
+.scene[data-pet-action='feed'] .hearts {
+  color: var(--os-cyan);
+}
+
+.panel {
+  display: grid;
+  gap: 8px;
+  padding: 11px 12px;
+  border-bottom: 1px solid var(--pixelos-bevel-highlight);
+  background: color-mix(in srgb, var(--os-panel-dark) 72%, var(--os-panel));
+}
+
+.title {
+  margin: 0;
+  color: var(--os-cyan);
+  font-size: 0.82rem;
+  letter-spacing: 0.08em;
+}
+
+.feedback {
+  min-height: 2.6em;
+  margin: 0;
+  color: var(--os-muted);
+  font-size: 0.74rem;
+  line-height: 1.35;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.actions button {
+  min-height: 32px;
+  padding: 6px 10px;
+  color: var(--os-ink);
+  border: var(--pixelos-bevel-width) solid var(--os-edge);
+  background: var(--os-panel);
+  box-shadow: inset 1px 1px 0 var(--pixelos-bevel-highlight), 1px 1px 0 #000;
+  font: inherit;
+  font-size: 0.72rem;
+  cursor: pointer;
+}
+
+.actions button:hover {
+  color: var(--os-cyan);
+}
+
+.actions button:active {
+  box-shadow: inset 2px 2px 0 #000;
+  transform: translate(1px, 1px);
+}
+
+.actions button:focus-visible {
+  outline: 2px solid var(--os-magenta);
+  outline-offset: 2px;
+}
+
+@keyframes mittens-bob {
+  from { transform: translateY(0); }
+  to { transform: translateY(-3px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .catImage { animation: none; }
+}
+
+:global(html[data-theme-effects='reduced']) .catImage {
+  animation: none;
+}
+
+@media (max-height: 430px) {
+  .scene { min-height: 155px; }
+  .catImage { max-height: 145px; }
+}

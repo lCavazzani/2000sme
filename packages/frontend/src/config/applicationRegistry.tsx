@@ -1,6 +1,7 @@
 import type { ComponentType } from 'react'
 import { FileExplorer } from '../components/FileExplorer'
 import { PixelGallery } from '../components/PixelGallery'
+import { PixelPet } from '../components/PixelPet'
 import { WordPad } from '../components/WordPad'
 import type { WindowConfig } from '../types/window'
 
@@ -8,7 +9,7 @@ export const LAUNCH_SURFACES = ['desktop', 'start-menu', 'mobile'] as const
 export type LaunchSurface = (typeof LAUNCH_SURFACES)[number]
 export type ApplicationCategory = 'career' | 'system'
 export type ApplicationCapability = 'desktop-window' | 'direct-route'
-export type ApplicationId = 'my-computer' | 'resume' | 'gallery'
+export type ApplicationId = 'my-computer' | 'resume' | 'gallery' | 'pet'
 
 export type ApplicationDefinition = WindowConfig & {
   id: ApplicationId
@@ -67,6 +68,23 @@ export const applicationRegistry = [
     width: 560,
     height: 400,
     renderer: PixelGallery,
+  }),
+  defineApplication({
+    id: 'pet',
+    label: 'DESKTOP PET',
+    title: 'DESKTOP PET',
+    category: 'system',
+    icon: '/pixelos/assets/7dbdf7f0-0086-4ef8-8cbf-e345ae75e5de.jpg',
+    mobileLabel: 'Desktop Pet',
+    path: '#/apps/pet',
+    shortcut: 'Alt+4',
+    capability: 'desktop-window',
+    launchSurfaces: ['desktop', 'start-menu', 'mobile'],
+    x: 560,
+    y: 90,
+    width: 300,
+    height: 360,
+    renderer: PixelPet,
   }),
   defineApplication({
     id: 'resume',

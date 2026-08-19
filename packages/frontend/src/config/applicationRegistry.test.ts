@@ -57,16 +57,19 @@ describe('applicationRegistry', () => {
     expect(applicationsForSurface('desktop').map((application) => application.id)).toEqual([
       'my-computer',
       'gallery',
+      'pet',
       'resume',
     ])
     expect(applicationsForSurface('start-menu').map((application) => application.id)).toEqual([
       'my-computer',
       'gallery',
+      'pet',
       'resume',
     ])
     expect(applicationsForSurface('mobile').map((application) => application.id)).toEqual([
       'my-computer',
       'gallery',
+      'pet',
       'resume',
     ])
   })
