@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react'
 import type { ApplicationId } from '../config/applicationRegistry'
 import styles from './ThemeSystemIcon.module.css'
 
@@ -11,59 +12,28 @@ type ThemeAssetIconProps = {
   className?: string
 }
 
-/**
- * Each supplied icon is deliberately assigned to an existing application
- * affordance. Application identity, launch behavior, routes, and window state
- * stay registry-owned; only the visual asset changes with the active theme.
- */
-const THEME_ICON_SOURCES: Record<ThemeAssetIconName, { win98: string; winxp: string }> = {
-  start: {
-    win98: '/theme-assets/win98/portfolio.ico',
-    winxp: '/theme-assets/winxp/start.ico',
-  },
-  portfolio: {
-    win98: '/theme-assets/win98/portfolio.ico',
-    winxp: '/theme-assets/winxp/portfolio.ico',
-  },
-  'my-computer': {
-    win98: '/theme-assets/win98/my-computer.ico',
-    winxp: '/theme-assets/winxp/my-computer.ico',
-  },
-  resume: {
-    win98: '/theme-assets/win98/resume.ico',
-    winxp: '/theme-assets/winxp/resume.ico',
-  },
-  guestbook: {
-    win98: '/theme-assets/win98/guestbook.ico',
-    winxp: '/theme-assets/winxp/guestbook.ico',
-  },
-  'about-me': {
-    win98: '/theme-assets/win98/about-me.ico',
-    winxp: '/theme-assets/winxp/about-me.ico',
-  },
-  contact: {
-    win98: '/theme-assets/win98/contact.ico',
-    winxp: '/theme-assets/winxp/contact.ico',
-  },
-  'appearance-themes': {
-    win98: '/theme-assets/win98/appearance-themes.ico',
-    winxp: '/theme-assets/winxp/appearance-themes.ico',
-  },
+const glyphs: Record<ThemeAssetIconName, ReactNode> = {
+  start: <><rect x="1" y="1" width="6" height="6" fill="currentColor" /><rect x="8" y="1" width="3" height="3" fill="#4de3d0" /><rect x="8" y="5" width="3" height="6" fill="#df4fbc" /><rect x="1" y="8" width="6" height="3" fill="#6d5aa8" /></>,
+  portfolio: <><path d="M1 4h10v7H1z" fill="currentColor" /><path d="M3 2h6v2H3z" fill="#4de3d0" /></>,
+  'my-computer': <><rect x="1" y="1" width="10" height="7" fill="currentColor" /><rect x="3" y="3" width="6" height="3" fill="#120b22" /><rect x="4" y="9" width="4" height="2" fill="currentColor" /></>,
+  resume: <><path d="M2 1h7l2 2v8H2z" fill="currentColor" /><path d="M4 5h5M4 7h5M4 9h3" stroke="#120b22" strokeWidth="1" /></>,
+  guestbook: <><path d="M1 2h10v7H5l-3 2V2z" fill="currentColor" /><path d="M3 4h6M3 6h4" stroke="#120b22" strokeWidth="1" /></>,
+  'about-me': <><circle cx="6" cy="4" r="3" fill="currentColor" /><path d="M1 11c1-3 9-3 10 0z" fill="currentColor" /></>,
+  contact: <><rect x="1" y="3" width="10" height="7" fill="currentColor" /><path d="m2 4 4 3 4-3" fill="none" stroke="#120b22" strokeWidth="1" /></>,
+  'appearance-themes': <><path d="M6 1 7 3l2 .5-1.5 1.5.4 2L6 6l-1.9 1 .4-2L3 3.5 5 3zM2 8h8v3H2z" fill="currentColor" /></>,
 }
 
 /**
- * Renders both supplied theme variants and lets the root data attribute pick
- * the visible asset. This keeps switches synchronous with stylesheet swaps and
- * avoids adding theme-context requirements to isolated shell tests.
+ * Application identity remains registry-owned. PixelOS supplies a compact
+ * inline glyph for each stable launcher ID, avoiding legacy XP/98 asset swaps
+ * while keeping isolated shell tests free of theme-context requirements.
  */
 export function ThemeAssetIcon({ name, alt = '', width, height, className }: ThemeAssetIconProps) {
-  const source = THEME_ICON_SOURCES[name]
-  const commonClassName = `${styles.icon} ${className ?? ''}`.trim()
-
   return (
-    <span className={styles.root} aria-hidden={alt === '' ? true : undefined}>
-      <img src={source.winxp} alt={alt} width={width} height={height} className={`${commonClassName} ${styles.winxp}`} />
-      <img src={source.win98} alt="" width={width} height={height} className={`${commonClassName} ${styles.win98}`} />
+    <span className={`${styles.root} ${className ?? ''}`.trim()} aria-hidden={alt === '' ? true : undefined}>
+      <svg className={styles.icon} width={width} height={height} viewBox="0 0 12 12" role={alt ? 'img' : undefined} aria-label={alt || undefined}>
+        {glyphs[name]}
+      </svg>
     </span>
   )
 }
