@@ -1,148 +1,48 @@
 .desktopIcon {
-  width: 76px;
-  min-height: 76px;
+  width: 84px;
+  min-height: 84px;
   display: grid;
   justify-items: center;
   align-content: start;
-  gap: 4px;
+  gap: 5px;
   padding: 5px 3px;
-  color: var(--os-icon-label-fg);
-  font: inherit;
-  line-height: 1.2;
-  text-shadow: var(--os-icon-label-shadow);
+  color: var(--pixelos-ink);
+  font: 10px/1.25 var(--pixelos-font);
+  letter-spacing: 0.03em;
+  text-align: center;
+  text-shadow: 1px 1px var(--pixelos-edge);
   border: 1px solid transparent;
   background: transparent;
   cursor: pointer;
 }
 
+.desktopIcon svg {
+  width: 34px;
+  height: 34px;
+  color: var(--pixelos-cyan);
+}
+
 .desktopIcon img {
-  width: 32px;
-  height: 32px;
+  width: 34px;
+  height: 34px;
   image-rendering: pixelated;
 }
 
 .desktopIcon > span:last-child {
-  max-width: 70px;
-  padding: 1px 2px;
+  max-width: 80px;
+  padding: 1px 3px;
   overflow-wrap: anywhere;
 }
 
 .desktopIcon:hover,
 .desktopIcon:focus-visible,
 .selected {
-  outline: var(--os-focus-ring);
+  outline: 2px dotted var(--pixelos-cyan);
   outline-offset: -3px;
-}
-
-.selected img {
-  filter: var(--os-icon-selected-shadow);
 }
 
 .selected > span:last-child {
-  color: var(--os-icon-label-fg);
-  background: var(--os-control-selected-bg);
-}
-
-:global(:root[data-os-theme='win98']) .desktopIcon {
-  width: 72px;
-  min-height: 72px;
-  gap: 3px;
-  padding: 3px 2px;
-  font-family: 'MS Sans Serif', Tahoma, Arial, sans-serif;
-  font-size: 11px;
-}
-
-:global(:root[data-os-theme='win98']) .desktopIcon:hover,
-:global(:root[data-os-theme='win98']) .desktopIcon:focus-visible,
-:global(:root[data-os-theme='win98']) .selected {
-  outline-offset: -2px;
-}
-
-:global(:root[data-os-theme='win98']) .selected > span:last-child {
-  padding: 1px 3px;
-}
-
-:global(:root[data-os-theme='win98']) .desktopIcon {
-  width: 74px;
-  min-height: 78px;
-  gap: 2px;
-  padding: 3px 1px;
-  line-height: 1.1;
-  text-align: center;
-}
-
-:global(:root[data-os-theme='win98']) .desktopIcon img {
-  width: 32px;
-  height: 32px;
-}
-
-:global(:root[data-os-theme='win98']) .desktopIcon > span:last-child {
-  max-width: 72px;
-  padding: 1px 2px;
-  text-shadow: 1px 1px #000;
-}
-
-:global(:root[data-os-theme='win98']) .desktopIcon:hover,
-:global(:root[data-os-theme='win98']) .desktopIcon:focus-visible,
-:global(:root[data-os-theme='win98']) .selected {
-  outline: 1px dotted #fff;
-  outline-offset: -2px;
-}
-
-:global(:root[data-os-theme='win98']) .selected img {
-  filter: none;
-}
-
-:global(:root[data-os-theme='win98']) .selected > span:last-child {
-  color: #fff;
-  background: #000080;
-}
-
-:global(:root[data-os-theme='winxp']) .desktopIcon {
-  width: 86px;
-  min-height: 90px;
-  gap: 4px;
-  padding: 4px 3px;
-  font-family: Tahoma, Verdana, Arial, sans-serif;
-  font-size: 12px;
-  line-height: 1.15;
-}
-
-:global(:root[data-os-theme='winxp']) .desktopIcon img {
-  width: 40px;
-  height: 40px;
-  image-rendering: auto;
-}
-
-:global(:root[data-os-theme='winxp']) .desktopIcon span {
-  max-width: 82px;
-  padding: 1px 3px;
-  text-shadow: 1px 1px #174271;
-}
-
-:global(:root[data-os-theme='winxp']) .desktopIcon:hover,
-:global(:root[data-os-theme='winxp']) .desktopIcon:focus-visible,
-:global(:root[data-os-theme='winxp']) .selected {
-  outline: 1px dotted #fff;
-  outline-offset: -3px;
-}
-
-:global(:root[data-os-theme='winxp']) .selected img {
-  filter: drop-shadow(1px 0 #2b70c7) drop-shadow(-1px 0 #2b70c7)
-    drop-shadow(0 1px #2b70c7) drop-shadow(0 -1px #2b70c7);
-}
-
-:global(:root[data-os-theme='winxp']) .selected span {
-  color: #fff;
-  background: rgb(49 106 197 / 82%);
-}
-
-:global(:root[data-os-theme='win98']) .desktopIcon {
-  border: 1px solid transparent !important;
-  background: transparent !important;
-  box-shadow: none !important;
-}
-
-:global(:root[data-os-theme='win98']) .desktopIcon:active {
-  transform: none;
+  color: var(--pixelos-edge);
+  background: var(--pixelos-magenta);
+  text-shadow: none;
 }

@@ -4,13 +4,9 @@ import { expect, test, type Page } from '@playwright/test'
 const seriousOrCritical = (violations: Awaited<ReturnType<AxeBuilder['analyze']>>['violations']) =>
   violations.filter((violation) => violation.impact === 'serious' || violation.impact === 'critical')
 
-async function visitInTheme(page: Page, theme: 'winxp' | 'win98', path = '/') {
-  await page.addInitScript((selectedTheme) => {
-    window.localStorage.setItem('2000sme:theme', selectedTheme)
-  }, theme)
+async function visitPixelOs(page: Page, path = '/') {
   await page.goto(path)
-  await expect(page.locator('html')).toHaveAttribute('data-os-theme', theme)
-  await expect(page.locator('#os-theme')).toHaveAttribute('href', new RegExp(`/themes/${theme === 'winxp' ? 'xp' : '98'}\\.css$`))
+  await expect(page.locator('html')).toHaveAttribute('data-os-theme', 'pixelos')
 }
 
 async function expectNoSeriousOrCriticalViolations(page: Page, selector: string) {
@@ -18,11 +14,10 @@ async function expectNoSeriousOrCriticalViolations(page: Page, selector: string)
   expect(seriousOrCritical(results.violations)).toEqual([])
 }
 
-test.describe('supported-theme accessibility regression coverage', () => {
-  test('scans the Windows XP first-visit desktop and keyboard-accessible Start menu', async ({ page }) => {
-    await page.goto('/')
+test.describe('PixelOS accessibility regression coverage', () => {
+  test('scans the PixelOS desktop and keyboard-accessible Start menu', async ({ page }) => {
+    await visitPixelOs(page)
 
-    await expect(page.locator('html')).toHaveAttribute('data-os-theme', 'winxp')
     await expectNoSeriousOrCriticalViolations(page, 'main[aria-label="Desktop"]')
 
     const startButton = page.getByRole('button', { name: 'Start' })
@@ -31,7 +26,7 @@ test.describe('supported-theme accessibility regression coverage', () => {
 
     const startMenu = page.getByRole('navigation', { name: 'Start menu' })
     await expect(startMenu).toBeVisible()
-    await expect(startMenu.getByRole('button', { name: 'My Portfolio' })).toBeFocused()
+    await expect(startMenu.getByRole('button', { name: 'MY MACHINE' })).toBeFocused()
     await expectNoSeriousOrCriticalViolations(page, '#start-menu')
 
     await page.keyboard.press('Escape')
@@ -39,33 +34,49 @@ test.describe('supported-theme accessibility regression coverage', () => {
     await expect(startButton).toBeFocused()
   })
 
-  test('recovers the stored Windows 98 preference and scans an opened desktop window', async ({ page }) => {
-    await visitInTheme(page, 'win98')
+  test('scans an opened retained README.TXT window', async ({ page }) => {
+    await visitPixelOs(page)
 
-    await page.getByRole('button', { name: 'Open Resume' }).dblclick()
-    const resumeWindow = page.getByRole('dialog', { name: 'resume.md - WordPad window' })
+    await page.getByRole('button', { name: 'Open README.TXT' }).dblclick()
+    const resumeWindow = page.getByRole('dialog', { name: 'README.TXT - WORDPAD window' })
 
     await expect(resumeWindow).toBeVisible()
     await expect(resumeWindow).toBeFocused()
     await expectNoSeriousOrCriticalViolations(page, '[role="dialog"]')
   })
 
-  test('scans the direct Visitor Scrapbook route and its verification status', async ({ page }) => {
-    await page.route(/\/api\/guestbook(?:\?.*)?$/, async (route) => {
-      await route.fulfill({
-        contentType: 'application/json',
-        body: JSON.stringify({ entries: [], page: { limit: 20, next_cursor: null } }),
-      })
-    })
-    await visitInTheme(page, 'winxp', '/#/apps/guestbook')
+  test('returns a retired Guestbook route to the accessible PixelOS desktop', async ({ page }) => {
+    await visitPixelOs(page, '/#/apps/guestbook')
 
-    const scrapbookRoute = page.getByRole('main', { name: 'Visitor Scrapbook direct route' })
-    await expect(scrapbookRoute).toBeVisible()
-    await expect(scrapbookRoute.locator('h1')).toHaveText('Visitor Scrapbook')
-    await scrapbookRoute.getByRole('tab', { name: 'Leave a note' }).click()
-    await expect(scrapbookRoute.getByLabel('Your name')).toBeVisible()
-    await expect(scrapbookRoute.getByLabel('Your note')).toBeVisible()
-    await expect(scrapbookRoute.getByRole('button', { name: 'Add note to scrapbook' })).toBeDisabled()
-    await expectNoSeriousOrCriticalViolations(page, 'main[aria-label="Visitor Scrapbook direct route"]')
+    const desktop = page.getByRole('main', { name: 'Desktop' })
+    await expect(desktop).toBeVisible()
+    await expect(page.getByRole('main', { name: 'Visitor Scrapbook direct route' })).toHaveCount(0)
+    await expectNoSeriousOrCriticalViolations(page, 'main[aria-label="Desktop"]')
+  })
+})
+
+
+test.describe('PXOS-5 effects accessibility', () => {
+  test('keeps the decorative sprite pointer-transparent and preserves desktop launcher interaction', async ({ page }) => {
+    await visitPixelOs(page)
+
+    const sprite = page.locator('.pixelos-desktop-sprite')
+    await expect(sprite).toHaveAttribute('aria-hidden', 'true')
+    await expect(sprite).toHaveCSS('pointer-events', 'none')
+
+    await page.getByRole('button', { name: 'Open MY MACHINE' }).dblclick()
+    await expect(page.getByRole('dialog', { name: 'MY MACHINE window' })).toBeVisible()
+  })
+
+  test('keeps PixelOS effects static when reduced motion is preferred', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' })
+    await visitPixelOs(page)
+
+    await expect(page.locator('html')).toHaveAttribute('data-theme-effects', 'reduced')
+    await expect(page.locator('.pixelos-desktop-sprite')).toHaveCSS('animation-name', 'none')
+
+    await page.getByRole('button', { name: 'Open MY MACHINE' }).dblclick()
+    await expect(page.locator('.pixelos-cursor-blink')).toHaveCSS('animation-name', 'none')
+    await expectNoSeriousOrCriticalViolations(page, '[role="dialog"]')
   })
 })

@@ -1,402 +1,146 @@
-/* Fill window-body, removing the 8px margin 98.css applies */
 .root {
-  margin: -8px;
-  height: calc(100% + 16px);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  background: var(--os-app-toolbar-surface);
-  font-family: var(--sans, 'MS Sans Serif', Arial, sans-serif);
-  font-size: 11px;
-}
-
-/* ── Toolbar ─────────────────────────────────────────────── */
-.toolbar {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  padding: 2px 4px;
-  border-bottom: 1px solid var(--os-app-divider);
-  flex-shrink: 0;
-  background: var(--os-app-toolbar-surface);
-}
-
-.navBtn {
-  width: 24px;
-  height: 22px;
-  padding: 0;
-  font-size: 10px;
-  flex-shrink: 0;
-  cursor: url('/arrow.cur'), auto;
-}
-
-.address {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  flex: 1;
-  min-width: 0;
-}
-
-.addressLabel {
-  white-space: nowrap;
-  font-size: 11px;
-}
-
-.addressInput {
-  flex: 1;
-  min-width: 0;
-  height: 20px;
-  padding: 0 4px;
-  font-family: inherit;
-  font-size: 11px;
-  box-shadow: var(--os-app-inset-shadow);
-  border: none;
-  color: var(--os-control-fg);
-  background: var(--os-app-content-surface);
-  cursor: url('/arrow.cur'), auto;
-}
-
-.viewToggle {
-  display: flex;
-  gap: 1px;
-  padding-left: 6px;
-  border-left: 1px solid var(--os-app-divider);
-  flex-shrink: 0;
-}
-
-.viewToggle button {
-  width: 26px;
-  height: 22px;
-  padding: 0;
-  font-size: 13px;
-  cursor: url('/arrow.cur'), auto;
-}
-
-.viewActive {
-  box-shadow: var(--os-control-inset) !important;
-}
-
-/* ── Two-pane body ──────────────────────────────────────── */
-.body {
-  display: flex;
-  flex: 1;
-  min-height: 0;
-  overflow: hidden;
-}
-
-.treePane {
-  min-width: 120px;
-  flex-shrink: 0;
-  overflow-y: auto;
-  overflow-x: hidden;
-  background: var(--os-app-content-surface);
-  padding: 0;
-}
-
-.treePane :global(.tree-view) {
   height: 100%;
-  min-height: 100%;
-  text-align: left;
-}
-
-.treeLeaf {
-  padding: 1px 4px;
-  cursor: url('/arrow.cur'), auto;
-  user-select: none;
-  white-space: nowrap;
-  font-size: 11px;
-}
-
-.treeLeaf:hover {
-  background: var(--os-app-selection-hover);
-}
-
-.treeLeafSelected {
-  background: var(--os-app-selection-bg) !important;
-  color: var(--os-app-selection-fg) !important;
-}
-
-.divider {
-  width: 3px;
-  background: var(--os-app-toolbar-surface);
-  flex-shrink: 0;
-  border-left: 1px solid var(--os-app-divider);
-  border-right: 1px solid var(--os-app-content-surface);
-  cursor: ew-resize;
-}
-
-.filePane {
-  flex: 1;
-  min-width: 0;
-  overflow: auto;
-  background: var(--os-app-content-surface);
-  padding: 4px;
-}
-
-/* ── Icon grid view ─────────────────────────────────────── */
-.iconGrid {
-  display: flex;
-  flex-wrap: wrap;
-  align-content: flex-start;
-  gap: 4px;
-  padding: 4px;
-}
-
-.folder {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 3px;
-  width: 76px;
-  padding: 4px 2px;
-  background: transparent;
-  border: 1px solid transparent;
-  cursor: url('/arrow.cur'), auto;
-  font-family: inherit;
+  overflow: hidden;
+  color: var(--pixelos-ink);
+  background: var(--pixelos-panel);
+  font-family: var(--pixelos-font);
   font-size: 11px;
+  text-transform: uppercase;
+}
+
+.menuBar {
+  min-height: 25px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 4px 8px;
+  color: var(--pixelos-ink);
+  background: var(--pixelos-panel-dark);
+  border-bottom: 2px solid var(--pixelos-edge);
+}
+
+.pathBar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-bottom: 2px solid var(--pixelos-edge);
+  box-shadow: inset 0 -1px var(--pixelos-bevel-highlight);
+}
+
+.pathLabel {
+  color: var(--pixelos-muted);
+}
+
+.pathField {
+  min-width: 0;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 7px;
+  color: var(--pixelos-cyan);
+  background: var(--pixelos-void);
+  box-shadow:
+    inset 2px 2px var(--pixelos-edge),
+    inset -2px -2px #4a3a75;
+}
+
+.pathField .machineGlyph {
+  width: 14px;
+  height: 14px;
+}
+
+.cursor {
+  margin-left: 1px;
+}
+
+.grid {
+  min-height: 0;
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(112px, 1fr));
+  align-content: start;
+  gap: 6px;
+  margin: 7px;
+  padding: 8px;
+  overflow: auto;
+  list-style: none;
+  background: var(--pixelos-void);
+  box-shadow:
+    inset 2px 2px var(--pixelos-edge),
+    inset -2px -2px #4a3a75;
+}
+
+.item {
+  width: 100%;
+  min-height: 88px;
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  gap: 5px;
+  padding: 8px 4px;
+  color: var(--pixelos-ink);
+  border: 1px solid transparent;
+  background: transparent;
+  font: inherit;
+  line-height: 1.25;
   text-align: center;
-  color: inherit;
+  cursor: pointer;
 }
 
-.folder:hover {
-  border-color: var(--os-app-selection-bg);
-  background: var(--os-app-selection-hover);
-}
-
-.folderSelected {
-  background: var(--os-app-selection-bg) !important;
-  color: var(--os-app-selection-fg) !important;
-  border-color: var(--os-app-selection-bg) !important;
-}
-
-.folderIcon {
+.machineGlyph {
   width: 32px;
   height: 32px;
-  image-rendering: pixelated;
-  pointer-events: none;
+  color: var(--pixelos-cyan);
+  shape-rendering: crispEdges;
 }
 
-.folderName {
-  word-break: break-word;
-  line-height: 1.2;
-  pointer-events: none;
+.item span {
+  max-width: 112px;
+  padding: 1px 3px;
+  overflow-wrap: anywhere;
 }
 
-/* ── List view ──────────────────────────────────────────── */
-.listTable {
-  width: 100%;
-  border-collapse: collapse;
-  font-family: inherit;
-  font-size: 11px;
+.item:hover,
+.item:focus-visible {
+  outline: 2px dotted var(--pixelos-cyan);
+  outline-offset: -4px;
 }
 
-.listTable th {
-  text-align: left;
-  padding: 1px 8px;
-  border-bottom: 2px solid var(--os-app-divider);
-  border-right: 1px solid var(--os-app-divider);
-  background: var(--os-app-toolbar-surface);
-  font-weight: normal;
-  white-space: nowrap;
-  position: sticky;
-  top: 0;
-  cursor: url('/arrow.cur'), auto;
+.selected {
+  color: var(--pixelos-edge);
+  background: var(--pixelos-magenta);
 }
 
-.listTable td {
-  padding: 1px 8px;
-  white-space: nowrap;
-  border-bottom: 1px solid #e8e8e8;
-  cursor: url('/arrow.cur'), auto;
+.selected .machineGlyph {
+  color: var(--pixelos-edge);
 }
 
-.listTable tbody tr:hover td {
-  background: var(--os-app-selection-hover);
-}
-
-.rowSelected td {
-  background: var(--os-app-selection-bg) !important;
-  color: var(--os-app-selection-fg) !important;
-}
-
-.nameCell {
+.statusBar {
+  min-height: 26px;
   display: flex;
   align-items: center;
-  gap: 4px;
+  padding: 4px 8px;
+  color: var(--pixelos-muted);
+  background: var(--pixelos-panel);
+  border-top: 2px solid var(--pixelos-edge);
+  box-shadow: inset 0 1px var(--pixelos-bevel-highlight);
 }
 
-.rowIcon {
-  width: 16px;
-  height: 16px;
-  image-rendering: pixelated;
-  flex-shrink: 0;
+.statusBar span {
+  width: 100%;
+  padding: 3px 5px;
+  background: var(--pixelos-void);
+  box-shadow:
+    inset 1px 1px var(--pixelos-edge),
+    inset -1px -1px #4a3a75;
 }
 
-:global(:root[data-os-theme='win98']) .root {
-  font-family: 'MS Sans Serif', Tahoma, Arial, sans-serif;
-}
-
-:global(:root[data-os-theme='win98']) .toolbar {
-  gap: 2px;
-  padding: 2px;
-  border-bottom-color: #808080;
-  box-shadow: var(--os-app-toolbar-highlight);
-}
-
-:global(:root[data-os-theme='win98']) .navBtn,
-:global(:root[data-os-theme='win98']) .viewToggle button {
-  border: 2px solid;
-  border-color: #fff #000 #000 #fff;
-  border-radius: 0;
-  background: #c0c0c0;
-  box-shadow: inset -1px -1px #808080, inset 1px 1px #dfdfdf;
-}
-
-:global(:root[data-os-theme='win98']) .navBtn:active,
-:global(:root[data-os-theme='win98']) .viewToggle button:active,
-:global(:root[data-os-theme='win98']) .viewActive {
-  border-color: #000 #fff #fff #000;
-  box-shadow: inset -1px -1px #fff, inset 1px 1px #808080 !important;
-}
-
-:global(:root[data-os-theme='win98']) .addressInput {
-  border: 2px solid;
-  border-color: #808080 #fff #fff #808080;
-  box-shadow: none;
-}
-
-:global(:root[data-os-theme='win98']) .divider {
-  width: 4px;
-  border-left-color: #808080;
-  border-right-color: #fff;
-}
-
-:global(:root[data-os-theme='win98']) .listTable th {
-  border: 2px solid;
-  border-color: #fff #808080 #808080 #fff;
-  box-shadow: inset -1px -1px #000, inset 1px 1px #dfdfdf;
-}
-
-:global(:root[data-os-theme='winxp']) .root {
-  background: #ece9d8;
-  font-family: Tahoma, Verdana, Arial, sans-serif;
-  font-size: 12px;
-}
-
-:global(:root[data-os-theme='winxp']) .toolbar {
-  min-height: 34px;
-  gap: 5px;
-  padding: 4px 6px;
-  border-bottom: 1px solid #92b0da;
-  background:
-    linear-gradient(180deg, rgb(255 255 255 / 84%), transparent 45%),
-    linear-gradient(#f7f7f5, #d8e3f1);
-  box-shadow: inset 0 1px #fff;
-}
-
-:global(:root[data-os-theme='winxp']) .navBtn,
-:global(:root[data-os-theme='winxp']) .viewToggle button {
-  border: 1px solid #6588bc;
-  border-radius: 3px;
-  background:
-    linear-gradient(180deg, rgb(255 255 255 / 80%), transparent 48%),
-    linear-gradient(#eef6ff, #bfd6f2);
-  box-shadow: inset 0 1px #fff, 0 1px #fff;
-}
-
-:global(:root[data-os-theme='winxp']) .navBtn:hover,
-:global(:root[data-os-theme='winxp']) .viewToggle button:hover {
-  filter: brightness(1.05);
-}
-
-:global(:root[data-os-theme='winxp']) .navBtn:active,
-:global(:root[data-os-theme='winxp']) .viewToggle button:active,
-:global(:root[data-os-theme='winxp']) .viewActive {
-  border-color: #4b75af;
-  background: #c7dbf2;
-  box-shadow: inset 0 1px 3px rgb(41 83 139 / 32%) !important;
-}
-
-:global(:root[data-os-theme='winxp']) .addressLabel {
-  color: #27558f;
-  font-weight: 700;
-}
-
-:global(:root[data-os-theme='winxp']) .addressInput {
-  height: 22px;
-  border: 1px solid #7f9db9;
-  border-radius: 2px;
-  background: #fff;
-  box-shadow: inset 0 1px 2px rgb(0 0 0 / 15%);
-}
-
-:global(:root[data-os-theme='winxp']) .treePane {
-  width: 176px;
-  background:
-    linear-gradient(180deg, #dceeff, #edf6ff 64%, #fff);
-  border-right: 1px solid #97b9df;
-}
-
-:global(:root[data-os-theme='winxp']) .treePane :global(.tree-view) {
-  padding: 7px 4px;
-}
-
-:global(:root[data-os-theme='winxp']) .treeLeaf {
-  padding: 2px 5px;
-  border-radius: 2px;
-}
-
-:global(:root[data-os-theme='winxp']) .divider {
-  width: 3px;
-  border-left-color: #8daed4;
-  border-right-color: #fff;
-  background: #d6e5f6;
-}
-
-:global(:root[data-os-theme='winxp']) .filePane {
-  padding: 7px;
-  background: #fff;
-}
-
-:global(:root[data-os-theme='winxp']) .folder {
-  width: 84px;
-  padding: 5px 3px;
-  border-radius: 3px;
-  font-size: 12px;
-}
-
-:global(:root[data-os-theme='winxp']) .folder:hover {
-  border-color: #82a9d8;
-  background: #e8f2ff;
-}
-
-:global(:root[data-os-theme='winxp']) .folderSelected {
-  border-color: #316ac5 !important;
-  background: #316ac5 !important;
-}
-
-:global(:root[data-os-theme='winxp']) .folderIcon {
-  width: 40px;
-  height: 40px;
-  image-rendering: auto;
-}
-
-:global(:root[data-os-theme='winxp']) .listTable th {
-  padding: 3px 8px;
-  border: 1px solid #9eb9d8;
-  background:
-    linear-gradient(180deg, rgb(255 255 255 / 82%), transparent 48%),
-    linear-gradient(#eaf3fc, #c8ddf3);
-  box-shadow: inset 0 1px #fff;
-  font-weight: 700;
-}
-
-:global(:root[data-os-theme='winxp']) .listTable td {
-  padding: 3px 8px;
-  border-bottom-color: #e8f0fa;
-}
-
-:global(:root[data-os-theme='winxp']) .listTable tbody tr:hover td {
-  background: #e9f3ff;
+@media (max-width: 460px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(104px, 1fr));
+  }
 }

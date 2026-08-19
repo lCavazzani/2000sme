@@ -12,17 +12,6 @@ function formatTime(date: Date) {
   }).format(date)
 }
 
-function PortfolioMark() {
-  return (
-    <span className={styles.portfolioMark} aria-hidden="true">
-      <span />
-      <span />
-      <span />
-      <span />
-    </span>
-  )
-}
-
 export function Taskbar() {
   const { windows, focusWindow, minimizeWindow, restoreWindow, openWindowById } = useWindows()
   const [isStartMenuOpen, setIsStartMenuOpen] = useState(false)
@@ -44,12 +33,6 @@ export function Taskbar() {
   }, [isStartMenuOpen])
 
   const startMenuApplications = applicationsForSurface('start-menu')
-  const primaryStartMenuApplications = startMenuApplications.filter((application) =>
-    ['portfolio', 'my-computer', 'resume', 'guestbook'].includes(application.id),
-  )
-  const supportingStartMenuApplications = startMenuApplications.filter((application) =>
-    ['about-me', 'contact', 'appearance-themes'].includes(application.id),
-  )
   const openWindows = windows.filter((windowState) => windowState.isOpen)
   const activeWindowId = openWindows
     .filter((windowState) => !windowState.isMinimized)
@@ -101,47 +84,24 @@ export function Taskbar() {
           aria-label="Start menu"
           onKeyDown={handleStartMenuKeyDown}
         >
-          <div className={styles.startMenuBanner} aria-hidden="true">2000sme</div>
-          <div className={styles.startMenuUser} aria-hidden="true">
-            <PortfolioMark />
-            <div>
-              <strong>Leonardo Cavazzani</strong>
-              <span>Senior Frontend Developer</span>
-            </div>
-          </div>
-          <div className={styles.startMenuColumns}>
-            <section className={styles.startMenuGroup} role="group" aria-labelledby="start-menu-applications">
-              <h2 id="start-menu-applications" className={styles.startMenuGroupHeading}>Applications</h2>
-              {primaryStartMenuApplications.map((application) => (
-                <button
-                  className={styles.startMenuItem}
-                  key={application.id}
-                  data-window-launcher={application.id}
-                  onClick={() => launchApplication(application.id)}
-                >
-                  <ThemeAssetIcon name={application.id} width={20} height={20} />
-                  {application.label}
-                </button>
-              ))}
-            </section>
-            <section className={styles.startMenuGroup} role="group" aria-labelledby="start-menu-profile-settings">
-              <h2 id="start-menu-profile-settings" className={styles.startMenuGroupHeading}>Profile &amp; settings</h2>
-              {supportingStartMenuApplications.map((application) => (
-                <button
-                  className={styles.startMenuItem}
-                  key={application.id}
-                  data-window-launcher={application.id}
-                  onClick={() => launchApplication(application.id)}
-                >
-                  <ThemeAssetIcon name={application.id} width={20} height={20} />
-                  {application.label}
-                </button>
-              ))}
-            </section>
-          </div>
+          <div className={styles.startMenuBanner} aria-hidden="true">PIXELOS 2.0</div>
+          <section className={styles.startMenuGroup} role="group" aria-labelledby="start-menu-applications">
+            <h2 id="start-menu-applications" className={styles.startMenuGroupHeading}>Applications</h2>
+            {startMenuApplications.map((application) => (
+              <button
+                className={styles.startMenuItem}
+                key={application.id}
+                data-window-launcher={application.id}
+                onClick={() => launchApplication(application.id)}
+              >
+                <ThemeAssetIcon name={application.id} width={20} height={20} />
+                {application.label}
+              </button>
+            ))}
+          </section>
         </nav>
       )}
-      <footer className={styles.taskbar} aria-label="Windows taskbar">
+      <footer className={styles.taskbar} aria-label="PixelOS taskbar">
         <button
           ref={startButtonRef}
           className={styles.startButton}
