@@ -3,6 +3,7 @@ import {
   applicationIdFromHash,
   applicationsForSurface,
 } from '../config/applicationRegistry'
+import { PIXEL_OS_ASSETS } from '../config/pixelosAssets'
 import { useWindows } from '../store/windows'
 import { DesktopIcon } from './DesktopIcon'
 import { DirectApplicationRoute } from './DirectApplicationRoute'
@@ -74,6 +75,13 @@ export function DesktopShell() {
       data-desktop-root
       tabIndex={-1}
     >
+      <img
+        className="pixelos-desktop-sprite pixelos-sprite-bob"
+        src={PIXEL_OS_ASSETS.mittens}
+        alt=""
+        aria-hidden="true"
+        draggable={false}
+      />
       <MobileLauncher />
       <section className="desktopIcons" aria-label="Desktop applications">
         {applicationsForSurface('desktop').map((application) => (

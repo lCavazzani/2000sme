@@ -28,6 +28,24 @@
   background-image: radial-gradient(ellipse at center, transparent 55%, rgb(9 5 18 / 55%) 100%);
 }
 
+.pixelos-desktop-sprite {
+  position: absolute;
+  z-index: 0;
+  left: 24px;
+  bottom: calc(var(--pixelos-taskbar-height) + 18px);
+  width: 56px;
+  height: 56px;
+  object-fit: cover;
+  pointer-events: none;
+  user-select: none;
+  image-rendering: pixelated;
+  filter: drop-shadow(2px 2px 0 rgb(13 8 25 / 65%));
+}
+
+:root[data-os-theme='pixelos'][data-theme-effects='reduced'] .pixelos-desktop-sprite {
+  transform: translateY(0);
+}
+
 .desktopIcons {
   position: relative;
   z-index: 1;
@@ -87,7 +105,8 @@
     padding: 0;
   }
 
-  .desktopIcons {
+  .desktopIcons,
+  .pixelos-desktop-sprite {
     display: none;
   }
 
