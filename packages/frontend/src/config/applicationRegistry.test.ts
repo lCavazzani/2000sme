@@ -59,6 +59,7 @@ describe('applicationRegistry', () => {
       'gallery',
       'pet',
       'notepad',
+      'about',
       'resume',
     ])
     expect(applicationsForSurface('start-menu').map((application) => application.id)).toEqual([
@@ -66,6 +67,7 @@ describe('applicationRegistry', () => {
       'gallery',
       'pet',
       'notepad',
+      'about',
       'resume',
     ])
     expect(applicationsForSurface('mobile').map((application) => application.id)).toEqual([
@@ -73,6 +75,7 @@ describe('applicationRegistry', () => {
       'gallery',
       'pet',
       'notepad',
+      'about',
       'resume',
     ])
   })
