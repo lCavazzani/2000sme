@@ -10,19 +10,14 @@
     "lint": "oxlint",
     "test": "vitest run",
     "test:a11y": "playwright test",
-    "test:theme": "playwright test e2e/theme-compatibility.spec.ts",
     "preview": "vite preview"
   },
   "dependencies": {
-    "7.css": "0.21.1",
-    "98.css": "^0.1.21",
     "@tanstack/react-query": "^5.101.4",
     "marked": "^18.0.9",
-    "motion": "^13.1.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
-    "react-rnd": "^10.5.3",
-    "xp.css": "0.2.6"
+    "react-rnd": "^10.5.3"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.13.0",

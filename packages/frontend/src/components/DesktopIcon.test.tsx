@@ -16,9 +16,10 @@ it('opens a desktop app through its launcher interaction contract', async () => 
   render(
     <WindowsProvider>
       <DesktopIcon
-        label="Portfolio"
-        icon="/icons.svg#portfolio"
-        windowId="portfolio"
+        label="MY MACHINE"
+        icon="/desktop-icons/my-computer.svg"
+        applicationId="my-computer"
+        windowId="my-computer"
         isSelected={false}
         onSelect={onSelect}
       />
@@ -26,9 +27,9 @@ it('opens a desktop app through its launcher interaction contract', async () => 
     </WindowsProvider>,
   )
 
-  const launcher = screen.getByRole('button', { name: 'Open Portfolio' })
+  const launcher = screen.getByRole('button', { name: 'Open MY MACHINE' })
   await user.click(launcher)
-  expect(onSelect).toHaveBeenCalledWith('portfolio')
+  expect(onSelect).toHaveBeenCalledWith('my-computer')
 
   await user.dblClick(launcher)
   expect(screen.getByText('1')).toBeInTheDocument()

@@ -31,11 +31,11 @@ test('keeps the primary PDF action readable and touch-sized on the narrow README
   await expect(page.locator('[aria-label="Read-only document toolbar"]')).toHaveCSS('overflow-x', 'auto')
 })
 
-test('keeps the persistent PDF action bottom-left inside the desktop Resume window while the document scrolls', async ({ page }) => {
+test('keeps the persistent PDF action bottom-left inside the desktop README.TXT window while the document scrolls', async ({ page }) => {
   await page.goto('/')
-  await page.getByRole('button', { name: 'Open Resume' }).dblclick()
+  await page.getByRole('button', { name: 'Open README.TXT' }).dblclick()
 
-  const resumeWindow = page.getByRole('dialog', { name: 'resume.md - WordPad window' })
+  const resumeWindow = page.getByRole('dialog', { name: 'README.TXT - WORDPAD window' })
   const persistentDownload = resumeWindow.getByRole('button', {
     name: 'Download resume (PDF) — persistent action',
   })

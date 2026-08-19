@@ -14,7 +14,7 @@ async function expectNoSeriousOrCriticalViolations(page: Page, selector: string)
   expect(seriousOrCritical(results.violations)).toEqual([])
 }
 
-test.describe('PixelOS shell accessibility regression coverage', () => {
+test.describe('PixelOS accessibility regression coverage', () => {
   test('scans the PixelOS desktop and keyboard-accessible Start menu', async ({ page }) => {
     await visitPixelOs(page)
 
@@ -26,7 +26,7 @@ test.describe('PixelOS shell accessibility regression coverage', () => {
 
     const startMenu = page.getByRole('navigation', { name: 'Start menu' })
     await expect(startMenu).toBeVisible()
-    await expect(startMenu.getByRole('button', { name: 'My Portfolio' })).toBeFocused()
+    await expect(startMenu.getByRole('button', { name: 'MY MACHINE' })).toBeFocused()
     await expectNoSeriousOrCriticalViolations(page, '#start-menu')
 
     await page.keyboard.press('Escape')
@@ -34,14 +34,23 @@ test.describe('PixelOS shell accessibility regression coverage', () => {
     await expect(startButton).toBeFocused()
   })
 
-  test('scans an opened retained Resume window under PixelOS chrome', async ({ page }) => {
+  test('scans an opened retained README.TXT window', async ({ page }) => {
     await visitPixelOs(page)
 
-    await page.getByRole('button', { name: 'Open Resume' }).dblclick()
-    const resumeWindow = page.getByRole('dialog', { name: 'resume.md - WordPad window' })
+    await page.getByRole('button', { name: 'Open README.TXT' }).dblclick()
+    const resumeWindow = page.getByRole('dialog', { name: 'README.TXT - WORDPAD window' })
 
     await expect(resumeWindow).toBeVisible()
     await expect(resumeWindow).toBeFocused()
     await expectNoSeriousOrCriticalViolations(page, '[role="dialog"]')
+  })
+
+  test('returns a retired Guestbook route to the accessible PixelOS desktop', async ({ page }) => {
+    await visitPixelOs(page, '/#/apps/guestbook')
+
+    const desktop = page.getByRole('main', { name: 'Desktop' })
+    await expect(desktop).toBeVisible()
+    await expect(page.getByRole('main', { name: 'Visitor Scrapbook direct route' })).toHaveCount(0)
+    await expectNoSeriousOrCriticalViolations(page, 'main[aria-label="Desktop"]')
   })
 })
