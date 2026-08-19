@@ -182,7 +182,7 @@
     #100a20;
 }
 
-:global(.window-body) .docArea { padding-bottom: 82px; }
+:global(.window) .docArea { padding-bottom: 82px; }
 
 .page {
   max-width: 740px;
@@ -241,7 +241,8 @@
 
 .floatingDownload { display: none; }
 
-:global(.window-body) .floatingDownload {
+:global(.window) .floatingDownload {
+  display: inline-flex;
   position: absolute;
   z-index: 2;
   bottom: 28px;

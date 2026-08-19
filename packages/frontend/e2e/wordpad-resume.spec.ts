@@ -15,7 +15,7 @@ test('PixelOS exposes the RESUME.PDF action as the only working document command
   await expect(page.getByRole('button', { name: 'Print (unavailable in resume preview)' })).toBeDisabled()
   await expect(page.getByLabel('Font')).toBeDisabled()
   await expect(page.getByLabel('Size')).toBeDisabled()
-  await expect(page.getByText('Read-only resume preview').first()).toBeVisible()
+  await expect(page.getByText('Read-only RESUME.PDF preview').first()).toBeVisible()
 })
 
 test('keeps the primary PDF action readable and touch-sized on the narrow RESUME.PDF route', async ({ page }) => {
