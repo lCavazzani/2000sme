@@ -18,11 +18,11 @@ describe('desktop shell interactions', () => {
     const user = userEvent.setup()
     render(<App />)
 
-    const resumeLauncher = screen.getByRole('button', { name: 'Open Resume' })
+    const resumeLauncher = screen.getByRole('button', { name: 'Open README.TXT' })
     resumeLauncher.focus()
     await user.keyboard('{Enter}')
 
-    const resumeWindow = screen.getByLabelText('resume.md - WordPad window')
+    const resumeWindow = screen.getByLabelText('README.TXT - WORDPAD window')
     expect(resumeWindow).toBeInTheDocument()
     await waitFor(() => expect(resumeWindow).toHaveFocus())
   })
@@ -31,24 +31,24 @@ describe('desktop shell interactions', () => {
     const user = userEvent.setup()
     render(<App />)
 
-    const resumeLauncher = screen.getByRole('button', { name: 'Open Resume' })
+    const resumeLauncher = screen.getByRole('button', { name: 'Open README.TXT' })
     await user.dblClick(resumeLauncher)
 
-    const taskbarButton = screen.getByRole('button', { name: 'resume.md - WordPad' })
+    const taskbarButton = screen.getByRole('button', { name: 'README.TXT - WORDPAD' })
     await user.click(screen.getByRole('button', { name: 'Minimize' }))
 
-    expect(screen.queryByLabelText('resume.md - WordPad window')).not.toBeInTheDocument()
+    expect(screen.queryByLabelText('README.TXT - WORDPAD window')).not.toBeInTheDocument()
     expect(taskbarButton).toHaveAttribute('aria-pressed', 'false')
 
     await user.click(taskbarButton)
-    expect(screen.getByLabelText('resume.md - WordPad window')).toBeInTheDocument()
+    expect(screen.getByLabelText('README.TXT - WORDPAD window')).toBeInTheDocument()
 
     await user.click(screen.getByRole('button', { name: 'Close' }))
-    expect(screen.queryByLabelText('resume.md - WordPad window')).not.toBeInTheDocument()
+    expect(screen.queryByLabelText('README.TXT - WORDPAD window')).not.toBeInTheDocument()
     await waitFor(() => expect(resumeLauncher).toHaveFocus())
   })
 
-  it('opens the Start menu by keyboard, restores focus on Escape, and launches its portfolio shortcut', async () => {
+  it('opens the Start menu by keyboard, restores focus on Escape, and launches its My Machine shortcut', async () => {
     const user = userEvent.setup()
     render(<App />)
 
@@ -57,18 +57,18 @@ describe('desktop shell interactions', () => {
     await user.keyboard('{Enter}')
 
     const startMenu = await screen.findByRole('navigation', { name: 'Start menu' })
-    const portfolioShortcut = screen.getByRole('button', { name: 'My Portfolio' })
-    await waitFor(() => expect(portfolioShortcut).toHaveFocus())
+    const myMachineShortcut = screen.getByRole('button', { name: 'MY MACHINE' })
+    await waitFor(() => expect(myMachineShortcut).toHaveFocus())
 
     fireEvent.keyDown(startMenu, { key: 'Escape' })
     await waitFor(() => expect(screen.queryByRole('navigation', { name: 'Start menu' })).not.toBeInTheDocument())
     await waitFor(() => expect(startButton).toHaveFocus())
 
     await user.keyboard('{Enter}')
-    await user.click(screen.getByRole('button', { name: 'My Portfolio' }))
+    await user.click(screen.getByRole('button', { name: 'MY MACHINE' }))
 
     expect(screen.queryByRole('navigation', { name: 'Start menu' })).not.toBeInTheDocument()
-    expect(screen.getByLabelText('My Portfolio window')).toBeInTheDocument()
+    expect(screen.getByLabelText('MY MACHINE window')).toBeInTheDocument()
   })
 })
 
@@ -78,7 +78,7 @@ it('switches between direct routes and desktop mode while restoring a meaningful
   window.location.hash = '#/apps/resume'
   render(<App />)
 
-  expect(screen.getByRole('main', { name: 'Resume direct route' })).toBeInTheDocument()
+  expect(screen.getByRole('main', { name: 'README.TXT direct route' })).toBeInTheDocument()
   await user.click(screen.getByRole('button', { name: 'Open desktop' }))
 
   const desktop = screen.getByRole('main', { name: 'Desktop' })
@@ -87,7 +87,7 @@ it('switches between direct routes and desktop mode while restoring a meaningful
 
   window.location.hash = '#/apps/about-me'
   fireEvent(window, new HashChangeEvent('hashchange'))
-  expect(screen.getByRole('main', { name: 'About Me direct route' })).toBeInTheDocument()
+  expect(screen.getByRole('main', { name: 'Desktop' })).toBeInTheDocument()
 
   window.location.hash = ''
   fireEvent(window, new HashChangeEvent('hashchange'))

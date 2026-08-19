@@ -55,19 +55,27 @@ describe('applicationRegistry', () => {
     }
 
     expect(applicationsForSurface('desktop').map((application) => application.id)).toEqual([
-      'portfolio',
+      'my-computer',
       'resume',
-      'guestbook',
-      'about-me',
-      'appearance-themes',
     ])
-    expect(applicationsForSurface('start-menu')).toContainEqual(expect.objectContaining({ id: 'portfolio' }))
-    expect(applicationsForSurface('start-menu')).toContainEqual(expect.objectContaining({ id: 'appearance-themes' }))
+    expect(applicationsForSurface('start-menu').map((application) => application.id)).toEqual([
+      'my-computer',
+      'resume',
+    ])
+    expect(applicationsForSurface('mobile').map((application) => application.id)).toEqual([
+      'my-computer',
+      'resume',
+    ])
   })
 
-  it('returns no application for unknown IDs or unsupported direct routes', () => {
+  it('returns no application for retired or unsupported IDs and direct routes', () => {
     expect(findApplication('not-real')).toBeUndefined()
+    expect(findApplication('portfolio')).toBeUndefined()
+    expect(findApplication('guestbook')).toBeUndefined()
+    expect(findApplication('contact')).toBeUndefined()
+    expect(findApplication('appearance-themes')).toBeUndefined()
     expect(applicationIdFromHash('#/apps/not-real')).toBeUndefined()
-    expect(applicationPath('not-real' as ApplicationId)).toBe('#/apps/portfolio')
+    expect(applicationIdFromHash('#/apps/guestbook')).toBeUndefined()
+    expect(applicationPath('not-real' as ApplicationId)).toBe('#/apps/my-computer')
   })
 })

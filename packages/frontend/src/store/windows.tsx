@@ -11,7 +11,16 @@ function getViewport(): Viewport {
 }
 
 export function WindowsProvider({ children }: { children: ReactNode }) {
-  const [state, dispatch] = useReducer(windowsReducer, undefined, () => readWindowSession())
+  const [state, dispatch] = useReducer(windowsReducer, undefined, () => {
+    const storedState = readWindowSession()
+    return {
+      ...storedState,
+      // PixelOS may retire registry entries while retaining the session schema.
+      // Unsupported saved windows are omitted rather than rendering a stale
+      // shell or making a retired public application reachable.
+      windows: storedState.windows.filter((windowState) => findApplication(windowState.id)),
+    }
+  })
 
   useEffect(() => {
     writeWindowSession(state)
