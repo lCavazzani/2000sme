@@ -8,7 +8,7 @@ export type ApiErrorBody = {
 export type ApiError = {
   body: ApiErrorBody
   init: {
-    status: 400 | 404 | 413 | 429 | 500
+    status: 400 | 404 | 410 | 413 | 429 | 500
     headers?: Record<string, string>
   }
 }
