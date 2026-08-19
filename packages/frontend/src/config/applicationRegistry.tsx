@@ -1,23 +1,13 @@
 import type { ComponentType } from 'react'
-import { AppearanceThemesWindow } from '../components/AppearanceThemesWindow'
-import { Contact } from '../components/Contact'
 import { FileExplorer } from '../components/FileExplorer'
-import { Guestbook } from '../components/Guestbook'
 import { WordPad } from '../components/WordPad'
 import type { WindowConfig } from '../types/window'
 
 export const LAUNCH_SURFACES = ['desktop', 'start-menu', 'mobile'] as const
 export type LaunchSurface = (typeof LAUNCH_SURFACES)[number]
-export type ApplicationCategory = 'portfolio' | 'career' | 'visitor' | 'system'
+export type ApplicationCategory = 'career' | 'system'
 export type ApplicationCapability = 'desktop-window' | 'direct-route'
-export type ApplicationId =
-  | 'portfolio'
-  | 'my-computer'
-  | 'resume'
-  | 'guestbook'
-  | 'about-me'
-  | 'contact'
-  | 'appearance-themes'
+export type ApplicationId = 'my-computer' | 'resume'
 
 export type ApplicationDefinition = WindowConfig & {
   id: ApplicationId
@@ -37,122 +27,45 @@ function defineApplication(application: ApplicationDefinition): ApplicationDefin
   return application
 }
 
+/**
+ * PXOS-3 retires legacy public surfaces. Future PixelOS applications are added
+ * by their dedicated PXOS tickets; this registry intentionally exposes only
+ * the two currently implemented, portfolio-safe applications.
+ */
 export const applicationRegistry = [
   defineApplication({
-    id: 'portfolio',
-    label: 'My Portfolio',
-    title: 'My Portfolio',
-    category: 'portfolio',
-    icon: '/desktop-icons/my-computer.svg',
-    mobileLabel: 'Portfolio',
-    path: '#/apps/portfolio',
-    shortcut: 'Alt+1',
-    capability: 'desktop-window',
-    launchSurfaces: ['start-menu', 'mobile', 'desktop'],
-    x: 64,
-    y: 64,
-    width: 480,
-    height: 320,
-  }),
-  defineApplication({
     id: 'my-computer',
-    label: 'My Computer',
-    title: 'My Computer',
+    label: 'MY MACHINE',
+    title: 'MY MACHINE',
     category: 'system',
     icon: '/desktop-icons/my-computer.svg',
-    mobileLabel: 'Explore',
+    mobileLabel: 'My Machine',
     path: '#/apps/my-computer',
-    shortcut: 'Alt+2',
+    shortcut: 'Alt+1',
     capability: 'desktop-window',
-    launchSurfaces: ['start-menu', 'mobile'],
-    x: 72,
-    y: 48,
+    launchSurfaces: ['desktop', 'start-menu', 'mobile'],
+    x: 120,
+    y: 50,
     width: 640,
     height: 440,
     renderer: FileExplorer,
   }),
   defineApplication({
     id: 'resume',
-    label: 'Resume',
-    title: 'resume.md - WordPad',
+    label: 'README.TXT',
+    title: 'README.TXT - WORDPAD',
     category: 'career',
     icon: '/desktop-icons/resume.svg',
-    mobileLabel: 'Resume',
+    mobileLabel: 'README.TXT',
     path: '#/apps/resume',
-    shortcut: 'Alt+3',
+    shortcut: 'Alt+2',
     capability: 'desktop-window',
     launchSurfaces: ['desktop', 'start-menu', 'mobile'],
-    x: 96,
-    y: 48,
+    x: 150,
+    y: 96,
     width: 760,
     height: 540,
     renderer: WordPad,
-  }),
-  defineApplication({
-    id: 'guestbook',
-    label: 'Visitor Scrapbook',
-    title: 'Visitor Scrapbook',
-    category: 'visitor',
-    icon: '/desktop-icons/guestbook.svg',
-    mobileLabel: 'Scrapbook',
-    path: '#/apps/guestbook',
-    shortcut: 'Alt+4',
-    capability: 'desktop-window',
-    launchSurfaces: ['desktop', 'start-menu', 'mobile'],
-    x: 156,
-    y: 124,
-    width: 560,
-    height: 520,
-    renderer: Guestbook,
-  }),
-  defineApplication({
-    id: 'about-me',
-    label: 'About Me',
-    title: 'About Me',
-    category: 'career',
-    icon: '/desktop-icons/about-me.svg',
-    mobileLabel: 'About',
-    path: '#/apps/about-me',
-    shortcut: 'Alt+5',
-    capability: 'desktop-window',
-    launchSurfaces: ['desktop', 'start-menu', 'mobile'],
-    x: 196,
-    y: 152,
-    width: 420,
-    height: 320,
-  }),
-  defineApplication({
-    id: 'contact',
-    label: 'Contact',
-    title: 'Contact Leonardo',
-    category: 'career',
-    icon: '/desktop-icons/about-me.svg',
-    mobileLabel: 'Contact',
-    path: '#/apps/contact',
-    capability: 'desktop-window',
-    launchSurfaces: ['start-menu', 'mobile'],
-    x: 224,
-    y: 168,
-    width: 420,
-    height: 280,
-    renderer: Contact,
-  }),
-  defineApplication({
-    id: 'appearance-themes',
-    label: 'Control Panel',
-    title: 'Appearance & Themes',
-    category: 'system',
-    icon: '/desktop-icons/control-panel.svg',
-    mobileLabel: 'Themes',
-    path: '#/apps/appearance-themes',
-    shortcut: 'Alt+6',
-    capability: 'desktop-window',
-    launchSurfaces: ['desktop', 'start-menu', 'mobile'],
-    x: 236,
-    y: 180,
-    width: 540,
-    height: 390,
-    renderer: AppearanceThemesWindow,
   }),
 ] as const satisfies readonly ApplicationDefinition[]
 
@@ -169,9 +82,10 @@ export function applicationsForSurface(surface: LaunchSurface): ApplicationDefin
 }
 
 export function applicationPath(id: ApplicationId): ApplicationDefinition['path'] {
-  return findApplication(id)?.path ?? '#/apps/portfolio'
+  return findApplication(id)?.path ?? '#/apps/my-computer'
 }
 
+/** Unsupported or retired hashes deliberately resolve to the desktop shell. */
 export function applicationIdFromHash(hash: string): ApplicationId | undefined {
   return applicationRegistry.find((application) => application.path === hash)?.id
 }

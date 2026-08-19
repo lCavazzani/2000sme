@@ -71,3 +71,14 @@
 :root[data-os-theme='pixelos'][data-theme-effects='reduced'] .pixelos-cursor-blink {
   animation: none;
 }
+
+@media (prefers-reduced-motion: reduce) {
+  :root[data-os-theme='pixelos'] .pixelos-sprite-bob,
+  :root[data-os-theme='pixelos'] .pixelos-cursor-blink {
+    animation: none !important;
+  }
+
+  :root[data-os-theme='pixelos'] .pixelos-cursor-blink {
+    opacity: 1;
+  }
+}

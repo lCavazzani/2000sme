@@ -3,14 +3,11 @@
   flex: 0 0 auto;
   align-items: center;
   justify-content: center;
+  color: var(--pixelos-cyan, currentcolor);
 }
 
 .icon {
-  display: none;
-  object-fit: contain;
-}
-
-:global(:root[data-os-theme='winxp']) .winxp,
-:global(:root[data-os-theme='win98']) .win98 {
   display: block;
+  overflow: visible;
+  shape-rendering: crispEdges;
 }

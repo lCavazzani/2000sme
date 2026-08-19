@@ -1,195 +1,95 @@
-import { useState } from 'react'
-import { useWindows } from '../store/windows'
-import { projects, type Project } from '../config/projects'
+import { useMemo, useState } from 'react'
+import { projects } from '../config/projects'
 import styles from './FileExplorer.module.css'
 
-type View = 'icons' | 'list'
+type MachineItem = {
+  id: string
+  name: string
+  detail: string
+  kind: 'drive' | 'folder'
+}
 
-export function FileExplorer() {
-  const [selectedNode, setSelectedNode] = useState<string>('root')
-  const [selectedFile, setSelectedFile] = useState<string | null>(null)
-  const [view, setView] = useState<View>('icons')
-  const { openWindow } = useWindows()
-
-  const shownProjects =
-    selectedNode === 'root' ? projects : projects.filter((p) => p.id === selectedNode)
-
-  const selectedProject = projects.find((p) => p.id === selectedNode)
-  const addressPath = selectedProject
-    ? `C:\\Projects\\${selectedProject.name}`
-    : 'C:\\Projects'
-
-  function openProjectDetail(project: Project) {
-    openWindow({
-      id: `project-detail-${project.id}`,
-      title: project.name,
-      icon: project.icon,
-      x: 140 + Math.floor(Math.random() * 80),
-      y: 100 + Math.floor(Math.random() * 60),
-      width: 500,
-      height: 380,
-    })
-  }
-
-  function selectNode(id: string) {
-    setSelectedNode(id)
-    setSelectedFile(null)
+function PixelMachineGlyph({ kind }: { kind: MachineItem['kind'] }) {
+  if (kind === 'drive') {
+    return (
+      <svg viewBox="0 0 32 32" className={styles.machineGlyph} aria-hidden="true">
+        <path d="M3 9h26v15H3z" fill="currentColor" />
+        <path d="M6 12h20v5H6z" fill="#120b22" />
+        <path d="M22 20h3v3h-3z" fill="#4de3d0" />
+        <path d="M7 20h11v3H7z" fill="#6d5aa8" />
+      </svg>
+    )
   }
 
   return (
-    <div className={styles.root}>
-      {/* Toolbar */}
-      <div className={styles.toolbar}>
-        <button
-          aria-label="Up"
-          disabled={selectedNode === 'root'}
-          onClick={() => selectNode('root')}
-          className={styles.navBtn}
-        >
-          ▲
-        </button>
-        <div className={styles.address}>
-          <span className={styles.addressLabel}>Address</span>
-          <input type="text" readOnly value={addressPath} className={styles.addressInput} />
-        </div>
-        <div className={styles.viewToggle}>
-          <button
-            title="Icon view"
-            className={view === 'icons' ? styles.viewActive : ''}
-            onClick={() => setView('icons')}
-          >
-            ⊞
-          </button>
-          <button
-            title="List view"
-            className={view === 'list' ? styles.viewActive : ''}
-            onClick={() => setView('list')}
-          >
-            ☰
-          </button>
+    <svg viewBox="0 0 32 32" className={styles.machineGlyph} aria-hidden="true">
+      <path d="M3 8h11l3 3h12v14H3z" fill="currentColor" />
+      <path d="M5 13h22v10H5z" fill="#3b2d5e" />
+      <path d="M5 13h22v3H5z" fill="#4de3d0" />
+    </svg>
+  )
+}
+
+/**
+ * PixelOS keeps real portfolio metadata but renders it through the supplied
+ * My Machine layout. There are no fabricated machine volumes, external links,
+ * or retired project-detail routes.
+ */
+export function FileExplorer() {
+  const [selectedId, setSelectedId] = useState<string | null>(null)
+  const items = useMemo<MachineItem[]>(() => [
+    {
+      id: 'portfolio-drive',
+      name: 'PORTFOLIO (C:)',
+      detail: `${projects.length} retained portfolio project${projects.length === 1 ? '' : 's'}`,
+      kind: 'drive',
+    },
+    ...projects.map((project) => ({
+      id: `project-${project.id}`,
+      name: project.name.toUpperCase(),
+      detail: `${project.year} · ${project.techStack.join(', ')}`,
+      kind: 'folder' as const,
+    })),
+  ], [])
+  const selectedItem = items.find((item) => item.id === selectedId)
+
+  return (
+    <section className={styles.root} aria-label="My Machine file browser">
+      <nav className={styles.menuBar} aria-label="My Machine menu">
+        <span>File</span>
+        <span>Edit</span>
+        <span>View</span>
+        <span>Help</span>
+      </nav>
+      <div className={styles.pathBar}>
+        <span className={styles.pathLabel}>Path</span>
+        <div className={styles.pathField} aria-label="Current path">
+          <PixelMachineGlyph kind="drive" />
+          <span>C:\PORTFOLIO\</span>
+          <span className={`pixelos-cursor-blink ${styles.cursor}`} aria-hidden="true">_</span>
         </div>
       </div>
-
-      {/* Two-pane body */}
-      <div className={styles.body}>
-        {/* Left: tree */}
-        <div className={styles.treePane}>
-          <ul className="tree-view" style={{ height: '100%' }}>
-            <li>
-              <details open>
-                <summary>Desktop</summary>
-                <ul>
-                  <li>
-                    <details open>
-                      <summary onClick={() => selectNode('root')}>My Computer</summary>
-                      <ul>
-                        <li>
-                          <details open>
-                            <summary onClick={() => selectNode('root')}>
-                              (C:) Projects
-                            </summary>
-                            <ul>
-                              {projects.map((project) => (
-                                <li
-                                  key={project.id}
-                                  className={[
-                                    styles.treeLeaf,
-                                    selectedNode === project.id ? styles.treeLeafSelected : '',
-                                  ].join(' ')}
-                                  onClick={() => selectNode(project.id)}
-                                  onDoubleClick={() => openProjectDetail(project)}
-                                >
-                                  📁 {project.name}
-                                </li>
-                              ))}
-                            </ul>
-                          </details>
-                        </li>
-                      </ul>
-                    </details>
-                  </li>
-                </ul>
-              </details>
+      <ul className={styles.grid} aria-label="Portfolio machine objects">
+        {items.map((item) => {
+          const isSelected = selectedId === item.id
+          return (
+            <li key={item.id}>
+              <button
+                type="button"
+                className={`${styles.item} ${isSelected ? styles.selected : ''}`}
+                aria-pressed={isSelected}
+                onClick={() => setSelectedId(item.id)}
+              >
+                <PixelMachineGlyph kind={item.kind} />
+                <span>{item.name}</span>
+              </button>
             </li>
-          </ul>
-        </div>
-
-        {/* Divider */}
-        <div className={styles.divider} />
-
-        {/* Right: file pane */}
-        <div className={styles.filePane}>
-          {view === 'icons' ? (
-            <div className={styles.iconGrid}>
-              {shownProjects.map((project) => (
-                <button
-                  key={project.id}
-                  className={[
-                    styles.folder,
-                    selectedFile === project.id ? styles.folderSelected : '',
-                  ].join(' ')}
-                  onClick={() => setSelectedFile(project.id)}
-                  onDoubleClick={() => openProjectDetail(project)}
-                >
-                  <img
-                    src={project.icon}
-                    alt=""
-                    width={32}
-                    height={32}
-                    className={styles.folderIcon}
-                  />
-                  <span className={styles.folderName}>{project.name}</span>
-                </button>
-              ))}
-            </div>
-          ) : (
-            <table className={styles.listTable}>
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Year</th>
-                  <th>Tech Stack</th>
-                  <th>Type</th>
-                </tr>
-              </thead>
-              <tbody>
-                {shownProjects.map((project) => (
-                  <tr
-                    key={project.id}
-                    className={selectedFile === project.id ? styles.rowSelected : undefined}
-                    onClick={() => setSelectedFile(project.id)}
-                    onDoubleClick={() => openProjectDetail(project)}
-                  >
-                    <td className={styles.nameCell}>
-                      <img
-                        src={project.icon}
-                        alt=""
-                        width={16}
-                        height={16}
-                        className={styles.rowIcon}
-                      />
-                      {project.name}
-                    </td>
-                    <td>{project.year}</td>
-                    <td>{project.techStack.join(', ')}</td>
-                    <td>File Folder</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
-        </div>
-      </div>
-
-      {/* Status bar */}
-      <div className="status-bar">
-        <p className="status-bar-field">
-          {shownProjects.length} object{shownProjects.length !== 1 ? 's' : ''}
-        </p>
-        <p className="status-bar-field">
-          {selectedFile ? projects.find((p) => p.id === selectedFile)?.name : ''}
-        </p>
-      </div>
-    </div>
+          )
+        })}
+      </ul>
+      <footer className={styles.statusBar}>
+        <span>{selectedItem ? selectedItem.detail : `${items.length} object(s)`}</span>
+      </footer>
+    </section>
   )
 }
