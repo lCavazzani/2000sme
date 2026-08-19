@@ -54,3 +54,29 @@ test.describe('PixelOS accessibility regression coverage', () => {
     await expectNoSeriousOrCriticalViolations(page, 'main[aria-label="Desktop"]')
   })
 })
+
+
+test.describe('PXOS-5 effects accessibility', () => {
+  test('keeps the decorative sprite pointer-transparent and preserves desktop launcher interaction', async ({ page }) => {
+    await visitPixelOs(page)
+
+    const sprite = page.locator('.pixelos-desktop-sprite')
+    await expect(sprite).toHaveAttribute('aria-hidden', 'true')
+    await expect(sprite).toHaveCSS('pointer-events', 'none')
+
+    await page.getByRole('button', { name: 'Open MY MACHINE' }).dblclick()
+    await expect(page.getByRole('dialog', { name: 'MY MACHINE window' })).toBeVisible()
+  })
+
+  test('keeps PixelOS effects static when reduced motion is preferred', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' })
+    await visitPixelOs(page)
+
+    await expect(page.locator('html')).toHaveAttribute('data-theme-effects', 'reduced')
+    await expect(page.locator('.pixelos-desktop-sprite')).toHaveCSS('animation-name', 'none')
+
+    await page.getByRole('button', { name: 'Open MY MACHINE' }).dblclick()
+    await expect(page.locator('.pixelos-cursor-blink')).toHaveCSS('animation-name', 'none')
+    await expectNoSeriousOrCriticalViolations(page, '[role="dialog"]')
+  })
+})
