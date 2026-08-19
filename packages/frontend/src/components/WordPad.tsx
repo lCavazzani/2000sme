@@ -44,8 +44,8 @@ export function WordPad() {
   }, [html])
 
   return (
-    <section className={styles.root} aria-label="Resume viewer">
-      <div className={styles.menuBar} aria-label="WordPad preview menu">
+    <section className={styles.root} aria-label="RESUME.PDF viewer">
+      <div className={styles.menuBar} aria-label="PixelOS resume preview menu">
         {MENU_ITEMS.map((item) => (
           <button key={item} type="button" className={styles.menuItem} disabled title={`${item} is unavailable in this read-only preview`}>
             {item}
@@ -140,8 +140,8 @@ export function WordPad() {
         Download PDF
       </button>
 
-      <div className="status-bar" aria-label="WordPad preview status">
-        <p className="status-bar-field">Read-only resume preview</p>
+      <div className="status-bar" aria-label="PixelOS resume preview status">
+        <p className="status-bar-field">Read-only RESUME.PDF preview</p>
         <p className="status-bar-field">PDF ready</p>
       </div>
     </section>
