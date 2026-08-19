@@ -347,3 +347,63 @@
   background: #ece9d8;
   box-shadow: inset 0 1px rgb(255 255 255 / 64%);
 }
+
+/* Visitor Scrapbook semantic adapter contract. These values are consumed by one
+   shared DOM tree; themes change materials, not guestbook structure or data flow. */
+:root {
+  --scrapbook-ink: #17365d;
+  --scrapbook-muted-ink: #4c6a8b;
+  --scrapbook-surface: #f8fbff;
+  --scrapbook-inset-surface: #edf5fe;
+  --scrapbook-header-surface: linear-gradient(135deg, #fafdff, #d7e9fa);
+  --scrapbook-card-surface: #fffdf5;
+  --scrapbook-card-shadow: 0 2px 4px rgb(42 75 123 / 20%);
+  --scrapbook-border: #8eadd0;
+  --scrapbook-divider: #aac3df;
+  --scrapbook-radius: 5px;
+  --scrapbook-control-surface: linear-gradient(#f4faff, #c8dff5);
+  --scrapbook-control-active-surface: linear-gradient(#61a8f4, #2269c8);
+  --scrapbook-control-border: #6389bc;
+  --scrapbook-focus: #316ac5;
+  --scrapbook-tape-opacity: 0.46;
+  --scrapbook-decoration-display: block;
+  --scrapbook-decoration-opacity: 0.46;
+  --scrapbook-entry-rotation: 0deg;
+  --scrapbook-paper-ivory: #fff8dd;
+  --scrapbook-paper-cream: #fff0d8;
+  --scrapbook-paper-blue: #e2f0ff;
+  --scrapbook-motion-duration: 180ms;
+  --scrapbook-motion-ease: cubic-bezier(0.2, 0.72, 0.28, 1);
+}
+
+:root[data-os-theme='win98'] {
+  --scrapbook-ink: #111;
+  --scrapbook-muted-ink: #222;
+  --scrapbook-surface: #c0c0c0;
+  --scrapbook-inset-surface: #ffffe1;
+  --scrapbook-header-surface: #c0c0c0;
+  --scrapbook-card-surface: #ffffe1;
+  --scrapbook-card-shadow: 2px 2px 0 #000;
+  --scrapbook-border: #fff #808080 #808080 #fff;
+  --scrapbook-divider: #808080;
+  --scrapbook-radius: 0;
+  --scrapbook-control-surface: #c0c0c0;
+  --scrapbook-control-active-surface: #000080;
+  --scrapbook-control-border: #fff #000 #000 #fff;
+  --scrapbook-focus: #000080;
+  --scrapbook-tape-opacity: 0.72;
+  --scrapbook-decoration-display: block;
+  --scrapbook-decoration-opacity: 0.72;
+  --scrapbook-entry-rotation: 0deg;
+  --scrapbook-paper-ivory: #ffffe1;
+  --scrapbook-paper-cream: #fff7b8;
+  --scrapbook-paper-blue: #d8eeff;
+  --scrapbook-motion-duration: 120ms;
+  --scrapbook-motion-ease: steps(3, end);
+}
+
+:root[data-theme-effects='reduced'] {
+  --scrapbook-decoration-display: none;
+  --scrapbook-entry-rotation: 0deg;
+  --scrapbook-motion-duration: 0ms;
+}

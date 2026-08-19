@@ -34,8 +34,20 @@ jobs:
       - name: Run workspace tests
         run: pnpm test
 
+      - name: Get Playwright version
+        id: playwright-version
+        run: echo "version=$(node -p "require('./packages/frontend/node_modules/@playwright/test/package.json').version")" >> $GITHUB_OUTPUT
+
+      - name: Cache Playwright browser
+        uses: actions/cache@v4
+        id: playwright-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-chromium-${{ steps.playwright-version.outputs.version }}
+
       - name: Install Chromium for accessibility tests
-        run: pnpm --filter 00sfrontend exec playwright install --with-deps chromium
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: pnpm --filter 00sfrontend exec playwright install chromium
 
       - name: Run browser accessibility tests
         run: pnpm --filter 00sfrontend test:a11y

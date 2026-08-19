@@ -1,14 +1,22 @@
-import { fireEvent, render, screen } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { ThemeProvider, useTheme } from './ThemeProvider'
 
 function ThemeProbe() {
-  const { theme, setTheme } = useTheme()
+  const { theme, setTheme, effectsPreference, setEffectsPreference } = useTheme()
 
   return (
-    <button type="button" onClick={() => setTheme(theme === 'winxp' ? 'win98' : 'winxp')}>
-      Switch from {theme}
-    </button>
+    <>
+      <button type="button" onClick={() => setTheme(theme === 'winxp' ? 'win98' : 'winxp')}>
+        Switch from {theme}
+      </button>
+      <button
+        type="button"
+        onClick={() => setEffectsPreference(effectsPreference === 'system' ? 'reduced' : 'system')}
+      >
+        Set effects to {effectsPreference === 'system' ? 'reduced' : 'system'}
+      </button>
+    </>
   )
 }
 
@@ -78,7 +86,7 @@ describe('ThemeProvider semantic theme contract', () => {
     expect(document.querySelectorAll('link[data-os-theme]')).toHaveLength(1)
   })
 
-  it('switches semantic capabilities to Windows 98 and follows reduced-effects preference changes', () => {
+  it('switches semantic capabilities to Windows 98 and follows reduced-effects preference changes', async () => {
     const media = installMatchMedia(false)
 
     render(
@@ -98,6 +106,12 @@ describe('ThemeProvider semantic theme contract', () => {
     expect(document.querySelectorAll('link[data-os-theme]')).toHaveLength(1)
 
     media.setReducedEffects(true)
+    await waitFor(() => expect(root.dataset.themeEffects).toBe('reduced'))
+
+    media.setReducedEffects(false)
+    await waitFor(() => expect(root.dataset.themeEffects).toBe('full'))
+    fireEvent.click(screen.getByRole('button', { name: 'Set effects to reduced' }))
     expect(root.dataset.themeEffects).toBe('reduced')
+    expect(window.localStorage.getItem('2000sme:effects')).toBe('reduced')
   })
 })

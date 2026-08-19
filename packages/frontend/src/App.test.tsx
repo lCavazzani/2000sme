@@ -19,6 +19,6 @@ describe('direct application routes', () => {
       'href',
       'mailto:cavazzanileonardo@gmail.com',
     )
-    expect(screen.getByRole('link', { name: 'Open desktop' })).toHaveAttribute('href', '#')
+    expect(screen.getByRole('button', { name: 'Open desktop' })).toHaveAttribute('type', 'button')
   })
 })
