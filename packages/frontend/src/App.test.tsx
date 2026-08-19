@@ -8,17 +8,13 @@ describe('direct application routes', () => {
     window.sessionStorage.clear()
   })
 
-  it('renders the contact destination without requiring desktop window interactions', () => {
+  it('falls back to the desktop for the retired Contact route', () => {
     window.location.hash = '#/apps/contact'
 
     render(<App />)
 
-    expect(screen.getByRole('main', { name: 'Contact direct route' })).toBeInTheDocument()
-    expect(screen.getByRole('heading', { name: 'Contact' })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: 'cavazzanileonardo@gmail.com' })).toHaveAttribute(
-      'href',
-      'mailto:cavazzanileonardo@gmail.com',
-    )
-    expect(screen.getByRole('button', { name: 'Open desktop' })).toHaveAttribute('type', 'button')
+    expect(screen.getByRole('main', { name: 'Desktop' })).toBeInTheDocument()
+    expect(screen.queryByRole('heading', { name: 'Contact' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('link', { name: 'cavazzanileonardo@gmail.com' })).not.toBeInTheDocument()
   })
 })
