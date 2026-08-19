@@ -157,3 +157,33 @@ test('suppresses optional scrapbook decoration without changing the semantic fee
   await expect(article.locator('[aria-hidden="true"]').first()).toHaveCSS('display', 'none')
   await expect(article).toHaveCSS('transform', 'none')
 })
+
+
+test('preserves the mounted scrapbook draft and feed while theme and effects preferences change', async ({ page }) => {
+  let guestbookRequests = 0
+  await page.route('**/api/guestbook?*', async (route) => {
+    guestbookRequests += 1
+    await route.fulfill({ contentType: 'application/json', body: JSON.stringify(sampleEntries) })
+  })
+  await page.goto('/')
+
+  await page.getByRole('button', { name: 'Open Visitor Scrapbook' }).dblclick()
+  const scrapbookWindow = page.getByRole('dialog', { name: 'Visitor Scrapbook window' })
+  await expect(scrapbookWindow.getByRole('article', { name: 'Ada Lovelace' })).toBeVisible()
+  await scrapbookWindow.getByRole('tab', { name: 'Leave a note' }).click()
+  await scrapbookWindow.getByLabel('Your name').fill('Grace Hopper')
+  await scrapbookWindow.getByLabel('Your note').fill('Theme changes keep this draft intact.')
+  const requestsBeforePreferences = guestbookRequests
+
+  await page.getByRole('button', { name: 'Open Control Panel' }).dblclick()
+  const appearanceWindow = page.getByRole('dialog', { name: 'Appearance & Themes window' })
+  await appearanceWindow.getByText('Windows 98', { exact: true }).click()
+  await expect(page.locator('html')).toHaveAttribute('data-os-theme', 'win98')
+  await appearanceWindow.getByText('Reduce scrapbook effects', { exact: true }).click()
+  await expect(page.locator('html')).toHaveAttribute('data-theme-effects', 'reduced')
+
+  await expect(scrapbookWindow.getByRole('tab', { name: 'Leave a note' })).toHaveAttribute('aria-selected', 'true')
+  await expect(scrapbookWindow.getByLabel('Your name')).toHaveValue('Grace Hopper')
+  await expect(scrapbookWindow.getByLabel('Your note')).toHaveValue('Theme changes keep this draft intact.')
+  expect(guestbookRequests).toBe(requestsBeforePreferences)
+})

@@ -14,8 +14,8 @@ const tilts = ['left', 'flat', 'right'] as const
 const corners = ['fold', 'pin', 'none'] as const
 const accents = ['sun', 'wave', 'dot'] as const
 
-export function decorationForEntry(entry: Pick<GuestbookEntry, 'id' | 'created_at'>): ScrapbookDecoration {
-  const hash = stableHash(`${entry.id}:${entry.created_at}`)
+export function decorationForEntry(entry: Pick<GuestbookEntry, 'id' | 'visualKey' | 'created_at'>): ScrapbookDecoration {
+  const hash = stableHash(`${entry.visualKey ?? entry.id}:${entry.created_at}`)
   return {
     paper: papers[hash % papers.length],
     tape: tapes[(hash >>> 3) % tapes.length],

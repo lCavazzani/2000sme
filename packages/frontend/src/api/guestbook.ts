@@ -6,6 +6,8 @@ export const DEFAULT_GUESTBOOK_PAGE_LIMIT = 20
 
 export type GuestbookEntry = {
   id: number | string
+  /** Private client identity that keeps visual state stable through server reconciliation. */
+  visualKey?: string
   name: string
   message: string
   created_at: string
@@ -106,6 +108,7 @@ export function useCreateGuestbookEntry() {
       const optimisticId = `optimistic-${Date.now()}-${++optimisticSequence}`
       const optimisticEntry: GuestbookEntry = {
         id: optimisticId,
+        visualKey: optimisticId,
         name: input.name,
         message: input.message,
         created_at: new Date().toISOString(),
@@ -138,7 +141,9 @@ export function useCreateGuestbookEntry() {
           ...current,
           pages: current.pages.map((page) => ({
             ...page,
-            entries: page.entries.map((candidate) => candidate.id === context?.optimisticId ? entry : candidate),
+            entries: page.entries.map((candidate) => candidate.id === context?.optimisticId
+              ? { ...entry, visualKey: context.optimisticId }
+              : candidate),
           })),
         }
       })
