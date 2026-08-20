@@ -1,4 +1,5 @@
 import type { ComponentType } from 'react'
+import { AboutPixelOS } from '../components/AboutPixelOS'
 import { FileExplorer } from '../components/FileExplorer'
 import { PixelGallery } from '../components/PixelGallery'
 import { PixelPet } from '../components/PixelPet'
@@ -10,7 +11,7 @@ export const LAUNCH_SURFACES = ['desktop', 'start-menu', 'mobile'] as const
 export type LaunchSurface = (typeof LAUNCH_SURFACES)[number]
 export type ApplicationCategory = 'career' | 'system'
 export type ApplicationCapability = 'desktop-window' | 'direct-route'
-export type ApplicationId = 'my-computer' | 'resume' | 'gallery' | 'pet' | 'notepad'
+export type ApplicationId = 'my-computer' | 'resume' | 'gallery' | 'pet' | 'notepad' | 'about'
 
 export type ApplicationDefinition = WindowConfig & {
   id: ApplicationId
@@ -103,6 +104,23 @@ export const applicationRegistry = [
     width: 460,
     height: 360,
     renderer: PixelNotepad,
+  }),
+  defineApplication({
+    id: 'about',
+    label: 'ABOUT PIXELOS',
+    title: 'ABOUT PIXELOS',
+    category: 'system',
+    icon: '/pixelos/assets/109f5dfc-b775-4bf5-9a64-962651f649f6.jpg',
+    mobileLabel: 'About PixelOS',
+    path: '#/apps/about',
+    shortcut: 'Alt+6',
+    capability: 'desktop-window',
+    launchSurfaces: ['desktop', 'start-menu', 'mobile'],
+    x: 300,
+    y: 180,
+    width: 380,
+    height: 270,
+    renderer: AboutPixelOS,
   }),
   defineApplication({
     id: 'resume',
