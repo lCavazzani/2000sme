@@ -17,15 +17,16 @@
 }
 
 .desktopIcon svg {
-  width: 42px;
-  height: 42px;
+  width: 64px;
+  height: 64px;
   color: var(--pixelos-cyan);
 }
 
 .desktopIcon img {
-  width: 42px;
-  height: 42px;
+  width: 64px;
+  height: 64px;
   image-rendering: pixelated;
+  image-rendering: crisp-edges;
 }
 
 .desktopIcon > span:last-child {

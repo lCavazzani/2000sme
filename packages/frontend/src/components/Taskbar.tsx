@@ -94,7 +94,7 @@ export function Taskbar() {
                 data-window-launcher={application.id}
                 onClick={() => launchApplication(application.id)}
               >
-                <ThemeAssetIcon name={application.id} width={20} height={20} />
+                <ThemeAssetIcon name={application.id} width={32} height={32} />
                 {application.label}
               </button>
             ))}

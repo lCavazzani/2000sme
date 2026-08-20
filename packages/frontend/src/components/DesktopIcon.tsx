@@ -46,9 +46,9 @@ export function DesktopIcon({
       data-window-launcher={windowId}
     >
       {applicationId ? (
-        <ThemeAssetIcon name={applicationId} width={32} height={32} />
+        <ThemeAssetIcon name={applicationId} width={64} height={64} />
       ) : (
-        <img src={icon} alt="" width={32} height={32} draggable={false} />
+        <img src={icon} alt="" width={64} height={64} draggable={false} />
       )}
       <span>{label}</span>
     </button>
