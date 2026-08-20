@@ -1,5 +1,6 @@
 import type { ComponentType } from 'react'
 import { FileExplorer } from '../components/FileExplorer'
+import { PixelGallery } from '../components/PixelGallery'
 import { WordPad } from '../components/WordPad'
 import type { WindowConfig } from '../types/window'
 
@@ -7,7 +8,7 @@ export const LAUNCH_SURFACES = ['desktop', 'start-menu', 'mobile'] as const
 export type LaunchSurface = (typeof LAUNCH_SURFACES)[number]
 export type ApplicationCategory = 'career' | 'system'
 export type ApplicationCapability = 'desktop-window' | 'direct-route'
-export type ApplicationId = 'my-computer' | 'resume'
+export type ApplicationId = 'my-computer' | 'resume' | 'gallery'
 
 export type ApplicationDefinition = WindowConfig & {
   id: ApplicationId
@@ -29,8 +30,8 @@ function defineApplication(application: ApplicationDefinition): ApplicationDefin
 
 /**
  * PXOS-3 retires legacy public surfaces. Future PixelOS applications are added
- * by their dedicated PXOS tickets; this registry intentionally exposes only
- * the two currently implemented, portfolio-safe applications.
+ * by their dedicated PXOS tickets; every entry remains registry-driven so the
+ * desktop, Start menu, mobile launcher, routes, and window manager share one contract.
  */
 export const applicationRegistry = [
   defineApplication({
@@ -49,6 +50,23 @@ export const applicationRegistry = [
     width: 640,
     height: 440,
     renderer: FileExplorer,
+  }),
+  defineApplication({
+    id: 'gallery',
+    label: 'PIXEL GALLERY',
+    title: 'PIXEL GALLERY',
+    category: 'system',
+    icon: '/pixelos/assets/57619517-ec8e-4409-b5e4-9b6c19235f98.jpg',
+    mobileLabel: 'Pixel Gallery',
+    path: '#/apps/gallery',
+    shortcut: 'Alt+3',
+    capability: 'desktop-window',
+    launchSurfaces: ['desktop', 'start-menu', 'mobile'],
+    x: 210,
+    y: 70,
+    width: 560,
+    height: 400,
+    renderer: PixelGallery,
   }),
   defineApplication({
     id: 'resume',
