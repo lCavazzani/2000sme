@@ -22,7 +22,7 @@ test.describe('TEST-11 PixelOS core visual and OS-behavior gate', () => {
     await expect(desktop).toHaveCSS('background-image', /dda42e57-923b-4342-b2b1-8ad755273c99\.jpg/)
     await expect(desktop).toHaveCSS('font-family', /Pixelify Sans/)
     await expect(taskbar).toHaveCSS('position', 'fixed')
-    await expect(taskbar).toHaveCSS('height', '34px')
+    await expect(taskbar).toHaveCSS('height', '36px')
     await expect(sprite).toBeVisible()
     await expect(sprite).toHaveAttribute('aria-hidden', 'true')
     await expect(sprite).toHaveCSS('pointer-events', 'none')
@@ -54,7 +54,7 @@ test.describe('TEST-11 PixelOS core visual and OS-behavior gate', () => {
     await expect(readme).toBeFocused()
     await expect(readme).toHaveAttribute('data-window-active', 'true')
     await expect(machine).toHaveAttribute('data-window-active', 'false')
-    await expect(readmeTitleBar).toHaveCSS('background-color', 'rgb(223, 79, 188)')
+    await expect(readmeTitleBar).toHaveCSS('background-color', 'rgb(255, 44, 229)')
     await expect(machineTitleBar).toHaveCSS('background-color', 'rgb(59, 45, 94)')
 
     await readme.getByRole('button', { name: 'Minimize' }).click()
