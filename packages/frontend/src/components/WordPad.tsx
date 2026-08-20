@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState, type ReactNode } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { marked } from 'marked'
 import resumeContent from '../content/resume.md?raw'
 import { openPrintWindow } from '../utils/pdfGenerator'
@@ -6,29 +6,7 @@ import styles from './WordPad.module.css'
 
 marked.use({ gfm: true, breaks: false })
 
-const FONT_SIZES = [8, 9, 10, 11, 12, 14, 16, 18, 20, 24, 28, 36, 48, 72]
 const MENU_ITEMS = ['File', 'Edit', 'View', 'Insert', 'Format', 'Help']
-const TOOLBAR_ITEMS = [
-  { label: 'New', icon: '📄' },
-  { label: 'Open', icon: '📁' },
-  { label: 'Save', icon: '💾' },
-  { label: 'Print', icon: '⏎' },
-  { label: 'Print Preview', icon: '🔎' },
-  { label: 'Find', icon: '🔍' },
-  { label: 'Cut', icon: '✂' },
-  { label: 'Copy', icon: '📋' },
-  { label: 'Paste', icon: '📌' },
-  { label: 'Undo', icon: '↩' },
-  { label: 'Date / Time', icon: '🕰' },
-] as const
-
-function DisabledPreviewButton({ label, children }: { label: string; children: ReactNode }) {
-  return (
-    <button type="button" disabled aria-label={`${label} (unavailable in resume preview)`} title={`${label} is unavailable in this read-only preview`}>
-      {children}
-    </button>
-  )
-}
 
 export function WordPad() {
   const html = useMemo(() => marked.parse(resumeContent) as string, [])
