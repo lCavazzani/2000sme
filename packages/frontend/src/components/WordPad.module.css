@@ -115,7 +115,7 @@
   gap: 12px;
   padding: 8px 10px;
   border-bottom: var(--pixelos-bevel-width) solid var(--os-edge);
-  background: linear-gradient(90deg, #2a1745, #142449);
+  background: #0a0618;
 }
 
 .primaryDownload,
@@ -125,16 +125,18 @@
   justify-content: center;
   gap: 7px;
   min-height: 34px;
-  border: 2px solid var(--os-magenta);
-  border-right-color: #5d1a70;
-  border-bottom-color: #5d1a70;
-  color: #120b22;
-  background: var(--os-cyan);
-  box-shadow: inset 1px 1px 0 #d5fffb, 2px 2px 0 #08040e;
+  border: 2px solid var(--os-cyan);
+  color: var(--os-cyan);
+  background: #07040e;
+  box-shadow:
+    0 0 6px var(--os-cyan),
+    0 0 14px color-mix(in srgb, var(--os-cyan) 45%, transparent),
+    inset 0 0 8px color-mix(in srgb, var(--os-cyan) 8%, transparent);
+  text-shadow: 0 0 8px var(--os-cyan), 0 0 18px var(--os-cyan);
   font: inherit;
   font-size: 0.78rem;
   font-weight: 700;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   cursor: pointer;
 }
@@ -145,12 +147,21 @@
 }
 
 .primaryDownload:hover,
-.floatingDownload:hover { filter: brightness(1.08); }
+.floatingDownload:hover {
+  box-shadow:
+    0 0 10px var(--os-cyan),
+    0 0 28px color-mix(in srgb, var(--os-cyan) 65%, transparent),
+    inset 0 0 12px color-mix(in srgb, var(--os-cyan) 12%, transparent);
+  text-shadow: 0 0 10px var(--os-cyan), 0 0 28px var(--os-cyan), 0 0 50px color-mix(in srgb, var(--os-cyan) 70%, transparent);
+}
 
 .primaryDownload:active,
 .floatingDownload:active {
   transform: translate(1px, 1px);
-  box-shadow: inset 1px 1px 0 #08040e;
+  box-shadow:
+    0 0 4px var(--os-cyan),
+    inset 0 0 16px color-mix(in srgb, var(--os-cyan) 18%, transparent);
+  text-shadow: 0 0 6px var(--os-cyan);
 }
 
 .primaryDownload:focus-visible,

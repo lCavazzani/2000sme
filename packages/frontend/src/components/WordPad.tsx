@@ -71,55 +71,6 @@ export function WordPad() {
         </p>
       )}
 
-      <div className={styles.toolbarRow} aria-label="Read-only document toolbar">
-        {TOOLBAR_ITEMS.slice(0, 3).map((item) => (
-          <DisabledPreviewButton key={item.label} label={item.label}>{item.icon}</DisabledPreviewButton>
-        ))}
-        <div role="separator" />
-        {TOOLBAR_ITEMS.slice(3, 5).map((item) => (
-          <DisabledPreviewButton key={item.label} label={item.label}>{item.icon}</DisabledPreviewButton>
-        ))}
-        <div role="separator" />
-        {TOOLBAR_ITEMS.slice(5, 6).map((item) => (
-          <DisabledPreviewButton key={item.label} label={item.label}>{item.icon}</DisabledPreviewButton>
-        ))}
-        <div role="separator" />
-        {TOOLBAR_ITEMS.slice(6, 10).map((item) => (
-          <DisabledPreviewButton key={item.label} label={item.label}>{item.icon}</DisabledPreviewButton>
-        ))}
-        <div role="separator" />
-        {TOOLBAR_ITEMS.slice(10).map((item) => (
-          <DisabledPreviewButton key={item.label} label={item.label}>{item.icon}</DisabledPreviewButton>
-        ))}
-      </div>
-
-      <div className={styles.toolbarRow} aria-label="Read-only format toolbar">
-        <label className={styles.toolbarLabel} htmlFor="wordpad-font">Font</label>
-        <select id="wordpad-font" className={styles.fontSelect} defaultValue="Times New Roman" disabled>
-          {['Arial', 'Times New Roman', 'Courier New', 'Verdana', 'Georgia'].map((font) => (
-            <option key={font}>{font}</option>
-          ))}
-        </select>
-        <label className={styles.toolbarLabel} htmlFor="wordpad-size">Size</label>
-        <select id="wordpad-size" className={styles.sizeSelect} defaultValue="12" disabled>
-          {FONT_SIZES.map((size) => (
-            <option key={size}>{size}</option>
-          ))}
-        </select>
-        <div role="separator" />
-        <DisabledPreviewButton label="Bold"><b>B</b></DisabledPreviewButton>
-        <DisabledPreviewButton label="Italic"><i>I</i></DisabledPreviewButton>
-        <DisabledPreviewButton label="Underline"><u>U</u></DisabledPreviewButton>
-        <div role="separator" />
-        <DisabledPreviewButton label="Colour"><span className={styles.colourBtn}>A</span></DisabledPreviewButton>
-        <div role="separator" />
-        <DisabledPreviewButton label="Align Left">⇤</DisabledPreviewButton>
-        <DisabledPreviewButton label="Centre">↔</DisabledPreviewButton>
-        <DisabledPreviewButton label="Align Right">⇥</DisabledPreviewButton>
-        <div role="separator" />
-        <DisabledPreviewButton label="Bullet List">≡</DisabledPreviewButton>
-      </div>
-
       <div className={styles.docArea} data-resume-document-area>
         <div
           className={styles.page}

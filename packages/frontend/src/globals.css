@@ -51,6 +51,17 @@
   --os-app-toolbar-surface: #3b2d5e;
   --os-app-toolbar-highlight: #6d5aa8;
   --os-crt-opacity: 0.22;
+
+  /* PixelOS component shorthand tokens */
+  --os-cyan: #4de3d0;
+  --os-magenta: #df4fbc;
+  --os-ink: #f2ecff;
+  --os-panel: #1c1436;
+  --os-muted: #a89ac8;
+  --os-edge: #0d0819;
+  --os-font-stack: 'Pixelify Sans', 'Courier New', monospace;
+  --pixelos-bevel-width: 2px;
+  --pixelos-bevel-highlight: #6d5aa8;
 }
 
 html {
