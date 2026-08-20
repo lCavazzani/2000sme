@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test'
 
-test('PixelOS exposes the README.TXT PDF action as the only working document command', async ({ page }) => {
+test('PixelOS exposes the RESUME.PDF action as the only working document command', async ({ page }) => {
   await page.goto('/#/apps/resume')
 
   await expect(page.locator('html')).toHaveAttribute('data-os-theme', 'pixelos')
@@ -18,7 +18,7 @@ test('PixelOS exposes the README.TXT PDF action as the only working document com
   await expect(page.getByText('Read-only resume preview').first()).toBeVisible()
 })
 
-test('keeps the primary PDF action readable and touch-sized on the narrow README.TXT route', async ({ page }) => {
+test('keeps the primary PDF action readable and touch-sized on the narrow RESUME.PDF route', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 })
   await page.goto('/#/apps/resume')
 
@@ -31,11 +31,11 @@ test('keeps the primary PDF action readable and touch-sized on the narrow README
   await expect(page.locator('[aria-label="Read-only document toolbar"]')).toHaveCSS('overflow-x', 'auto')
 })
 
-test('keeps the persistent PDF action bottom-left inside the desktop README.TXT window while the document scrolls', async ({ page }) => {
+test('keeps the persistent PDF action bottom-left inside the desktop RESUME.PDF window while the document scrolls', async ({ page }) => {
   await page.goto('/')
-  await page.getByRole('button', { name: 'Open README.TXT' }).dblclick()
+  await page.getByRole('button', { name: 'Open RESUME.PDF' }).dblclick()
 
-  const resumeWindow = page.getByRole('dialog', { name: 'README.TXT - WORDPAD window' })
+  const resumeWindow = page.getByRole('dialog', { name: 'RESUME.PDF - WORDPAD window' })
   const persistentDownload = resumeWindow.getByRole('button', {
     name: 'Download resume (PDF) — persistent action',
   })

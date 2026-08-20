@@ -46,8 +46,8 @@ test.describe('TEST-11 PixelOS core visual and OS-behavior gate', () => {
 
     const machine = await openDesktopApplication(page, 'MY MACHINE')
     await page.getByRole('button', { name: 'Start' }).click()
-    await page.getByRole('navigation', { name: 'Start menu' }).getByRole('button', { name: 'README.TXT' }).click()
-    const readme = page.getByRole('dialog', { name: 'README.TXT - WORDPAD window' })
+    await page.getByRole('navigation', { name: 'Start menu' }).getByRole('button', { name: 'RESUME.PDF' }).click()
+    const readme = page.getByRole('dialog', { name: 'RESUME.PDF - WORDPAD window' })
     const machineTitleBar = machine.locator('.title-bar')
     const readmeTitleBar = readme.locator('.title-bar')
 
@@ -59,7 +59,7 @@ test.describe('TEST-11 PixelOS core visual and OS-behavior gate', () => {
 
     await readme.getByRole('button', { name: 'Minimize' }).click()
     await expect(readme).toBeHidden()
-    const readmeTask = page.getByRole('button', { name: 'README.TXT - WORDPAD' })
+    const readmeTask = page.getByRole('button', { name: 'RESUME.PDF - WORDPAD' })
     await expect(readmeTask).toBeVisible()
     await readmeTask.click()
     await expect(readme).toBeVisible()

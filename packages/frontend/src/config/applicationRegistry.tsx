@@ -2,6 +2,7 @@ import type { ComponentType } from 'react'
 import { FileExplorer } from '../components/FileExplorer'
 import { PixelGallery } from '../components/PixelGallery'
 import { PixelPet } from '../components/PixelPet'
+import { PixelNotepad } from '../components/PixelNotepad'
 import { WordPad } from '../components/WordPad'
 import type { WindowConfig } from '../types/window'
 
@@ -9,7 +10,7 @@ export const LAUNCH_SURFACES = ['desktop', 'start-menu', 'mobile'] as const
 export type LaunchSurface = (typeof LAUNCH_SURFACES)[number]
 export type ApplicationCategory = 'career' | 'system'
 export type ApplicationCapability = 'desktop-window' | 'direct-route'
-export type ApplicationId = 'my-computer' | 'resume' | 'gallery' | 'pet'
+export type ApplicationId = 'my-computer' | 'resume' | 'gallery' | 'pet' | 'notepad'
 
 export type ApplicationDefinition = WindowConfig & {
   id: ApplicationId
@@ -87,14 +88,31 @@ export const applicationRegistry = [
     renderer: PixelPet,
   }),
   defineApplication({
-    id: 'resume',
+    id: 'notepad',
     label: 'README.TXT',
-    title: 'README.TXT - WORDPAD',
-    category: 'career',
+    title: 'README.TXT',
+    category: 'system',
     icon: '/desktop-icons/resume.svg',
     mobileLabel: 'README.TXT',
-    path: '#/apps/resume',
+    path: '#/apps/notepad',
     shortcut: 'Alt+2',
+    capability: 'desktop-window',
+    launchSurfaces: ['desktop', 'start-menu', 'mobile'],
+    x: 150,
+    y: 96,
+    width: 460,
+    height: 360,
+    renderer: PixelNotepad,
+  }),
+  defineApplication({
+    id: 'resume',
+    label: 'RESUME.PDF',
+    title: 'RESUME.PDF - WORDPAD',
+    category: 'career',
+    icon: '/desktop-icons/resume.svg',
+    mobileLabel: 'Resume PDF',
+    path: '#/apps/resume',
+    shortcut: 'Alt+5',
     capability: 'desktop-window',
     launchSurfaces: ['desktop', 'start-menu', 'mobile'],
     x: 150,

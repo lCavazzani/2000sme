@@ -18,11 +18,11 @@ describe('desktop shell interactions', () => {
     const user = userEvent.setup()
     render(<App />)
 
-    const resumeLauncher = screen.getByRole('button', { name: 'Open README.TXT' })
+    const resumeLauncher = screen.getByRole('button', { name: 'Open RESUME.PDF' })
     resumeLauncher.focus()
     await user.keyboard('{Enter}')
 
-    const resumeWindow = screen.getByLabelText('README.TXT - WORDPAD window')
+    const resumeWindow = screen.getByLabelText('RESUME.PDF - WORDPAD window')
     expect(resumeWindow).toBeInTheDocument()
     await waitFor(() => expect(resumeWindow).toHaveFocus())
   })
@@ -31,20 +31,20 @@ describe('desktop shell interactions', () => {
     const user = userEvent.setup()
     render(<App />)
 
-    const resumeLauncher = screen.getByRole('button', { name: 'Open README.TXT' })
+    const resumeLauncher = screen.getByRole('button', { name: 'Open RESUME.PDF' })
     await user.dblClick(resumeLauncher)
 
-    const taskbarButton = screen.getByRole('button', { name: 'README.TXT - WORDPAD' })
+    const taskbarButton = screen.getByRole('button', { name: 'RESUME.PDF - WORDPAD' })
     await user.click(screen.getByRole('button', { name: 'Minimize' }))
 
-    expect(screen.queryByLabelText('README.TXT - WORDPAD window')).not.toBeInTheDocument()
+    expect(screen.queryByLabelText('RESUME.PDF - WORDPAD window')).not.toBeInTheDocument()
     expect(taskbarButton).toHaveAttribute('aria-pressed', 'false')
 
     await user.click(taskbarButton)
-    expect(screen.getByLabelText('README.TXT - WORDPAD window')).toBeInTheDocument()
+    expect(screen.getByLabelText('RESUME.PDF - WORDPAD window')).toBeInTheDocument()
 
     await user.click(screen.getByRole('button', { name: 'Close' }))
-    expect(screen.queryByLabelText('README.TXT - WORDPAD window')).not.toBeInTheDocument()
+    expect(screen.queryByLabelText('RESUME.PDF - WORDPAD window')).not.toBeInTheDocument()
     await waitFor(() => expect(resumeLauncher).toHaveFocus())
   })
 
@@ -75,7 +75,7 @@ describe('desktop shell interactions', () => {
 
 it('switches between direct routes and desktop mode while restoring a meaningful desktop focus target', async () => {
   const user = userEvent.setup()
-  window.location.hash = '#/apps/resume'
+  window.location.hash = '#/apps/notepad'
   render(<App />)
 
   expect(screen.getByRole('main', { name: 'README.TXT direct route' })).toBeInTheDocument()
