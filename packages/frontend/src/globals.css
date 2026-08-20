@@ -1,14 +1,14 @@
 :root {
   --os-desktop-surface: #120b22;
   --os-desktop-fg: #f2ecff;
-  --os-focus-ring: 2px dotted #4de3d0;
+  --os-focus-ring: 2px dotted #00ffe8;
   --os-focus-offset: -4px;
   --os-motion-duration: 0ms;
   --os-window-surface: #1c1436;
   --os-window-radius: 0;
   --os-window-border: #0d0819;
-  --os-window-shadow: 3px 3px 0 rgb(0 0 0 / 42%);
-  --os-title-active-bg: #df4fbc;
+  --os-window-shadow: 3px 3px 0 rgb(0 0 0 / 52%);
+  --os-title-active-bg: #ff2ce5;
   --os-title-active-fg: #120b22;
   --os-title-inactive-bg: #3b2d5e;
   --os-title-inactive-fg: #f2ecff;
@@ -17,9 +17,9 @@
   --os-control-border-color: #0d0819;
   --os-control-hover-bg: #3b2d5e;
   --os-control-pressed-bg: #120b22;
-  --os-control-disabled-fg: #a89ac8;
-  --os-control-inset: inset 2px 2px #0d0819, inset -2px -2px #6d5aa8;
-  --os-control-selected-bg: #df4fbc;
+  --os-control-disabled-fg: #baaed6;
+  --os-control-inset: inset 2px 2px #0d0819, inset -2px -2px #7060b8;
+  --os-control-selected-bg: #ff2ce5;
   --os-control-selected-fg: #120b22;
   --os-taskbar-bg: #1c1436;
   --os-taskbar-fg: #f2ecff;
@@ -31,37 +31,37 @@
   --os-start-menu-fg: #f2ecff;
   --os-start-menu-border-width: 2px;
   --os-start-menu-border-color: #0d0819;
-  --os-start-menu-elevation: 3px 3px 0 rgb(0 0 0 / 42%);
+  --os-start-menu-elevation: 3px 3px 0 rgb(0 0 0 / 52%);
   --os-tray-bg: #1c1436;
   --os-tray-border-width: 0;
   --os-tray-border-color: transparent;
   --os-tray-radius: 0;
   --os-icon-label-fg: #f2ecff;
-  --os-icon-label-shadow: 1px 1px #120b22;
+  --os-icon-label-shadow: 1px 1px #0d0819;
   --os-icon-selected-shadow: none;
   --os-app-content-surface: #1c1436;
   --os-app-inset-surface: #120b22;
   --os-app-inset-shadow: inset 2px 2px #0d0819, inset -2px -2px #4a3a75;
-  --os-app-divider: #6d5aa8;
-  --os-app-link-fg: #4de3d0;
-  --os-app-link-hover-fg: #df4fbc;
-  --os-app-selection-bg: #df4fbc;
+  --os-app-divider: #7060b8;
+  --os-app-link-fg: #00ffe8;
+  --os-app-link-hover-fg: #ff2ce5;
+  --os-app-selection-bg: #ff2ce5;
   --os-app-selection-fg: #120b22;
-  --os-app-selection-hover: #6d5aa8;
+  --os-app-selection-hover: #7060b8;
   --os-app-toolbar-surface: #3b2d5e;
-  --os-app-toolbar-highlight: #6d5aa8;
-  --os-crt-opacity: 0.22;
+  --os-app-toolbar-highlight: #7060b8;
+  --os-crt-opacity: 0.20;
 
   /* PixelOS component shorthand tokens */
-  --os-cyan: #4de3d0;
-  --os-magenta: #df4fbc;
+  --os-cyan: #00ffe8;
+  --os-magenta: #ff2ce5;
   --os-ink: #f2ecff;
   --os-panel: #1c1436;
-  --os-muted: #a89ac8;
+  --os-muted: #baaed6;
   --os-edge: #0d0819;
   --os-font-stack: 'Pixelify Sans', 'Courier New', monospace;
   --pixelos-bevel-width: 2px;
-  --pixelos-bevel-highlight: #6d5aa8;
+  --pixelos-bevel-highlight: #7060b8;
 }
 
 html {
