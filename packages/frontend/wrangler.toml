@@ -1,5 +1,11 @@
-name = "00sme"
+name = "2000sme"
 compatibility_date = "2026-08-11"
 
 [assets]
+directory = "./dist"
+
+[env.development]
+workers_dev = true
+
+[env.development.assets]
 directory = "./dist"

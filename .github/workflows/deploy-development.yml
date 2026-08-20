@@ -1,0 +1,182 @@
+name: Deploy Development
+
+on:
+  push:
+    branches:
+      - development
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-development
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    name: Lint, test, and build development frontend
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint frontend
+        run: pnpm --filter 00sfrontend lint
+
+      - name: Run API security regression tests
+        run: pnpm --filter backend test:security
+
+      - name: Run workspace tests
+        run: pnpm test
+
+      - name: Build cloud-development frontend
+        run: pnpm --filter 00sfrontend build:cloud-development
+
+      - name: Verify development artifact has no private-network API origin
+        run: pnpm --filter 00sfrontend assert:production-api-origin
+
+      - name: Upload validated development frontend artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-dist-development
+          path: packages/frontend/dist
+          if-no-files-found: error
+          retention-days: 7
+
+  migrate-development-database:
+    name: Migrate Development D1
+    needs: quality
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Apply development D1 migrations
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: pnpm --dir packages/backend run db:migrate:development
+
+  deploy-development-backend:
+    name: Deploy Development Backend
+    needs: migrate-development-database
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Deploy isolated development backend
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: pnpm --dir packages/backend run deploy:development
+
+  deploy-development-frontend:
+    name: Deploy Development Frontend
+    needs: quality
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Download validated development frontend artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: frontend-dist-development
+          path: packages/frontend/dist
+
+      - name: Verify validated development frontend artifact
+        run: |
+          test -f packages/frontend/dist/index.html || {
+            echo 'Validated development artifact is missing packages/frontend/dist/index.html.' >&2
+            exit 1
+          }
+
+      - name: Deploy isolated development frontend
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: pnpm --dir packages/frontend exec wrangler deploy --env development
+
+  development-smoke:
+    name: Smoke Test Development Environment
+    needs:
+      - deploy-development-backend
+      - deploy-development-frontend
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify development frontend and backend
+        run: |
+          sleep 5
+          curl --fail --silent --show-error --retry 3 --retry-delay 3 https://2000sme-development.cavazzanileonardo.workers.dev/ | grep -q 'id="root"'
+          curl --fail --silent --show-error --retry 3 --retry-delay 3 https://00sbackedn-development.cavazzanileonardo.workers.dev/api/health | grep -qx 'ok'
+
+  development-evidence:
+    name: Publish Development Evidence
+    needs: development-smoke
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out development source
+        uses: actions/checkout@v4
+
+      - name: Generate development evidence
+        env:
+          PUBLIC_FRONTEND_URL: https://2000sme-development.cavazzanileonardo.workers.dev
+          PUBLIC_BACKEND_URL: https://00sbackedn-development.cavazzanileonardo.workers.dev
+          RELEASE_EVIDENCE_DIR: development-evidence
+        run: node scripts/generate-release-evidence.mjs
+
+      - name: Publish development-evidence artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: development-evidence
+          path: development-evidence
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Add development evidence to workflow summary
+        run: cat development-evidence/release-summary.md >> "$GITHUB_STEP_SUMMARY"

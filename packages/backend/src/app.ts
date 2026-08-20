@@ -4,7 +4,10 @@ import { createGuestbookRetirementRoutes } from './domains/guestbook-retirement/
 import { createProjectRoutes } from './domains/projects/projects.routes'
 import { securityHeaders } from './shared/security-headers'
 
-const ALLOWED_ORIGINS = ['https://2000sme.cavazzanileonardo.workers.dev']
+const ALLOWED_ORIGINS = [
+  'https://2000sme.cavazzanileonardo.workers.dev',
+  'https://2000sme-development.cavazzanileonardo.workers.dev',
+]
 
 export function createApp() {
   const app = new Hono<{ Bindings: CloudflareBindings }>()
