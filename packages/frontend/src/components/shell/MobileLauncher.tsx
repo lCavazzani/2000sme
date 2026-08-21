@@ -1,4 +1,4 @@
-import { applicationsForSurface } from '../config/applicationRegistry'
+import { applicationsForSurface } from '../../config/applicationRegistry'
 import styles from './MobileLauncher.module.css'
 
 export function MobileLauncher() {

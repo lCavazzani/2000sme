@@ -22,8 +22,12 @@ const suppliedApplicationIcons = {
 
 async function visitPixelOs(page: Page, path = '/') {
   await page.goto('/')
-  await page.evaluate(() => window.sessionStorage.clear())
-  await page.goto(path)
+  await page.evaluate(() => {
+    window.sessionStorage.clear()
+    window.sessionStorage.setItem('2000sme:pixelos-intro-seen:v1', 'true')
+  })
+  await page.reload()
+  if (path !== '/') await page.goto(path)
   await expect(page.locator('html')).toHaveAttribute('data-os-theme', 'pixelos')
 }
 

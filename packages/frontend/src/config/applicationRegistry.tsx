@@ -1,11 +1,11 @@
 import type { ComponentType } from 'react'
-import { AboutPixelOS } from '../components/AboutPixelOS'
-import { FileExplorer } from '../components/FileExplorer'
-import { MinesweeperWindow } from '../components/MinesweeperWindow'
-import { PixelGallery } from '../components/PixelGallery'
-import { PixelPet } from '../components/PixelPet'
-import { PixelNotepad } from '../components/PixelNotepad'
-import { WordPad } from '../components/WordPad'
+import { AboutPixelOS } from '../components/apps/AboutPixelOS'
+import { FileExplorer } from '../components/apps/FileExplorer'
+import { MinesweeperWindow } from '../games/minesweeper/MinesweeperWindow'
+import { PixelGallery } from '../components/apps/PixelGallery'
+import { PixelPet } from '../components/apps/PixelPet'
+import { PixelNotepad } from '../components/apps/PixelNotepad'
+import { WordPad } from '../components/apps/WordPad'
 import type { WindowConfig } from '../types/window'
 
 export const LAUNCH_SURFACES = ['desktop', 'start-menu', 'mobile'] as const

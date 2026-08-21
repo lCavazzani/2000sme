@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
-import { applicationsForSurface } from '../config/applicationRegistry'
+import { applicationsForSurface } from '../../config/applicationRegistry'
 import { MobileLauncher } from './MobileLauncher'
 
 describe('MobileLauncher', () => {

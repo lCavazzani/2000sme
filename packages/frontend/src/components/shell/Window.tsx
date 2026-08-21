@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, type KeyboardEvent, type ReactNode } from 'react'
 import { Rnd } from 'react-rnd'
-import { useWindows } from '../store/windows'
-import type { WindowState } from '../types/window'
+import { useWindows } from '../../store/windows'
+import type { WindowState } from '../../types/window'
 import styles from './Window.module.css'
 
 type WindowProps = {

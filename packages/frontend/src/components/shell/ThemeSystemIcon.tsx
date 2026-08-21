@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import type { ApplicationId } from '../config/applicationRegistry'
+import type { ApplicationId } from '../../config/applicationRegistry'
 import styles from './ThemeSystemIcon.module.css'
 
 export type ThemeAssetIconName = ApplicationId | 'start'

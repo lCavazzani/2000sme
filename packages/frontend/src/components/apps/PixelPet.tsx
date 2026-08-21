@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { PIXEL_OS_ASSETS } from '../config/pixelosAssets'
+import { PIXEL_OS_ASSETS } from '../../config/pixelosAssets'
 import styles from './PixelPet.module.css'
 
 type PetAction = 'idle' | 'pet' | 'feed'

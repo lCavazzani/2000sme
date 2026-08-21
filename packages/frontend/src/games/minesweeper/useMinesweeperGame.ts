@@ -6,7 +6,7 @@ import {
   revealCell,
   toggleFlag,
   type MinesweeperState,
-} from '../games/minesweeper'
+} from '.'
 
 function nextSeed(seed: number) {
   return (seed + 1) >>> 0

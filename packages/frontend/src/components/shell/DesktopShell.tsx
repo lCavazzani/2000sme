@@ -2,9 +2,9 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import {
   applicationIdFromHash,
   applicationsForSurface,
-} from '../config/applicationRegistry'
-import { PIXEL_OS_ASSETS } from '../config/pixelosAssets'
-import { useWindows } from '../store/windows'
+} from '../../config/applicationRegistry'
+import { PIXEL_OS_ASSETS } from '../../config/pixelosAssets'
+import { useWindows } from '../../store/windows'
 import { DesktopIcon } from './DesktopIcon'
 import { DirectApplicationRoute } from './DirectApplicationRoute'
 import { MobileLauncher } from './MobileLauncher'

@@ -6,9 +6,9 @@ import {
   findApplication,
   type ApplicationId,
   type LauncherGroup,
-} from '../config/applicationRegistry'
-import { useWindows } from '../store/windows'
-import type { WindowState } from '../types/window'
+} from '../../config/applicationRegistry'
+import { useWindows } from '../../store/windows'
+import type { WindowState } from '../../types/window'
 import { ThemeAssetIcon } from './ThemeSystemIcon'
 import styles from './Taskbar.module.css'
 

@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState } from 'react'
 import { marked } from 'marked'
-import resumeContent from '../content/resume.md?raw'
-import { openPrintWindow } from '../utils/pdfGenerator'
+import resumeContent from '../../content/resume.md?raw'
+import { openPrintWindow } from '../../utils/pdfGenerator'
 import styles from './WordPad.module.css'
 
 marked.use({ gfm: true, breaks: false })
