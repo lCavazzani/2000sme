@@ -65,3 +65,13 @@ Three transparent 64 × 64px original vehicle source frames and their metadata w
 | `games/nightshift/nightshift-vehicle-kit.json` | `a704a5e4f7926325f225883fd8e55cdfe4196720c849caf7759eb0c2ecf53254` | Canonical source-frame order and descriptive metadata | Supports a future asset loader; does not replace semantic DOM control/status text. |
 
 No GAME-9 asset may be smoothed, recolored, rotated, branded, or used as the sole functional text/control surface.
+
+## GAME-13 Minesweeper Victory Assets
+Two transparent static pixel-art source frames were supplied by the project owner in `pixelos-minesweeper-victory-package.zip` (archive SHA-256 `72b46151a26289476a0d0dd542fec28e3255e2eee3bf4585b0b831ed159ab6e5`). GAME-13 imports only the approved native `*-static-00.png` frames, byte-for-byte. Preview images, sheets, metadata, visual reference, and handoff documents are not shipped at runtime.
+
+| Imported file | SHA-256 | Native dimensions | Approved role |
+|---|---|---:|---|
+| `icons/pixelos-minesweeper-static-00.png` | `7f65e6bb9cc38f7d5ab3d2d4510c33270db5bf9ccd22b7ae5df211185f5d10ac` | 32 × 32 px | Minesweeper registry, desktop, Start-menu, taskbar, and mobile launcher icon. |
+| `icons/pixelos-minesweeper-victory-burst-static-00.png` | `1fb03e0a95b3e692e3a4a3f4210df0bdd39677d0c62ebb75640f2c023d0dc9c5` | 16 × 16 px | Decorative, aria-hidden, pointer-transparent spark within the local ALL CLEAR victory overlay. |
+
+Both frames must retain pixelated/crisp-edge integer scaling. The victory burst is not a semantic control, a status announcement, or a repeating/flickering effect.

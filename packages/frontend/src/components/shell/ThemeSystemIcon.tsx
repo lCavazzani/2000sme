@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import type { ApplicationId } from '../../config/applicationRegistry'
+import { PIXEL_OS_ASSETS } from '../../config/pixelosAssets'
 import styles from './ThemeSystemIcon.module.css'
 
 export type ThemeAssetIconName = ApplicationId | 'start'
@@ -19,6 +20,7 @@ const staticIconSources: Partial<Record<ApplicationId, string>> = {
   notepad: '/pixelos/icons/pixelos-readme-static-00.png',
   about: '/pixelos/icons/pixelos-about-me-static-00.png',
   resume: '/pixelos/icons/pixelos-resume-static-00.png',
+  minesweeper: PIXEL_OS_ASSETS.minesweeperIcon,
 }
 
 const glyphs: Record<ThemeAssetIconName, ReactNode> = {

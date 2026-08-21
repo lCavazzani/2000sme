@@ -18,6 +18,8 @@ describe('pixelosAssets', () => {
       '/pixelos/assets/b8f2dc8c-d0e5-4b1f-87bb-43b221e8b3a5.jpg',
       '/pixelos/intro/pixelos-boot-beacon-static-00.png',
       '/pixelos/intro/pixelos-owner-emblem-static-00.png',
+      '/pixelos/icons/pixelos-minesweeper-static-00.png',
+      '/pixelos/icons/pixelos-minesweeper-victory-burst-static-00.png',
     ])
   })
 
