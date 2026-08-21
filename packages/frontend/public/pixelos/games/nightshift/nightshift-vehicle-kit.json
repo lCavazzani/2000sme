@@ -1,0 +1,13 @@
+{
+  "frameWidth": 64,
+  "frameHeight": 64,
+  "frameCount": 3,
+  "fps": 1.0,
+  "loop": false,
+  "frames": [
+    "nightshift-player-car-static-00.png",
+    "nightshift-traffic-violet-coupe-static-00.png",
+    "nightshift-traffic-amber-van-static-00.png"
+  ],
+  "alt": "Three original Nightshift.EXE vehicle sprites: a midnight-blue player hatchback, violet coupe traffic, and amber service-van traffic."
+}
