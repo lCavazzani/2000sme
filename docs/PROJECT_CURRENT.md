@@ -16,9 +16,12 @@
 | PixelOS applications to add | Pixel Gallery, Mittens/Desktop Pet, Minesweeper, About PixelOS, and README.TXT Notepad. |
 | Applications to retire | Visitor Scrapbook/Guestbook, Contact, Control Panel, and My Portfolio. |
 | Integration branch | `development` is the current integration branch. |
-| Production frontend | `https://2000sme.cavazzanileonardo.workers.dev` |
-| Production backend | `https://00sbackedn.cavazzanileonardo.workers.dev` |
-| Release evidence | The latest successful `Release Evidence` artifact and deployment job summary in GitHub Actions. |
+| Production frontend | `https://2000sme.cavazzanileonardo.workers.dev` — deployed only from `master`. |
+| Production backend | `https://00sbackedn.cavazzanileonardo.workers.dev` — deployed only from `master`. |
+| Development frontend | `https://2000sme-development.cavazzanileonardo.workers.dev` — deployed from `development`; use for integration review, never as production evidence. |
+| Development backend | `https://00sbackedn-development.cavazzanileonardo.workers.dev` — isolated D1/KV bindings; used only by the development frontend. |
+| Release evidence | The latest successful `Release Evidence` artifact and deployment job summary in GitHub Actions prove production. |
+| Development evidence | The latest successful `development-evidence` artifact proves the `development` review deployment only. |
 
 ## Current Delivery Focus
 
@@ -63,6 +66,7 @@ If a source cannot be checked, clearly label the response as a **proposal based 
 |---|---|---|
 | Durable product or architecture decision | Decision owner / PM | Update the decision record and this brief if it changes the active baseline. |
 | Pull request opened or merged | Developer | Update the board ticket with the PR and merged SHA; include release impact in the PR. |
+| Development deployment succeeds | CI | CI publishes development evidence. Use it for integration review, not as a production claim. |
 | Production release succeeds | CI + release owner | CI publishes release evidence; release owner reconciles this brief if the active baseline, known issues, or delivery focus changed. |
 | Production incident | PM + developer | Create or update a BUG ticket and add a concise risk row above until verified fixed or deliberately retired. |
 | Sprint / priority change | PM | Update the board; update this brief only if it changes the project-wide delivery focus. |
@@ -74,6 +78,7 @@ If a source cannot be checked, clearly label the response as a **proposal based 
 | Source repository | `https://github.com/lCavazzani/2000sme` |
 | Project board | `https://app.notion.com/p/77ff65d59e24431aaabede27228d6016` |
 | Release-evidence guide | [`release-evidence.md`](release-evidence.md) |
+| Development environment guide | [`development-environment.md`](development-environment.md) |
 | PixelOS pivot record | `PixelOS-Pivot-Scope.md` (in the pivot branch until merged) |
 | Historical project handoff | Project shared file: `Retro Portfolio — Project Context Handoff.md` |
 

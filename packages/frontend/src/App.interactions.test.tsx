@@ -18,11 +18,11 @@ describe('desktop shell interactions', () => {
     const user = userEvent.setup()
     render(<App />)
 
-    const resumeLauncher = screen.getByRole('button', { name: 'Open README.TXT' })
+    const resumeLauncher = screen.getByRole('button', { name: 'Open RESUME.PDF' })
     resumeLauncher.focus()
     await user.keyboard('{Enter}')
 
-    const resumeWindow = screen.getByLabelText('README.TXT - WORDPAD window')
+    const resumeWindow = screen.getByLabelText('RESUME.PDF - WORDPAD window')
     expect(resumeWindow).toBeInTheDocument()
     await waitFor(() => expect(resumeWindow).toHaveFocus())
   })
@@ -31,21 +31,35 @@ describe('desktop shell interactions', () => {
     const user = userEvent.setup()
     render(<App />)
 
-    const resumeLauncher = screen.getByRole('button', { name: 'Open README.TXT' })
+    const resumeLauncher = screen.getByRole('button', { name: 'Open RESUME.PDF' })
     await user.dblClick(resumeLauncher)
 
-    const taskbarButton = screen.getByRole('button', { name: 'README.TXT - WORDPAD' })
+    const taskbarButton = screen.getByRole('button', { name: 'RESUME.PDF - WORDPAD' })
     await user.click(screen.getByRole('button', { name: 'Minimize' }))
 
-    expect(screen.queryByLabelText('README.TXT - WORDPAD window')).not.toBeInTheDocument()
+    expect(screen.queryByLabelText('RESUME.PDF - WORDPAD window')).not.toBeInTheDocument()
     expect(taskbarButton).toHaveAttribute('aria-pressed', 'false')
 
     await user.click(taskbarButton)
-    expect(screen.getByLabelText('README.TXT - WORDPAD window')).toBeInTheDocument()
+    expect(screen.getByLabelText('RESUME.PDF - WORDPAD window')).toBeInTheDocument()
 
     await user.click(screen.getByRole('button', { name: 'Close' }))
-    expect(screen.queryByLabelText('README.TXT - WORDPAD window')).not.toBeInTheDocument()
+    expect(screen.queryByLabelText('RESUME.PDF - WORDPAD window')).not.toBeInTheDocument()
     await waitFor(() => expect(resumeLauncher).toHaveFocus())
+  })
+
+  it('launches the Minesweeper placeholder through desktop and Start-menu paths before GAME-3 renders a board', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+
+    await user.dblClick(screen.getByRole('button', { name: 'Open MINESWEEPER.EXE' }))
+    expect(screen.getByLabelText('MINESWEEPER.EXE window')).toBeInTheDocument()
+    expect(screen.getByText('GAME ENGINE: PENDING RULES VALIDATION')).toBeInTheDocument()
+
+    await user.click(screen.getByRole('button', { name: 'Close' }))
+    await user.click(screen.getByRole('button', { name: 'Start' }))
+    await user.click(screen.getByRole('button', { name: 'MINESWEEPER.EXE' }))
+    expect(screen.getByLabelText('MINESWEEPER.EXE window')).toBeInTheDocument()
   })
 
   it('opens the Start menu by keyboard, restores focus on Escape, and launches its My Machine shortcut', async () => {
@@ -75,10 +89,11 @@ describe('desktop shell interactions', () => {
 
 it('switches between direct routes and desktop mode while restoring a meaningful desktop focus target', async () => {
   const user = userEvent.setup()
-  window.location.hash = '#/apps/resume'
+  window.location.hash = '#/apps/minesweeper'
   render(<App />)
 
-  expect(screen.getByRole('main', { name: 'README.TXT direct route' })).toBeInTheDocument()
+  expect(screen.getByRole('main', { name: 'MINESWEEPER.EXE direct route' })).toBeInTheDocument()
+  expect(screen.getByText('GAME ENGINE: PENDING RULES VALIDATION')).toBeInTheDocument()
   await user.click(screen.getByRole('button', { name: 'Open desktop' }))
 
   const desktop = screen.getByRole('main', { name: 'Desktop' })

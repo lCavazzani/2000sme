@@ -15,37 +15,23 @@
 			"binding": "RATE_LIMIT",
 			"id": "61767027715b4cc582d1a6899ac40052"
 		}
-	]
-	// "compatibility_flags": [
-	//   "nodejs_compat"
-	// ],
-	// "vars": {
-	//   "MY_VAR": "my-variable"
-	// },
-	// "kv_namespaces": [
-	//   {
-	//     "binding": "MY_KV_NAMESPACE",
-	//     "id": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-	//   }
-	// ],
-	// "r2_buckets": [
-	//   {
-	//     "binding": "MY_BUCKET",
-	//     "bucket_name": "my-bucket"
-	//   }
-	// ],
-	// "d1_databases": [
-	//   {
-	//     "binding": "MY_DB",
-	//     "database_name": "my-database",
-	//     "database_id": ""
-	//   }
-	// ],
-	// "ai": {
-	//   "binding": "AI"
-	// },
-	// "observability": {
-	//   "enabled": true,
-	//   "head_sampling_rate": 1
-	// }
+	],
+	"env": {
+		"development": {
+			"workers_dev": true,
+			"d1_databases": [
+				{
+					"binding": "portfolio_db",
+					"database_name": "portfolio-db-development",
+					"database_id": "f2872762-0948-4d33-a7ba-a58111b2467e"
+				}
+			],
+			"kv_namespaces": [
+				{
+					"binding": "RATE_LIMIT",
+					"id": "fbc828f1eb15450a82cbcccbb90eaf6d"
+				}
+			]
+		}
+	}
 }
