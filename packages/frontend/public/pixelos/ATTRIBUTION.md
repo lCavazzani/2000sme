@@ -42,7 +42,6 @@ Two additional transparent 32 × 32px RGBA PNG source frames were supplied by th
 | `icons/pixelos-about-me-static-00.png` | `597cb4399a06930b314141e881f014dd2adac00313c0b577cc3e63bec47bfe13` | `about` | ABOUT PIXELOS |
 | `icons/pixelos-resume-static-00.png` | `6a38cc6cf5a167de85c08fdb5e3908f7c7427fea6c120211215c8f6092795cc4` | `resume` | RESUME.PDF |
 
-
 ## PXOS-11 Entrance Sequence Assets
 
 Two transparent static pixel-art source frames were supplied by the project owner in `pixelos-entrance-sequence-package.zip` (archive SHA-256 `4e80ed105a1ab6232a03880ebe33c309df0ec07c580c12c209ad8c6ab057a77f`). PXOS-11 imports only the approved `*-static-00.png` frames byte-for-byte. Visual references, sprite sheets, metadata, and handoff documents are not shipped as runtime assets.
@@ -53,3 +52,16 @@ Two transparent static pixel-art source frames were supplied by the project owne
 | `intro/pixelos-owner-emblem-static-00.png` | `7b4496ed3f4aeb994d0943674ca9cf705de2eb6cbab5ab3b7d2d65a42ccfd325` | 64 × 64 px | Decorative Enter PixelOS emblem; adjacent semantic identity text remains authoritative. |
 
 Both frames must retain integer pixel scaling and `image-rendering: pixelated`; they must not be smoothed, recolored, rotated, or animated.
+
+## GAME-9 NIGHTSHIFT.EXE Vehicle Kit
+
+Three transparent 64 × 64px original vehicle source frames and their metadata were supplied by the project owner in `nightshift-exe-vehicle-kit.zip` (archive SHA-256 `26e7e18f69c6c3a477aee9128303e49997299660127582c0b23f4893f1025633`). GAME-9 imports only the approved `*-static-00.png` frames and `nightshift-vehicle-kit.json` metadata into the future-game asset path. The contiguous source sheet and the source-package handoff document are not shipped at runtime.
+
+| Imported file | SHA-256 | Future Canvas 2D role | Rendering boundary |
+|---|---|---|---|
+| `games/nightshift/nightshift-player-car-static-00.png` | `e464505f84edfddf12d22a4249d45ca0157a3d653c8c569c01bd7056286df7bb` | Original player vehicle | Integer-only `drawImage()` scale with smoothing disabled; decorative sprite only. |
+| `games/nightshift/nightshift-traffic-violet-coupe-static-00.png` | `423aa193c9688c0feb2d975981cd000cf15cdda5471ec5d447950ede201ca856` | Low violet traffic silhouette | Integer-only Canvas scale; future deterministic traffic role. |
+| `games/nightshift/nightshift-traffic-amber-van-static-00.png` | `c79e6199525b63b1362945ee371f11203366eb5ca894a69a786a3ff00a9baba3` | Tall amber traffic silhouette | Integer-only Canvas scale; future readable traffic variation. |
+| `games/nightshift/nightshift-vehicle-kit.json` | `a704a5e4f7926325f225883fd8e55cdfe4196720c849caf7759eb0c2ecf53254` | Canonical source-frame order and descriptive metadata | Supports a future asset loader; does not replace semantic DOM control/status text. |
+
+No GAME-9 asset may be smoothed, recolored, rotated, branded, or used as the sole functional text/control surface.
