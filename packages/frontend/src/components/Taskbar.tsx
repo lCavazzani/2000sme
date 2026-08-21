@@ -1,9 +1,22 @@
 import { useEffect, useRef, useState, type KeyboardEvent } from 'react'
-import { applicationsForSurface, findApplication, type ApplicationId } from '../config/applicationRegistry'
+import {
+  LAUNCHER_GROUPS,
+  applicationsForLauncherGroup,
+  applicationsForSurface,
+  findApplication,
+  type ApplicationId,
+  type LauncherGroup,
+} from '../config/applicationRegistry'
 import { useWindows } from '../store/windows'
 import type { WindowState } from '../types/window'
 import { ThemeAssetIcon } from './ThemeSystemIcon'
 import styles from './Taskbar.module.css'
+
+const LAUNCHER_GROUP_LABELS: Record<LauncherGroup, string> = {
+  system: 'Applications',
+  games: 'Games',
+  career: 'Career',
+}
 
 function formatTime(date: Date) {
   return new Intl.DateTimeFormat(undefined, {
@@ -33,6 +46,12 @@ export function Taskbar() {
   }, [isStartMenuOpen])
 
   const startMenuApplications = applicationsForSurface('start-menu')
+  const startMenuGroups = LAUNCHER_GROUPS.map((group) => ({
+    group,
+    applications: applicationsForLauncherGroup(group).filter((application) =>
+      startMenuApplications.some((startMenuApplication) => startMenuApplication.id === application.id),
+    ),
+  })).filter(({ applications }) => applications.length > 0)
   const openWindows = windows.filter((windowState) => windowState.isOpen)
   const activeWindowId = openWindows
     .filter((windowState) => !windowState.isMinimized)
@@ -85,20 +104,27 @@ export function Taskbar() {
           onKeyDown={handleStartMenuKeyDown}
         >
           <div className={styles.startMenuBanner} aria-hidden="true">PIXELOS 2.0</div>
-          <section className={styles.startMenuGroup} role="group" aria-labelledby="start-menu-applications">
-            <h2 id="start-menu-applications" className={styles.startMenuGroupHeading}>Applications</h2>
-            {startMenuApplications.map((application) => (
-              <button
-                className={styles.startMenuItem}
-                key={application.id}
-                data-window-launcher={application.id}
-                onClick={() => launchApplication(application.id)}
-              >
-                <ThemeAssetIcon name={application.id} width={32} height={32} />
-                {application.label}
-              </button>
-            ))}
-          </section>
+          <div className={styles.startMenuContent}>
+            {startMenuGroups.map(({ group, applications }) => {
+              const headingId = `start-menu-${group}`
+              return (
+                <section className={styles.startMenuGroup} role="group" aria-labelledby={headingId} key={group}>
+                  <h2 id={headingId} className={styles.startMenuGroupHeading}>{LAUNCHER_GROUP_LABELS[group]}</h2>
+                  {applications.map((application) => (
+                    <button
+                      className={styles.startMenuItem}
+                      key={application.id}
+                      data-window-launcher={application.id}
+                      onClick={() => launchApplication(application.id)}
+                    >
+                      <ThemeAssetIcon name={application.id} width={32} height={32} />
+                      {application.label}
+                    </button>
+                  ))}
+                </section>
+              )
+            })}
+          </div>
         </nav>
       )}
       <footer className={styles.taskbar} aria-label="PixelOS taskbar">

@@ -48,6 +48,20 @@ describe('desktop shell interactions', () => {
     await waitFor(() => expect(resumeLauncher).toHaveFocus())
   })
 
+  it('launches the Minesweeper placeholder through desktop and Start-menu paths before GAME-3 renders a board', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+
+    await user.dblClick(screen.getByRole('button', { name: 'Open MINESWEEPER.EXE' }))
+    expect(screen.getByLabelText('MINESWEEPER.EXE window')).toBeInTheDocument()
+    expect(screen.getByText('GAME ENGINE: PENDING RULES VALIDATION')).toBeInTheDocument()
+
+    await user.click(screen.getByRole('button', { name: 'Close' }))
+    await user.click(screen.getByRole('button', { name: 'Start' }))
+    await user.click(screen.getByRole('button', { name: 'MINESWEEPER.EXE' }))
+    expect(screen.getByLabelText('MINESWEEPER.EXE window')).toBeInTheDocument()
+  })
+
   it('opens the Start menu by keyboard, restores focus on Escape, and launches its My Machine shortcut', async () => {
     const user = userEvent.setup()
     render(<App />)
@@ -75,10 +89,11 @@ describe('desktop shell interactions', () => {
 
 it('switches between direct routes and desktop mode while restoring a meaningful desktop focus target', async () => {
   const user = userEvent.setup()
-  window.location.hash = '#/apps/notepad'
+  window.location.hash = '#/apps/minesweeper'
   render(<App />)
 
-  expect(screen.getByRole('main', { name: 'README.TXT direct route' })).toBeInTheDocument()
+  expect(screen.getByRole('main', { name: 'MINESWEEPER.EXE direct route' })).toBeInTheDocument()
+  expect(screen.getByText('GAME ENGINE: PENDING RULES VALIDATION')).toBeInTheDocument()
   await user.click(screen.getByRole('button', { name: 'Open desktop' }))
 
   const desktop = screen.getByRole('main', { name: 'Desktop' })

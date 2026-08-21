@@ -1,6 +1,7 @@
 import type { ComponentType } from 'react'
 import { AboutPixelOS } from '../components/AboutPixelOS'
 import { FileExplorer } from '../components/FileExplorer'
+import { MinesweeperPlaceholder } from '../components/MinesweeperPlaceholder'
 import { PixelGallery } from '../components/PixelGallery'
 import { PixelPet } from '../components/PixelPet'
 import { PixelNotepad } from '../components/PixelNotepad'
@@ -9,15 +10,18 @@ import type { WindowConfig } from '../types/window'
 
 export const LAUNCH_SURFACES = ['desktop', 'start-menu', 'mobile'] as const
 export type LaunchSurface = (typeof LAUNCH_SURFACES)[number]
-export type ApplicationCategory = 'career' | 'system'
+export type ApplicationCategory = 'career' | 'game' | 'system'
+export const LAUNCHER_GROUPS = ['system', 'games', 'career'] as const
+export type LauncherGroup = (typeof LAUNCHER_GROUPS)[number]
 export type ApplicationCapability = 'desktop-window' | 'direct-route'
-export type ApplicationId = 'my-computer' | 'resume' | 'gallery' | 'pet' | 'notepad' | 'about'
+export type ApplicationId = 'my-computer' | 'resume' | 'gallery' | 'pet' | 'notepad' | 'about' | 'minesweeper'
 
 export type ApplicationDefinition = WindowConfig & {
   id: ApplicationId
   label: string
   title: string
   category: ApplicationCategory
+  launcherGroup: LauncherGroup
   icon: string
   mobileLabel: string
   path: `#/apps/${ApplicationId}`
@@ -42,6 +46,7 @@ export const applicationRegistry = [
     label: 'MY MACHINE',
     title: 'MY MACHINE',
     category: 'system',
+    launcherGroup: 'system',
     icon: '/pixelos/icons/pixelos-my-machine-static-00.png',
     mobileLabel: 'My Machine',
     path: '#/apps/my-computer',
@@ -59,6 +64,7 @@ export const applicationRegistry = [
     label: 'PIXEL GALLERY',
     title: 'PIXEL GALLERY',
     category: 'system',
+    launcherGroup: 'system',
     icon: '/pixelos/icons/pixelos-gallery-static-00.png',
     mobileLabel: 'Pixel Gallery',
     path: '#/apps/gallery',
@@ -76,6 +82,7 @@ export const applicationRegistry = [
     label: 'DESKTOP PET',
     title: 'DESKTOP PET',
     category: 'system',
+    launcherGroup: 'system',
     icon: '/pixelos/icons/pixelos-desktop-pet-static-00.png',
     mobileLabel: 'Desktop Pet',
     path: '#/apps/pet',
@@ -93,6 +100,7 @@ export const applicationRegistry = [
     label: 'README.TXT',
     title: 'README.TXT',
     category: 'system',
+    launcherGroup: 'system',
     icon: '/pixelos/icons/pixelos-readme-static-00.png',
     mobileLabel: 'README.TXT',
     path: '#/apps/notepad',
@@ -110,6 +118,7 @@ export const applicationRegistry = [
     label: 'ABOUT PIXELOS',
     title: 'ABOUT PIXELOS',
     category: 'system',
+    launcherGroup: 'system',
     icon: '/pixelos/assets/109f5dfc-b775-4bf5-9a64-962651f649f6.jpg',
     mobileLabel: 'About PixelOS',
     path: '#/apps/about',
@@ -123,10 +132,29 @@ export const applicationRegistry = [
     renderer: AboutPixelOS,
   }),
   defineApplication({
+    id: 'minesweeper',
+    label: 'MINESWEEPER.EXE',
+    title: 'MINESWEEPER.EXE',
+    category: 'game',
+    launcherGroup: 'games',
+    icon: '/pixelos/icons/minesweeper.svg',
+    mobileLabel: 'Minesweeper',
+    path: '#/apps/minesweeper',
+    shortcut: 'Alt+7',
+    capability: 'desktop-window',
+    launchSurfaces: ['desktop', 'start-menu', 'mobile'],
+    x: 350,
+    y: 116,
+    width: 430,
+    height: 280,
+    renderer: MinesweeperPlaceholder,
+  }),
+  defineApplication({
     id: 'resume',
     label: 'RESUME.PDF',
     title: 'RESUME.PDF - WORDPAD',
     category: 'career',
+    launcherGroup: 'career',
     icon: '/desktop-icons/resume.svg',
     mobileLabel: 'Resume PDF',
     path: '#/apps/resume',
@@ -151,6 +179,10 @@ export function findApplication(id: string): ApplicationDefinition | undefined {
 
 export function applicationsForSurface(surface: LaunchSurface): ApplicationDefinition[] {
   return applicationRegistry.filter((application) => application.launchSurfaces.includes(surface))
+}
+
+export function applicationsForLauncherGroup(group: LauncherGroup): ApplicationDefinition[] {
+  return applicationRegistry.filter((application) => application.launcherGroup === group)
 }
 
 export function applicationPath(id: ApplicationId): ApplicationDefinition['path'] {

@@ -4,8 +4,10 @@ import {
   applicationIdFromHash,
   applicationPath,
   applicationRegistry,
+  applicationsForLauncherGroup,
   applicationsForSurface,
   findApplication,
+  LAUNCHER_GROUPS,
   LAUNCH_SURFACES,
   type ApplicationId,
 } from './applicationRegistry'
@@ -67,6 +69,7 @@ describe('applicationRegistry', () => {
       'pet',
       'notepad',
       'about',
+      'minesweeper',
       'resume',
     ])
     expect(applicationsForSurface('start-menu').map((application) => application.id)).toEqual([
@@ -75,6 +78,7 @@ describe('applicationRegistry', () => {
       'pet',
       'notepad',
       'about',
+      'minesweeper',
       'resume',
     ])
     expect(applicationsForSurface('mobile').map((application) => application.id)).toEqual([
@@ -83,8 +87,35 @@ describe('applicationRegistry', () => {
       'pet',
       'notepad',
       'about',
+      'minesweeper',
       'resume',
     ])
+  })
+
+  it('derives named launcher groups from the canonical registry', () => {
+    expect(LAUNCHER_GROUPS).toEqual(['system', 'games', 'career'])
+    expect(applicationsForLauncherGroup('system').map((application) => application.id)).toEqual([
+      'my-computer',
+      'gallery',
+      'pet',
+      'notepad',
+      'about',
+    ])
+    expect(applicationsForLauncherGroup('games').map((application) => application.id)).toEqual(['minesweeper'])
+    expect(applicationsForLauncherGroup('career').map((application) => application.id)).toEqual(['resume'])
+  })
+
+  it('registers Minesweeper consistently across all launch surfaces and direct routes', () => {
+    const minesweeper = findApplication('minesweeper')
+    expect(minesweeper).toMatchObject({
+      label: 'MINESWEEPER.EXE',
+      title: 'MINESWEEPER.EXE',
+      launcherGroup: 'games',
+      path: '#/apps/minesweeper',
+      capability: 'desktop-window',
+    })
+    expect(minesweeper?.launchSurfaces).toEqual(['desktop', 'start-menu', 'mobile'])
+    expect(applicationIdFromHash('#/apps/minesweeper')).toBe('minesweeper')
   })
 
   it('returns no application for retired or unsupported IDs and direct routes', () => {
