@@ -32,3 +32,12 @@ These four transparent 32 × 32px RGBA PNG source frames were supplied by the pr
 | `icons/pixelos-readme-static-00.png` | `248413ee1663c13990b82925f7f4b99780b1a18610852881c667c85e62d30f64` | `notepad` | README.TXT |
 
 The imported icons remain decorative wherever the launcher or taskbar also exposes the matching application label. They are rendered only at approved integer scales with pixelated/crisp-edge image rendering.
+
+## PXOS-X Supplemental Application Icons
+
+Two additional transparent 32 × 32px RGBA PNG source frames were supplied by the project owner in `2-pixelos-application-icon-package.zip` (archive SHA-256 `c1132fa33ea3c656258f3da6358c5957fb8ae0f559c6f8d9a12cf0bee153ccc7`). The archive’s four previously imported source frames exactly match the existing PXOS-X files by SHA-256; this supplemental delivery adds only the two rows below. PXOS-X imports only the approved `*-static-00.png` source frames, byte-for-byte. Preview images, sprite sheets, metadata, and generated artwork are not shipped as launcher assets.
+
+| Imported file | SHA-256 | Registry identity | Approved launcher role |
+|---|---|---|---|
+| `icons/pixelos-about-me-static-00.png` | `597cb4399a06930b314141e881f014dd2adac00313c0b577cc3e63bec47bfe13` | `about` | ABOUT PIXELOS |
+| `icons/pixelos-resume-static-00.png` | `6a38cc6cf5a167de85c08fdb5e3908f7c7427fea6c120211215c8f6092795cc4` | `resume` | RESUME.PDF |
