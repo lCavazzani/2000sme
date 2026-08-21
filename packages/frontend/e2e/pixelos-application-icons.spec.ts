@@ -9,6 +9,7 @@ const approvedIcons = {
 
 
 test('PXOS-X uses the approved static icon family on desktop, Start menu, and mobile launchers', async ({ page }) => {
+  await page.addInitScript(() => window.sessionStorage.setItem('2000sme:pixelos-intro-seen:v1', 'true'))
   await page.goto('/')
 
   for (const [applicationId, iconPath] of Object.entries(approvedIcons)) {

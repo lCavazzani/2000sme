@@ -41,3 +41,15 @@ Two additional transparent 32 × 32px RGBA PNG source frames were supplied by th
 |---|---|---|---|
 | `icons/pixelos-about-me-static-00.png` | `597cb4399a06930b314141e881f014dd2adac00313c0b577cc3e63bec47bfe13` | `about` | ABOUT PIXELOS |
 | `icons/pixelos-resume-static-00.png` | `6a38cc6cf5a167de85c08fdb5e3908f7c7427fea6c120211215c8f6092795cc4` | `resume` | RESUME.PDF |
+
+
+## PXOS-11 Entrance Sequence Assets
+
+Two transparent static pixel-art source frames were supplied by the project owner in `pixelos-entrance-sequence-package.zip` (archive SHA-256 `4e80ed105a1ab6232a03880ebe33c309df0ec07c580c12c209ad8c6ab057a77f`). PXOS-11 imports only the approved `*-static-00.png` frames byte-for-byte. Visual references, sprite sheets, metadata, and handoff documents are not shipped as runtime assets.
+
+| Imported file | SHA-256 | Native dimensions | Approved role |
+|---|---|---:|---|
+| `intro/pixelos-boot-beacon-static-00.png` | `cfc186ef40e394ca494c6a76f445568ff2c7b75169ebde51d665bce6c5125c7f` | 32 × 32 px | Decorative Boot Card beacon; empty alt text and hidden from assistive technology. |
+| `intro/pixelos-owner-emblem-static-00.png` | `7b4496ed3f4aeb994d0943674ca9cf705de2eb6cbab5ab3b7d2d65a42ccfd325` | 64 × 64 px | Decorative Enter PixelOS emblem; adjacent semantic identity text remains authoritative. |
+
+Both frames must retain integer pixel scaling and `image-rendering: pixelated`; they must not be smoothed, recolored, rotated, or animated.

@@ -9,6 +9,7 @@ describe('direct application routes', () => {
   })
 
   it('falls back to the desktop for the retired Contact route', () => {
+    window.sessionStorage.setItem('2000sme:pixelos-intro-seen:v1', 'true')
     window.location.hash = '#/apps/contact'
 
     render(<App />)
