@@ -48,13 +48,13 @@ describe('desktop shell interactions', () => {
     await waitFor(() => expect(resumeLauncher).toHaveFocus())
   })
 
-  it('launches the Minesweeper placeholder through desktop and Start-menu paths before GAME-3 renders a board', async () => {
+  it('launches the playable Minesweeper window through desktop and Start-menu paths', async () => {
     const user = userEvent.setup()
     render(<App />)
 
     await user.dblClick(screen.getByRole('button', { name: 'Open MINESWEEPER.EXE' }))
     expect(screen.getByLabelText('MINESWEEPER.EXE window')).toBeInTheDocument()
-    expect(screen.getByText('GAME ENGINE: PENDING RULES VALIDATION')).toBeInTheDocument()
+    expect(screen.getByRole('status')).toHaveTextContent('READY: REVEAL A CELL TO START.')
 
     await user.click(screen.getByRole('button', { name: 'Close' }))
     await user.click(screen.getByRole('button', { name: 'Start' }))
@@ -93,7 +93,7 @@ it('switches between direct routes and desktop mode while restoring a meaningful
   render(<App />)
 
   expect(screen.getByRole('main', { name: 'MINESWEEPER.EXE direct route' })).toBeInTheDocument()
-  expect(screen.getByText('GAME ENGINE: PENDING RULES VALIDATION')).toBeInTheDocument()
+  expect(screen.getByRole('status')).toHaveTextContent('READY: REVEAL A CELL TO START.')
   await user.click(screen.getByRole('button', { name: 'Open desktop' }))
 
   const desktop = screen.getByRole('main', { name: 'Desktop' })

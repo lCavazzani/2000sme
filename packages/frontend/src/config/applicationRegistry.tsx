@@ -1,7 +1,7 @@
 import type { ComponentType } from 'react'
 import { AboutPixelOS } from '../components/AboutPixelOS'
 import { FileExplorer } from '../components/FileExplorer'
-import { MinesweeperPlaceholder } from '../components/MinesweeperPlaceholder'
+import { MinesweeperWindow } from '../components/MinesweeperWindow'
 import { PixelGallery } from '../components/PixelGallery'
 import { PixelPet } from '../components/PixelPet'
 import { PixelNotepad } from '../components/PixelNotepad'
@@ -143,11 +143,11 @@ export const applicationRegistry = [
     shortcut: 'Alt+7',
     capability: 'desktop-window',
     launchSurfaces: ['desktop', 'start-menu', 'mobile'],
-    x: 350,
-    y: 116,
-    width: 430,
-    height: 280,
-    renderer: MinesweeperPlaceholder,
+    x: 340,
+    y: 76,
+    width: 500,
+    height: 560,
+    renderer: MinesweeperWindow,
   }),
   defineApplication({
     id: 'resume',
