@@ -34,11 +34,11 @@ test.describe('PixelOS accessibility regression coverage', () => {
     await expect(startButton).toBeFocused()
   })
 
-  test('scans an opened retained README.TXT window', async ({ page }) => {
+  test('scans an opened retained RESUME.PDF window', async ({ page }) => {
     await visitPixelOs(page)
 
-    await page.getByRole('button', { name: 'Open README.TXT' }).dblclick()
-    const resumeWindow = page.getByRole('dialog', { name: 'README.TXT - WORDPAD window' })
+    await page.getByRole('button', { name: 'Open RESUME.PDF' }).dblclick()
+    const resumeWindow = page.getByRole('dialog', { name: 'RESUME.PDF - WORDPAD window' })
 
     await expect(resumeWindow).toBeVisible()
     await expect(resumeWindow).toBeFocused()

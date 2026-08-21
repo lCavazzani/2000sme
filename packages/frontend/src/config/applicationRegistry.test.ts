@@ -4,8 +4,10 @@ import {
   applicationIdFromHash,
   applicationPath,
   applicationRegistry,
+  applicationsForLauncherGroup,
   applicationsForSurface,
   findApplication,
+  LAUNCHER_GROUPS,
   LAUNCH_SURFACES,
   type ApplicationId,
 } from './applicationRegistry'
@@ -44,6 +46,15 @@ describe('applicationRegistry', () => {
     }
   })
 
+  it('maps the approved static PixelOS icon family to its intended application identities', () => {
+    expect(findApplication('my-computer')?.icon).toBe('/pixelos/icons/pixelos-my-machine-static-00.png')
+    expect(findApplication('gallery')?.icon).toBe('/pixelos/icons/pixelos-gallery-static-00.png')
+    expect(findApplication('pet')?.icon).toBe('/pixelos/icons/pixelos-desktop-pet-static-00.png')
+    expect(findApplication('notepad')?.icon).toBe('/pixelos/icons/pixelos-readme-static-00.png')
+    expect(findApplication('about')?.icon).toBe('/pixelos/icons/pixelos-about-me-static-00.png')
+    expect(findApplication('resume')?.icon).toBe('/pixelos/icons/pixelos-resume-static-00.png')
+  })
+
   it('derives every launcher surface from the same registry without duplicate destinations', () => {
     for (const surface of LAUNCH_SURFACES) {
       const applications = applicationsForSurface(surface)
@@ -58,20 +69,55 @@ describe('applicationRegistry', () => {
       'my-computer',
       'gallery',
       'pet',
+      'notepad',
+      'about',
+      'minesweeper',
       'resume',
     ])
     expect(applicationsForSurface('start-menu').map((application) => application.id)).toEqual([
       'my-computer',
       'gallery',
       'pet',
+      'notepad',
+      'about',
+      'minesweeper',
       'resume',
     ])
     expect(applicationsForSurface('mobile').map((application) => application.id)).toEqual([
       'my-computer',
       'gallery',
       'pet',
+      'notepad',
+      'about',
+      'minesweeper',
       'resume',
     ])
+  })
+
+  it('derives named launcher groups from the canonical registry', () => {
+    expect(LAUNCHER_GROUPS).toEqual(['system', 'games', 'career'])
+    expect(applicationsForLauncherGroup('system').map((application) => application.id)).toEqual([
+      'my-computer',
+      'gallery',
+      'pet',
+      'notepad',
+      'about',
+    ])
+    expect(applicationsForLauncherGroup('games').map((application) => application.id)).toEqual(['minesweeper'])
+    expect(applicationsForLauncherGroup('career').map((application) => application.id)).toEqual(['resume'])
+  })
+
+  it('registers Minesweeper consistently across all launch surfaces and direct routes', () => {
+    const minesweeper = findApplication('minesweeper')
+    expect(minesweeper).toMatchObject({
+      label: 'MINESWEEPER.EXE',
+      title: 'MINESWEEPER.EXE',
+      launcherGroup: 'games',
+      path: '#/apps/minesweeper',
+      capability: 'desktop-window',
+    })
+    expect(minesweeper?.launchSurfaces).toEqual(['desktop', 'start-menu', 'mobile'])
+    expect(applicationIdFromHash('#/apps/minesweeper')).toBe('minesweeper')
   })
 
   it('returns no application for retired or unsupported IDs and direct routes', () => {

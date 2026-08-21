@@ -1,37 +1,39 @@
 .desktopIcon {
-  width: 84px;
-  min-height: 84px;
+  width: 88px;
+  min-height: 92px;
   display: grid;
   justify-items: center;
   align-content: start;
-  gap: 5px;
-  padding: 5px 3px;
+  gap: 6px;
+  padding: 6px 4px;
   color: var(--pixelos-ink);
-  font: 10px/1.25 var(--pixelos-font);
-  letter-spacing: 0.03em;
+  font: 11px/1.3 var(--pixelos-font);
+  letter-spacing: 0.01em;
   text-align: center;
-  text-shadow: 1px 1px var(--pixelos-edge);
+  text-shadow: 1px 1px var(--pixelos-edge), 0 0 6px var(--pixelos-edge);
   border: 1px solid transparent;
   background: transparent;
   cursor: pointer;
 }
 
 .desktopIcon svg {
-  width: 34px;
-  height: 34px;
+  width: 64px;
+  height: 64px;
   color: var(--pixelos-cyan);
 }
 
 .desktopIcon img {
-  width: 34px;
-  height: 34px;
+  width: 64px;
+  height: 64px;
   image-rendering: pixelated;
+  image-rendering: crisp-edges;
 }
 
 .desktopIcon > span:last-child {
-  max-width: 80px;
-  padding: 1px 3px;
-  overflow-wrap: anywhere;
+  max-width: 88px;
+  padding: 1px 4px;
+  overflow-wrap: break-word;
+  hyphens: none;
 }
 
 .desktopIcon:hover,
