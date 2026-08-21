@@ -1,5 +1,5 @@
 import { useRef, useState, type KeyboardEvent } from 'react'
-import { cellDisplay, type MinesweeperCell as MinesweeperEngineCell, type MinesweeperState } from '../games/minesweeper'
+import { cellDisplay, type MinesweeperCell as MinesweeperEngineCell, type MinesweeperState } from '.'
 import { MinesweeperCell } from './MinesweeperCell'
 import styles from './MinesweeperWindow.module.css'
 

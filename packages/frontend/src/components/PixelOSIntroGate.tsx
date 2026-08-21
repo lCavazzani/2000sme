@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { PIXEL_OS_ASSETS } from '../config/pixelosAssets'
-import { DesktopShell } from './DesktopShell'
-import { hasSeenPixelOsIntro, markPixelOsIntroSeen } from './pixelosIntroSession'
+import { DesktopShell } from './shell/DesktopShell'
+import { hasSeenPixelOsIntro, markPixelOsIntroSeen } from '../utils/pixelosIntroSession'
 import styles from './PixelOSIntroGate.module.css'
 
 type IntroStage = 'boot' | 'enter' | 'desktop'

@@ -1,6 +1,6 @@
 import { type KeyboardEvent } from 'react'
-import type { ApplicationId } from '../config/applicationRegistry'
-import { useWindows } from '../store/windows'
+import type { ApplicationId } from '../../config/applicationRegistry'
+import { useWindows } from '../../store/windows'
 import { ThemeAssetIcon } from './ThemeSystemIcon'
 import styles from './DesktopIcon.module.css'
 

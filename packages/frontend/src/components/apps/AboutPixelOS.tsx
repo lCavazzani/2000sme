@@ -1,5 +1,5 @@
-import { PIXEL_OS_ASSETS } from '../config/pixelosAssets'
-import { useWindows } from '../store/windows'
+import { PIXEL_OS_ASSETS } from '../../config/pixelosAssets'
+import { useWindows } from '../../store/windows'
 import styles from './AboutPixelOS.module.css'
 
 const SYSTEM_INFO = [

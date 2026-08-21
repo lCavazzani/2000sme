@@ -1,4 +1,4 @@
-import { findApplication } from '../config/applicationRegistry'
+import { findApplication } from '../../config/applicationRegistry'
 
 type ApplicationContentProps = {
   windowId: string

@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { PIXEL_OS_GALLERY } from '../config/pixelosAssets'
+import { PIXEL_OS_GALLERY } from '../../config/pixelosAssets'
 import styles from './PixelGallery.module.css'
 
 type GalleryItem = (typeof PIXEL_OS_GALLERY)[number]

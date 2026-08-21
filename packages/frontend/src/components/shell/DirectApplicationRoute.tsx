@@ -1,5 +1,5 @@
-import type { ApplicationId } from '../config/applicationRegistry'
-import { findApplication } from '../config/applicationRegistry'
+import type { ApplicationId } from '../../config/applicationRegistry'
+import { findApplication } from '../../config/applicationRegistry'
 import { ApplicationContent } from './ApplicationContent'
 
 type DirectApplicationRouteProps = {

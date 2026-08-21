@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { projects } from '../config/projects'
+import { projects } from '../../config/projects'
 import styles from './FileExplorer.module.css'
 
 type MachineItem = {

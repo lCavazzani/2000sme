@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
-import { WindowsProvider } from '../store/windows'
+import { WindowsProvider } from '../../store/windows'
 import { AboutPixelOS } from './AboutPixelOS'
 
 describe('AboutPixelOS', () => {
