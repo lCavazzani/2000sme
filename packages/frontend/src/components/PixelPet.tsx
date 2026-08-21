@@ -22,7 +22,7 @@ export function PixelPet() {
           alt="Mittens, an orange cat resting on a windowsill"
           className={styles.catImage}
         />
-        <div className={styles.hearts} aria-label={`${hearts} happy heart${hearts === 1 ? '' : 's'}`}>
+        <div className={styles.hearts} aria-hidden="true">
           {Array.from({ length: hearts }, (_, index) => <span key={index} aria-hidden="true">♥</span>)}
         </div>
       </div>
