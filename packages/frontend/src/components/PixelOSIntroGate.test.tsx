@@ -36,12 +36,17 @@ describe('PixelOSIntroGate', () => {
     expect(window.sessionStorage.getItem('2000sme:pixelos-intro-seen:v1')).toBe('true')
   })
 
-  it('moves from the bounded boot card into the semantic Enter PixelOS screen', () => {
+  it('keeps the visible boot card long enough to read before entering the semantic Enter PixelOS screen', () => {
     vi.useFakeTimers()
     renderIntroGate()
 
     act(() => {
-      vi.advanceTimersByTime(860)
+      vi.advanceTimersByTime(1_599)
+    })
+    expect(screen.getByRole('button', { name: 'Skip intro' })).toBeInTheDocument()
+
+    act(() => {
+      vi.advanceTimersByTime(1)
     })
 
     const enter = screen.getByRole('button', { name: 'Enter Desktop' })

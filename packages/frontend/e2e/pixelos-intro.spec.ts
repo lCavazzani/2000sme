@@ -24,7 +24,7 @@ test.describe('PXOS-11 optional PixelOS entrance', () => {
     await beginFreshIntro(page)
 
     const enter = page.getByRole('button', { name: 'Enter Desktop' })
-    await expect(enter).toBeVisible({ timeout: 1_500 })
+    await expect(enter).toBeVisible({ timeout: 2_500 })
     await expect(enter).toBeFocused()
     await expect(page.getByText('LEONARDO CAVAZZANI')).toBeVisible()
     await expect(page.getByText('Senior Software Engineer')).toBeVisible()

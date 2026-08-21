@@ -6,6 +6,8 @@ import styles from './PixelOSIntroGate.module.css'
 
 type IntroStage = 'boot' | 'enter' | 'desktop'
 
+const BOOT_TO_ENTER_DELAY_MS = 1_600
+
 function isDirectApplicationRoute() {
   return window.location.hash.startsWith('#/apps/')
 }
@@ -47,7 +49,7 @@ export function PixelOSIntroGate() {
       return
     }
 
-    const transitionTimer = window.setTimeout(() => setStage('enter'), 860)
+    const transitionTimer = window.setTimeout(() => setStage('enter'), BOOT_TO_ENTER_DELAY_MS)
     return () => window.clearTimeout(transitionTimer)
   }, [stage])
 
@@ -79,7 +81,7 @@ export function PixelOSIntroGate() {
           <p className={styles.bootStatus}>PREPARING DESKTOP</p>
           <div className={styles.bootCells} aria-hidden="true">
             {Array.from({ length: 7 }, (_, index) => (
-              <span key={index} className={index < 5 ? styles.bootCellActive : styles.bootCell} />
+              <span key={index} className={styles.bootCellActive} />
             ))}
           </div>
         </section>
