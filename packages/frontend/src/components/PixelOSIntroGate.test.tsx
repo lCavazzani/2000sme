@@ -53,6 +53,11 @@ describe('PixelOSIntroGate', () => {
     expect(enter).toHaveFocus()
     expect(screen.getByText('LEONARDO CAVAZZANI')).toBeInTheDocument()
     expect(screen.getByText('Senior Software Engineer')).toBeInTheDocument()
+    const portrait = screen.getByText('LEONARDO CAVAZZANI').closest('section')?.querySelector('img')
+    expect(portrait).toHaveAttribute('src', '/pixelos/portraits/pixelos-leonardo-entry-hero-00.png')
+    expect(portrait).toHaveAttribute('width', '128')
+    expect(portrait).toHaveAttribute('height', '128')
+    expect(portrait).toHaveAttribute('alt', '')
 
     fireEvent.click(enter)
     expect(screen.getByRole('main', { name: 'Desktop' })).toBeInTheDocument()

@@ -20,6 +20,9 @@ describe('pixelosAssets', () => {
       '/pixelos/intro/pixelos-owner-emblem-static-00.png',
       '/pixelos/icons/pixelos-minesweeper-static-00.png',
       '/pixelos/icons/pixelos-minesweeper-victory-burst-static-00.png',
+      '/pixelos/portraits/pixelos-leonardo-entry-hero-00.png',
+      '/pixelos/portraits/pixelos-leonardo-profile-64-00.png',
+      '/pixelos/portraits/pixelos-leonardo-profile-32-00.png',
     ])
   })
 

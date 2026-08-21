@@ -163,11 +163,13 @@
   box-shadow: inset 2px 2px var(--pixelos-bevel-highlight), inset -2px -2px var(--pixelos-edge), 6px 6px 0 rgb(0 0 0 / 30%);
 }
 
-.ownerEmblem {
+.ownerPortrait {
   width: 128px;
   height: 128px;
   margin-top: 8px;
+  object-fit: contain;
   image-rendering: pixelated;
+  image-rendering: crisp-edges;
 }
 
 .ownerName {
@@ -250,8 +252,4 @@
     padding: 24px 18px;
   }
 
-  .ownerEmblem {
-    width: 96px;
-    height: 96px;
-  }
 }

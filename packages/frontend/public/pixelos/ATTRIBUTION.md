@@ -75,3 +75,15 @@ Two transparent static pixel-art source frames were supplied by the project owne
 | `icons/pixelos-minesweeper-victory-burst-static-00.png` | `1fb03e0a95b3e692e3a4a3f4210df0bdd39677d0c62ebb75640f2c023d0dc9c5` | 16 × 16 px | Decorative, aria-hidden, pointer-transparent spark within the local ALL CLEAR victory overlay. |
 
 Both frames must retain pixelated/crisp-edge integer scaling. The victory burst is not a semantic control, a status announcement, or a repeating/flickering effect.
+
+## PXOS-12 Portrait Family
+
+Three transparent static pixel-art owner portraits were supplied by the project owner in `pixelos-portrait-asset-package.zip` (archive SHA-256 `36f9c8d4ac808943be6e44ef081a6b29cff6c753203a083d8db05d7cf9ed844f`). PXOS-12 imports only the approved native `*-00.png` frames, byte-for-byte. Preview images, sheets, metadata, and handoff documents are not shipped at runtime.
+
+| Imported file | SHA-256 | Native dimensions | Approved role |
+|---|---|---:|---|
+| `portraits/pixelos-leonardo-entry-hero-00.png` | `8491a1773fefbd35b159f8f92fafd49a38fd7094c6d609cc25443cbaa98c33a8` | 128 × 128 px | Decorative Stage 2 Enter PixelOS portrait; adjacent owner name and role remain authoritative. |
+| `portraits/pixelos-leonardo-profile-64-00.png` | `ef85f8093bd63aaa518851e1d9783e09c421660e03f522724eba1ee2c1c5000e` | 64 × 64 px | Decorative portrait within the explicitly labelled static Resume owner context. |
+| `portraits/pixelos-leonardo-profile-32-00.png` | `621e1d1e54e56dae0660a777b31d13cb27c0aeaf1b020346e9de5a4e1daf2e19` | 32 × 32 px | Registered compact portrait variant; not used as a desktop application icon or presence indicator. |
+
+All portraits must retain integer pixel scaling and pixelated/crisp-edge rendering. They are static identity imagery only: no live presence, typing state, automated chat claim, authentication, or audio behavior may be attached.

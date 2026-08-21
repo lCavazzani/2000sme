@@ -16,6 +16,9 @@ export const PIXEL_OS_ASSETS = {
   ownerEmblem: '/pixelos/intro/pixelos-owner-emblem-static-00.png',
   minesweeperIcon: '/pixelos/icons/pixelos-minesweeper-static-00.png',
   minesweeperVictoryBurst: '/pixelos/icons/pixelos-minesweeper-victory-burst-static-00.png',
+  leonardoEntryHero: '/pixelos/portraits/pixelos-leonardo-entry-hero-00.png',
+  leonardoProfile64: '/pixelos/portraits/pixelos-leonardo-profile-64-00.png',
+  leonardoProfile32: '/pixelos/portraits/pixelos-leonardo-profile-32-00.png',
 } as const
 
 export const PIXEL_OS_GALLERY = [
