@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 const { openPrintWindowMock } = vi.hoisted(() => ({ openPrintWindowMock: vi.fn() }))
 
-vi.mock('../utils/pdfGenerator', () => ({
+vi.mock('../../utils/pdfGenerator', () => ({
   openPrintWindow: openPrintWindowMock,
 }))
 
