@@ -31,6 +31,7 @@ test('keeps the primary PDF action readable and touch-sized on the narrow RESUME
 })
 
 test('keeps the persistent PDF action bottom-left inside the desktop RESUME.PDF window while the document scrolls', async ({ page }) => {
+  await page.addInitScript(() => window.sessionStorage.setItem('2000sme:pixelos-intro-seen:v1', 'true'))
   await page.goto('/')
   await page.getByRole('button', { name: 'Open RESUME.PDF' }).dblclick()
 

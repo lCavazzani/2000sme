@@ -7,6 +7,7 @@ describe('desktop shell interactions', () => {
   beforeEach(() => {
     window.location.hash = ''
     window.sessionStorage.clear()
+    window.sessionStorage.setItem('2000sme:pixelos-intro-seen:v1', 'true')
   })
 
   afterEach(() => {
