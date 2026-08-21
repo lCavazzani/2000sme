@@ -1,4 +1,6 @@
-import { expect, test, type Page } from '@playwright/test'
+import { expect, test, type Locator, type Page } from '@playwright/test'
+
+const stableScreenshot = { animations: 'disabled' as const, caret: 'hide' as const }
 
 async function visitPixelOs(page: Page, path = '/', reducedEffects = false) {
   await page.addInitScript((shouldReduce) => {
@@ -21,16 +23,21 @@ async function safeCellIndexes(page: Page) {
   })
 }
 
-async function winCurrentBoard(page: Page, directRoute = false) {
-  const gameWindow = directRoute
+async function winCurrentBoard(page: Page, directRoute = false): Promise<Locator> {
+  const gameSurface = directRoute
     ? page.getByRole('main', { name: 'MINESWEEPER.EXE direct route' })
     : await openMinesweeper(page)
   for (const index of await safeCellIndexes(page)) {
-    const cell = gameWindow.locator(`[data-minesweeper-cell-index="${index}"]`)
+    const cell = gameSurface.locator(`[data-minesweeper-cell-index="${index}"]`)
     if (await cell.getAttribute('data-cell-state') === 'hidden') await cell.click()
   }
-  await expect(gameWindow.getByRole('heading', { name: 'ALL CLEAR' })).toBeVisible()
-  return gameWindow
+  await expect(gameSurface.getByRole('heading', { name: 'ALL CLEAR' })).toBeVisible()
+  return gameSurface
+}
+
+async function expectStaticVictorySparks(gameSurface: Locator) {
+  await expect(gameSurface.getByLabel('ALL CLEAR')).toBeVisible()
+  await expect(gameSurface.locator('[aria-hidden="true"] [class*="victorySpark"]').first()).toHaveCSS('animation-name', 'none')
 }
 
 test.describe('TEST-16 GAME-13 Minesweeper browser and accessibility gate', () => {
@@ -48,29 +55,52 @@ test.describe('TEST-16 GAME-13 Minesweeper browser and accessibility gate', () =
     await mobile.close()
   })
 
-  test('shows one focused victory action on a real engine-derived win and resets through that action', async ({ page }) => {
+  test('shows one focused victory action on a real engine-derived win and resets through Enter while retaining game chrome', async ({ page }) => {
     await visitPixelOs(page)
     const gameWindow = await winCurrentBoard(page)
 
     const newGame = gameWindow.getByRole('button', { name: 'NEW GAME' })
     await expect(gameWindow.getByText('BOARD SECURED')).toBeVisible()
     await expect(gameWindow.getByRole('status')).toHaveText('CLEARED: EVERY SAFE CELL IS REVEALED.')
+    await expect(gameWindow.getByRole('status')).toHaveCount(1)
+    await expect(gameWindow.getByRole('button', { name: 'Game', exact: true })).toBeVisible()
+    await expect(gameWindow.getByRole('group', { name: /Minesweeper board/ })).toBeVisible()
     await expect(newGame).toBeFocused()
-    await newGame.press('Enter')
+    await expect(gameWindow).toHaveScreenshot('minesweeper-victory-normal.png', stableScreenshot)
 
+    await newGame.press('Enter')
+    await expect(gameWindow.getByRole('heading', { name: 'ALL CLEAR' })).toHaveCount(0)
+    await expect(gameWindow.getByRole('status')).toHaveText('READY: REVEAL A CELL TO START.')
+    await expect(gameWindow).toHaveScreenshot('minesweeper-post-reset.png', stableScreenshot)
+  })
+
+  test('resets an accessible victory action through Space without a mouse-only path', async ({ page }) => {
+    await visitPixelOs(page)
+    const gameWindow = await winCurrentBoard(page)
+
+    await gameWindow.getByRole('button', { name: 'NEW GAME' }).press('Space')
     await expect(gameWindow.getByRole('heading', { name: 'ALL CLEAR' })).toHaveCount(0)
     await expect(gameWindow.getByRole('status')).toHaveText('READY: REVEAL A CELL TO START.')
   })
 
-  test('keeps the static reduced-effects victory panel legible at compact viewport width', async ({ browser }) => {
+  test('keeps the local reduced-effects victory panel legible at compact viewport width', async ({ browser }) => {
     const page = await browser.newPage({ viewport: { width: 390, height: 844 } })
     await visitPixelOs(page, '/#/apps/minesweeper', true)
-    const gameWindow = await winCurrentBoard(page, true)
+    const gameSurface = await winCurrentBoard(page, true)
 
-    const overlay = gameWindow.getByLabel('ALL CLEAR')
-    await expect(overlay).toBeVisible()
-    await expect(overlay.locator('[aria-hidden="true"] [class*="victorySpark"]').first()).toHaveCSS('animation-name', 'none')
+    await expectStaticVictorySparks(gameSurface)
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true)
+    await expect(gameSurface).toHaveScreenshot('minesweeper-victory-reduced-effects.png', stableScreenshot)
+    await page.close()
+  })
+
+  test('keeps the prefers-reduced-motion direct-route victory presentation static', async ({ browser }) => {
+    const page = await browser.newPage({ viewport: { width: 390, height: 844 } })
+    await page.emulateMedia({ reducedMotion: 'reduce' })
+    await visitPixelOs(page, '/#/apps/minesweeper')
+    const gameSurface = await winCurrentBoard(page, true)
+
+    await expectStaticVictorySparks(gameSurface)
     await page.close()
   })
 })
