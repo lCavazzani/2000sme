@@ -12,6 +12,15 @@ type ThemeAssetIconProps = {
   className?: string
 }
 
+const staticIconSources: Partial<Record<ApplicationId, string>> = {
+  'my-computer': '/pixelos/icons/pixelos-my-machine-static-00.png',
+  gallery: '/pixelos/icons/pixelos-gallery-static-00.png',
+  pet: '/pixelos/icons/pixelos-desktop-pet-static-00.png',
+  notepad: '/pixelos/icons/pixelos-readme-static-00.png',
+  about: '/pixelos/icons/pixelos-about-me-static-00.png',
+  resume: '/pixelos/icons/pixelos-resume-static-00.png',
+}
+
 const glyphs: Record<ThemeAssetIconName, ReactNode> = {
   start: <><rect x="1" y="1" width="6" height="6" fill="currentColor" /><rect x="8" y="1" width="3" height="3" fill="#4de3d0" /><rect x="8" y="5" width="3" height="6" fill="#df4fbc" /><rect x="1" y="8" width="6" height="3" fill="#6d5aa8" /></>,
   'my-computer': <><rect x="1" y="1" width="10" height="7" fill="currentColor" /><rect x="3" y="3" width="6" height="3" fill="#120b22" /><rect x="4" y="9" width="4" height="2" fill="currentColor" /></>,
@@ -23,16 +32,29 @@ const glyphs: Record<ThemeAssetIconName, ReactNode> = {
 }
 
 /**
- * Application identity remains registry-owned. PixelOS supplies a compact
- * inline glyph for each stable launcher ID, avoiding legacy XP/98 asset swaps
- * while keeping isolated shell tests free of theme-context requirements.
+ * Application identity remains registry-owned. Supplied static PixelOS frames
+ * take precedence for application launchers; the inline glyph map remains only
+ * for the Start control and a resilient fallback.
  */
 export function ThemeAssetIcon({ name, alt = '', width, height, className }: ThemeAssetIconProps) {
+  const staticIconSource = name === 'start' ? undefined : staticIconSources[name]
+
   return (
     <span className={`${styles.root} ${className ?? ''}`.trim()} aria-hidden={alt === '' ? true : undefined}>
-      <svg className={styles.icon} width={width} height={height} viewBox="0 0 12 12" role={alt ? 'img' : undefined} aria-label={alt || undefined}>
-        {glyphs[name]}
-      </svg>
+      {staticIconSource ? (
+        <img
+          className={`${styles.icon} ${styles.raster}`}
+          src={staticIconSource}
+          alt={alt}
+          width={width}
+          height={height}
+          draggable={false}
+        />
+      ) : (
+        <svg className={styles.icon} width={width} height={height} viewBox="0 0 12 12" role={alt ? 'img' : undefined} aria-label={alt || undefined}>
+          {glyphs[name]}
+        </svg>
+      )}
     </span>
   )
 }
