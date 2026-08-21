@@ -11,7 +11,7 @@ export function MobileLauncher() {
       <div className={styles.entries}>
         {applicationsForSurface('mobile').map((application) => (
           <a className={styles.entry} href={application.path} key={application.id}>
-            <img src={application.icon} alt="" width={24} height={24} />
+            <img src={application.icon} alt="" width={32} height={32} />
             <span>{application.mobileLabel}</span>
           </a>
         ))}

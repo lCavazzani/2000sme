@@ -1,0 +1,109 @@
+.root {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  min-height: 0;
+  height: 100%;
+  color: var(--os-ink);
+  background: var(--os-panel);
+  font-family: var(--os-font-stack);
+}
+
+.menuBar {
+  display: flex;
+  gap: 17px;
+  min-height: 28px;
+  align-items: center;
+  padding: 0 10px;
+  color: var(--os-muted);
+  border-bottom: var(--pixelos-bevel-width) solid var(--os-edge);
+  box-shadow: inset 0 -1px 0 var(--pixelos-bevel-highlight);
+  font-size: 0.74rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.editor {
+  min-width: 0;
+  min-height: 0;
+  width: 100%;
+  height: 100%;
+  resize: none;
+  padding: 13px;
+  color: var(--os-ink);
+  border: 0;
+  outline: 0;
+  background: #100a20;
+  box-shadow: inset 2px 2px 0 #06030d, inset -1px -1px 0 var(--pixelos-bevel-highlight);
+  caret-color: var(--os-cyan);
+  font: 0.88rem/1.55 var(--os-font-stack);
+  letter-spacing: 0.035em;
+  text-transform: uppercase;
+}
+
+.editor:focus-visible {
+  outline: 2px solid var(--os-magenta);
+  outline-offset: -3px;
+}
+
+.status {
+  display: flex;
+  min-height: 27px;
+  gap: 12px;
+  align-items: center;
+  padding: 0 9px;
+  color: var(--os-muted);
+  border-top: var(--pixelos-bevel-width) solid var(--os-edge);
+  box-shadow: inset 0 1px 0 var(--pixelos-bevel-highlight);
+  font-size: 0.7rem;
+}
+
+.status span:nth-child(2) {
+  margin-left: auto;
+}
+
+.insertCue {
+  min-width: 26px;
+  color: var(--os-cyan);
+  text-align: center;
+  animation: insert-blink 1s steps(2, end) infinite;
+}
+
+@keyframes insert-blink {
+  50% { opacity: 0.35; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .insertCue { animation: none; }
+}
+
+:global(html[data-theme-effects='reduced']) .insertCue {
+  animation: none;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+@media (max-width: 460px) {
+  .menuBar {
+    gap: 10px;
+    padding-inline: 7px;
+    font-size: 0.66rem;
+  }
+
+  .editor {
+    padding: 10px;
+    font-size: 0.76rem;
+  }
+
+  .status {
+    gap: 7px;
+    padding-inline: 7px;
+    font-size: 0.62rem;
+  }
+}
