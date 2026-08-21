@@ -17,6 +17,8 @@ const staticIconSources: Partial<Record<ApplicationId, string>> = {
   gallery: '/pixelos/icons/pixelos-gallery-static-00.png',
   pet: '/pixelos/icons/pixelos-desktop-pet-static-00.png',
   notepad: '/pixelos/icons/pixelos-readme-static-00.png',
+  about: '/pixelos/icons/pixelos-about-me-static-00.png',
+  resume: '/pixelos/icons/pixelos-resume-static-00.png',
 }
 
 const glyphs: Record<ThemeAssetIconName, ReactNode> = {
@@ -31,9 +33,9 @@ const glyphs: Record<ThemeAssetIconName, ReactNode> = {
 }
 
 /**
- * Application identity remains registry-owned. PixelOS supplies a compact
- * inline glyph for each stable launcher ID, avoiding legacy XP/98 asset swaps
- * while keeping isolated shell tests free of theme-context requirements.
+ * Application identity remains registry-owned. Supplied static PixelOS frames
+ * take precedence for application launchers; the inline glyph map remains only
+ * for the Start control and a resilient fallback.
  */
 export function ThemeAssetIcon({ name, alt = '', width, height, className }: ThemeAssetIconProps) {
   const staticIconSource = name === 'start' ? undefined : staticIconSources[name]

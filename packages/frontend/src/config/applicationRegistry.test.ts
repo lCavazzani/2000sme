@@ -51,6 +51,8 @@ describe('applicationRegistry', () => {
     expect(findApplication('gallery')?.icon).toBe('/pixelos/icons/pixelos-gallery-static-00.png')
     expect(findApplication('pet')?.icon).toBe('/pixelos/icons/pixelos-desktop-pet-static-00.png')
     expect(findApplication('notepad')?.icon).toBe('/pixelos/icons/pixelos-readme-static-00.png')
+    expect(findApplication('about')?.icon).toBe('/pixelos/icons/pixelos-about-me-static-00.png')
+    expect(findApplication('resume')?.icon).toBe('/pixelos/icons/pixelos-resume-static-00.png')
   })
 
   it('derives every launcher surface from the same registry without duplicate destinations', () => {
