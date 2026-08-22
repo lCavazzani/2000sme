@@ -165,10 +165,16 @@
   margin-top: 4px;
 }
 
-.board {
-  display: grid;
+.boardStage {
+  position: relative;
   width: min(100%, 396px);
   margin: 0 auto;
+}
+
+.board {
+  display: grid;
+  width: 100%;
+  margin: 0;
   border: 3px solid #080412;
   background: #080412;
   box-shadow: 2px 2px 0 var(--pixelos-bevel-highlight), -1px -1px 0 #05020d;
@@ -219,6 +225,105 @@
 .cell[data-cell-number='6'],
 .cell[data-cell-number='7'],
 .cell[data-cell-number='8'] { color: #ffd968; }
+
+.victoryOverlay {
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: rgba(16, 10, 32, 0.52);
+}
+
+.victorySparks {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.victoryCard {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 8px;
+  min-width: min(84%, 220px);
+  padding: 16px;
+  color: var(--os-ink);
+  border: 3px solid #080412;
+  background: #1b1645;
+  box-shadow: inset 2px 2px 0 #35306f, inset -2px -2px 0 #09051a, 3px 3px 0 rgba(5, 3, 17, 0.55);
+  text-align: center;
+}
+
+.victoryCard h2,
+.victoryCard p {
+  margin: 0;
+}
+
+.victoryCard h2 {
+  color: var(--os-cyan);
+}
+
+.victoryCard p,
+.victoryCard time {
+  color: var(--os-muted);
+  font-size: 0.72rem;
+}
+
+.victoryCard button {
+  min-height: 34px;
+  color: #1e173e;
+  border: 2px solid #09051a;
+  border-right-color: var(--pixelos-bevel-highlight);
+  border-bottom-color: var(--pixelos-bevel-highlight);
+  background: #f6cf6a;
+  box-shadow: inset 1px 1px 0 #fff1a8;
+  font: 700 0.76rem/1 var(--os-font-stack);
+}
+
+.victoryCard button:focus-visible {
+  outline: 2px solid var(--os-magenta);
+  outline-offset: 2px;
+}
+
+.victorySpark {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  background: var(--victory-burst) center / 16px 16px no-repeat;
+  image-rendering: pixelated;
+  pointer-events: none;
+  animation: mine-victory-burst 520ms steps(4, end) both;
+  animation-delay: calc(var(--spark-index) * 35ms);
+}
+
+.victorySpark:nth-child(1) { top: 10%; left: 13%; }
+.victorySpark:nth-child(2) { top: 12%; right: 14%; }
+.victorySpark:nth-child(3) { top: 31%; left: 7%; }
+.victorySpark:nth-child(4) { top: 34%; right: 7%; }
+.victorySpark:nth-child(5) { bottom: 31%; left: 10%; }
+.victorySpark:nth-child(6) { bottom: 28%; right: 10%; }
+.victorySpark:nth-child(7) { bottom: 10%; left: 18%; }
+.victorySpark:nth-child(8) { bottom: 10%; right: 18%; }
+
+@keyframes mine-victory-burst {
+  from { opacity: 0; transform: scale(0.5); }
+  65% { opacity: 1; transform: scale(1); }
+  to { opacity: 0.82; transform: scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .victorySpark {
+    animation: none;
+    opacity: 0.82;
+  }
+}
+
+:global(html[data-theme-effects='reduced']) .victorySpark {
+  animation: none;
+  opacity: 0.82;
+}
 
 .statusBar {
   min-height: 28px;

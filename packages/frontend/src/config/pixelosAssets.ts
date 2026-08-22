@@ -14,6 +14,8 @@ export const PIXEL_OS_ASSETS = {
   cockpit: `${assetRoot}/b8f2dc8c-d0e5-4b1f-87bb-43b221e8b3a5.jpg`,
   bootBeacon: '/pixelos/intro/pixelos-boot-beacon-static-00.png',
   ownerEmblem: '/pixelos/intro/pixelos-owner-emblem-static-00.png',
+  minesweeperIcon: '/pixelos/icons/pixelos-minesweeper-static-00.png',
+  minesweeperVictoryBurst: '/pixelos/icons/pixelos-minesweeper-victory-burst-static-00.png',
 } as const
 
 export const PIXEL_OS_GALLERY = [

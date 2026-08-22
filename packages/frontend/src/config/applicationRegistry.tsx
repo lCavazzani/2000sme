@@ -1,4 +1,5 @@
 import type { ComponentType } from 'react'
+import { PIXEL_OS_ASSETS } from './pixelosAssets'
 import { AboutPixelOS } from '../components/apps/AboutPixelOS'
 import { FileExplorer } from '../components/apps/FileExplorer'
 import { MinesweeperWindow } from '../games/minesweeper/MinesweeperWindow'
@@ -137,7 +138,7 @@ export const applicationRegistry = [
     title: 'MINESWEEPER.EXE',
     category: 'game',
     launcherGroup: 'games',
-    icon: '/pixelos/icons/minesweeper.svg',
+    icon: PIXEL_OS_ASSETS.minesweeperIcon,
     mobileLabel: 'Minesweeper',
     path: '#/apps/minesweeper',
     shortcut: 'Alt+7',
