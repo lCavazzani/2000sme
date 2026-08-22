@@ -3,6 +3,7 @@ import { PIXEL_OS_ASSETS } from './pixelosAssets'
 import { AboutPixelOS } from '../components/apps/AboutPixelOS'
 import { FileExplorer } from '../components/apps/FileExplorer'
 import { MinesweeperWindow } from '../games/minesweeper/MinesweeperWindow'
+import { NightshiftWindow } from '../games/nightshift/NightshiftWindow'
 import { PixelGallery } from '../components/apps/PixelGallery'
 import { PixelPet } from '../components/apps/PixelPet'
 import { PixelNotepad } from '../components/apps/PixelNotepad'
@@ -15,7 +16,7 @@ export type ApplicationCategory = 'career' | 'game' | 'system'
 export const LAUNCHER_GROUPS = ['system', 'games', 'career'] as const
 export type LauncherGroup = (typeof LAUNCHER_GROUPS)[number]
 export type ApplicationCapability = 'desktop-window' | 'direct-route'
-export type ApplicationId = 'my-computer' | 'resume' | 'gallery' | 'pet' | 'notepad' | 'about' | 'minesweeper'
+export type ApplicationId = 'my-computer' | 'resume' | 'gallery' | 'pet' | 'notepad' | 'about' | 'minesweeper' | 'nightshift'
 
 export type ApplicationDefinition = WindowConfig & {
   id: ApplicationId
@@ -149,6 +150,24 @@ export const applicationRegistry = [
     width: 500,
     height: 560,
     renderer: MinesweeperWindow,
+  }),
+  defineApplication({
+    id: 'nightshift',
+    label: 'NIGHTSHIFT.EXE',
+    title: 'NIGHTSHIFT.EXE',
+    category: 'game',
+    launcherGroup: 'games',
+    icon: '/pixelos/games/nightshift/nightshift-player-car-static-00.png',
+    mobileLabel: 'Nightshift',
+    path: '#/apps/nightshift',
+    shortcut: 'Alt+8',
+    capability: 'desktop-window',
+    launchSurfaces: ['desktop', 'start-menu', 'mobile'],
+    x: 370,
+    y: 96,
+    width: 680,
+    height: 580,
+    renderer: NightshiftWindow,
   }),
   defineApplication({
     id: 'resume',

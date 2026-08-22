@@ -1,0 +1,139 @@
+.window {
+  display: grid;
+  gap: 8px;
+  min-height: 100%;
+  padding: 8px;
+  color: var(--pixelos-ink, #f2ecff);
+  background: #120b22;
+  font-family: "Pixelify Sans", "Courier New", monospace;
+}
+
+.header,
+.statusBar,
+.controls,
+.help {
+  border: 2px solid #0d0819;
+  box-shadow: inset 1px 1px #6d5aa8, inset -1px -1px #0d0819;
+  background: #1c1436;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 8px;
+}
+
+.title {
+  margin: 0;
+  font-size: 0.92rem;
+  letter-spacing: 0.05em;
+}
+
+.status {
+  color: #4de3d0;
+  font-size: 0.78rem;
+}
+
+.stage {
+  display: grid;
+  place-items: center;
+  min-width: 0;
+  overflow: auto;
+  border: 3px solid #0d0819;
+  background: #0d0819;
+}
+
+.canvas {
+  display: block;
+  width: min(100%, 640px);
+  height: auto;
+  aspect-ratio: 16 / 9;
+  image-rendering: pixelated;
+  background: #120b22;
+  outline-offset: -4px;
+}
+
+.canvas:focus-visible,
+.controls button:focus-visible {
+  outline: 3px solid #4de3d0;
+  outline-offset: 2px;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 6px;
+}
+
+.controls button {
+  min-height: 32px;
+  border: 2px solid #0d0819;
+  box-shadow: inset 1px 1px #6d5aa8, inset -1px -1px #120b22;
+  background: #3b2d5e;
+  color: #f2ecff;
+  font: inherit;
+  font-size: 0.74rem;
+  cursor: pointer;
+}
+
+.controls button:active {
+  box-shadow: inset 2px 2px #0d0819;
+  transform: translate(1px, 1px);
+}
+
+.controls button[disabled] {
+  cursor: not-allowed;
+  color: #a89ac8;
+}
+
+.statusBar {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 4px;
+  padding: 6px;
+  font-size: 0.72rem;
+}
+
+.statusBar span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.help {
+  margin: 0;
+  padding: 6px 8px;
+  color: #a89ac8;
+  font-size: 0.72rem;
+  line-height: 1.45;
+}
+
+@media (max-width: 560px) {
+  .window {
+    padding: 5px;
+    gap: 5px;
+  }
+
+  .header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .statusBar {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .controls button {
+    flex: 1 1 calc(50% - 4px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .canvas {
+    scroll-behavior: auto;
+  }
+}
