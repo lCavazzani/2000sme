@@ -12,6 +12,8 @@ export const PIXEL_OS_ASSETS = {
   mascot: `${assetRoot}/109f5dfc-b775-4bf5-9a64-962651f649f6.jpg`,
   harbour: `${assetRoot}/57619517-ec8e-4409-b5e4-9b6c19235f98.jpg`,
   cockpit: `${assetRoot}/b8f2dc8c-d0e5-4b1f-87bb-43b221e8b3a5.jpg`,
+  bootBeacon: '/pixelos/intro/pixelos-boot-beacon-static-00.png',
+  ownerEmblem: '/pixelos/intro/pixelos-owner-emblem-static-00.png',
 } as const
 
 export const PIXEL_OS_GALLERY = [

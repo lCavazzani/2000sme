@@ -1,0 +1,257 @@
+.root {
+  min-height: 100dvh;
+  position: relative;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  isolation: isolate;
+  padding: 32px;
+  color: var(--pixelos-ink);
+  background: var(--pixelos-void);
+  font-family: var(--pixelos-font);
+}
+
+.root::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  opacity: 0.045;
+  background-image:
+    linear-gradient(90deg, transparent 50%, var(--pixelos-cyan) 50%),
+    linear-gradient(0deg, transparent 50%, var(--pixelos-magenta) 50%);
+  background-size: 8px 8px, 12px 12px;
+  pointer-events: none;
+}
+
+.stageAnnouncement {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.bootCard {
+  display: grid;
+  justify-items: center;
+  gap: 20px;
+  transform: translateY(-5vh);
+  text-align: center;
+}
+
+.bootTitle,
+.enterTitle {
+  margin: 0;
+  font: inherit;
+}
+
+.wordmark,
+.wordmarkCompact {
+  display: inline-flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.18em;
+  color: var(--pixelos-ink);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  line-height: 0.8;
+  text-transform: uppercase;
+  text-shadow: 3px 0 var(--pixelos-cyan), -3px 2px var(--pixelos-magenta);
+}
+
+.wordmark {
+  font-size: clamp(3rem, 10vw, 5.5rem);
+}
+
+.wordmarkCompact {
+  font-size: clamp(1.65rem, 6vw, 2.5rem);
+}
+
+.bootStatus,
+.ownerName,
+.ownerRole,
+.invitation {
+  margin: 0;
+}
+
+.bootStatus {
+  color: var(--pixelos-muted);
+  font-size: 0.85rem;
+  letter-spacing: 0.14em;
+}
+
+.bootCells {
+  display: flex;
+  gap: 8px;
+}
+
+.bootCell,
+.bootCellActive {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--pixelos-edge);
+  background: var(--pixelos-panel);
+  box-shadow: inset 2px 2px var(--pixelos-panel-dark), inset -2px -2px var(--pixelos-edge);
+}
+
+.bootCellActive {
+  animation: boot-cell-resolve 140ms steps(1, end) both;
+  background: var(--pixelos-cyan);
+  box-shadow: inset 2px 2px var(--pixelos-bevel-highlight), inset -2px -2px var(--pixelos-edge);
+}
+
+.bootCellActive:nth-child(2) { animation-delay: 180ms; }
+.bootCellActive:nth-child(3) { animation-delay: 360ms; }
+.bootCellActive:nth-child(4) { animation-delay: 540ms; }
+.bootCellActive:nth-child(5) { animation-delay: 720ms; }
+.bootCellActive:nth-child(6) { animation-delay: 900ms; }
+.bootCellActive:nth-child(7) { animation-delay: 1080ms; }
+
+.skipButton,
+.enterButton {
+  min-height: 44px;
+  border: 2px solid var(--pixelos-edge);
+  color: var(--pixelos-ink);
+  background: var(--pixelos-panel);
+  box-shadow: inset 2px 2px var(--pixelos-bevel-highlight), inset -2px -2px var(--pixelos-edge);
+  cursor: pointer;
+  font: inherit;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.skipButton {
+  position: absolute;
+  bottom: 28px;
+  left: 28px;
+  padding: 10px 14px;
+}
+
+.skipButton:active,
+.enterButton:active {
+  box-shadow: inset 2px 2px var(--pixelos-edge), inset -2px -2px var(--pixelos-bevel-highlight);
+}
+
+.skipButton:focus-visible,
+.enterButton:focus-visible {
+  outline: 3px solid var(--pixelos-cyan);
+  outline-offset: 3px;
+}
+
+.bootBeacon {
+  width: 96px;
+  height: 96px;
+  position: absolute;
+  right: 28px;
+  bottom: 28px;
+  image-rendering: pixelated;
+  pointer-events: none;
+}
+
+.enterPanel {
+  width: min(100%, 460px);
+  display: grid;
+  justify-items: center;
+  gap: 14px;
+  padding: 30px;
+  text-align: center;
+  background: var(--pixelos-panel);
+  border: 2px solid var(--pixelos-edge);
+  box-shadow: inset 2px 2px var(--pixelos-bevel-highlight), inset -2px -2px var(--pixelos-edge), 6px 6px 0 rgb(0 0 0 / 30%);
+}
+
+.ownerEmblem {
+  width: 128px;
+  height: 128px;
+  margin-top: 8px;
+  image-rendering: pixelated;
+}
+
+.ownerName {
+  color: var(--pixelos-ink);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.ownerRole,
+.invitation {
+  color: var(--pixelos-muted);
+  line-height: 1.5;
+}
+
+.enterButton {
+  width: min(100%, 280px);
+  margin-top: 6px;
+  padding: 11px 18px;
+  background: var(--pixelos-magenta);
+  font-weight: 700;
+}
+
+@keyframes boot-cell-resolve {
+  from {
+    background: var(--pixelos-panel);
+    box-shadow: inset 2px 2px var(--pixelos-panel-dark), inset -2px -2px var(--pixelos-edge);
+  }
+
+  to {
+    background: var(--pixelos-cyan);
+    box-shadow: inset 2px 2px var(--pixelos-bevel-highlight), inset -2px -2px var(--pixelos-edge);
+  }
+}
+
+:global(html[data-theme-effects='reduced']) .bootCellActive,
+:global(html[data-theme-effects='reduced']) .bootCellActive:nth-child(n) {
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bootCellActive,
+  .bootCellActive:nth-child(n) {
+    animation: none;
+  }
+}
+
+@media (max-width: 560px) {
+  .root {
+    padding: 16px;
+  }
+
+  .bootCard {
+    gap: 16px;
+    transform: translateY(-3vh);
+  }
+
+  .bootCells {
+    gap: 6px;
+  }
+
+  .bootCell,
+  .bootCellActive {
+    width: 16px;
+    height: 16px;
+  }
+
+  .skipButton {
+    bottom: max(16px, env(safe-area-inset-bottom));
+    left: max(16px, env(safe-area-inset-left));
+  }
+
+  .bootBeacon {
+    width: 64px;
+    height: 64px;
+    right: max(16px, env(safe-area-inset-right));
+    bottom: max(16px, env(safe-area-inset-bottom));
+  }
+
+  .enterPanel {
+    padding: 24px 18px;
+  }
+
+  .ownerEmblem {
+    width: 96px;
+    height: 96px;
+  }
+}

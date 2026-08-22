@@ -1,6 +1,7 @@
 import { expect, test, type Page } from '@playwright/test'
 
 async function visitPixelOs(page: Page, path = '/') {
+  await page.addInitScript(() => window.sessionStorage.setItem('2000sme:pixelos-intro-seen:v1', 'true'))
   await page.goto(path)
   await expect(page.locator('html')).toHaveAttribute('data-os-theme', 'pixelos')
 }

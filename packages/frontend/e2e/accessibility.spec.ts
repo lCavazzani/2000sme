@@ -5,6 +5,7 @@ const seriousOrCritical = (violations: Awaited<ReturnType<AxeBuilder['analyze']>
   violations.filter((violation) => violation.impact === 'serious' || violation.impact === 'critical')
 
 async function visitPixelOs(page: Page, path = '/') {
+  await page.addInitScript(() => window.sessionStorage.setItem('2000sme:pixelos-intro-seen:v1', 'true'))
   await page.goto(path)
   await expect(page.locator('html')).toHaveAttribute('data-os-theme', 'pixelos')
 }

@@ -1,11 +1,11 @@
 import type { ComponentType } from 'react'
-import { AboutPixelOS } from '../components/AboutPixelOS'
-import { FileExplorer } from '../components/FileExplorer'
-import { MinesweeperPlaceholder } from '../components/MinesweeperPlaceholder'
-import { PixelGallery } from '../components/PixelGallery'
-import { PixelPet } from '../components/PixelPet'
-import { PixelNotepad } from '../components/PixelNotepad'
-import { WordPad } from '../components/WordPad'
+import { AboutPixelOS } from '../components/apps/AboutPixelOS'
+import { FileExplorer } from '../components/apps/FileExplorer'
+import { MinesweeperWindow } from '../games/minesweeper/MinesweeperWindow'
+import { PixelGallery } from '../components/apps/PixelGallery'
+import { PixelPet } from '../components/apps/PixelPet'
+import { PixelNotepad } from '../components/apps/PixelNotepad'
+import { WordPad } from '../components/apps/WordPad'
 import type { WindowConfig } from '../types/window'
 
 export const LAUNCH_SURFACES = ['desktop', 'start-menu', 'mobile'] as const
@@ -143,11 +143,11 @@ export const applicationRegistry = [
     shortcut: 'Alt+7',
     capability: 'desktop-window',
     launchSurfaces: ['desktop', 'start-menu', 'mobile'],
-    x: 350,
-    y: 116,
-    width: 430,
-    height: 280,
-    renderer: MinesweeperPlaceholder,
+    x: 340,
+    y: 76,
+    width: 500,
+    height: 560,
+    renderer: MinesweeperWindow,
   }),
   defineApplication({
     id: 'resume',
