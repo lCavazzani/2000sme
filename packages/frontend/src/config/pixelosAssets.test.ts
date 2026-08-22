@@ -23,6 +23,9 @@ describe('pixelosAssets', () => {
       '/pixelos/portraits/pixelos-leonardo-entry-hero-00.png',
       '/pixelos/portraits/pixelos-leonardo-profile-64-00.png',
       '/pixelos/portraits/pixelos-leonardo-profile-32-00.png',
+      '/pixelos/games/nightshift/nightshift-player-car-static-00.png',
+      '/pixelos/games/nightshift/nightshift-traffic-violet-coupe-static-00.png',
+      '/pixelos/games/nightshift/nightshift-traffic-amber-van-static-00.png',
     ])
   })
 
