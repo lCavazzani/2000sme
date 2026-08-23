@@ -11,22 +11,32 @@ async function openNightshift(page: Page) {
   return page.getByRole('dialog', { name: 'NIGHTSHIFT.EXE window' })
 }
 
-test.describe('GAME-10 NIGHTSHIFT Canvas core', () => {
-  test('launches through PixelOS and exposes semantic start, pause, reset, and game status', async ({ page }) => {
+test.describe('GAME-11 NIGHTSHIFT local MVP wrapper', () => {
+  test('launches through PixelOS with semantic HUD values, touch controls, and local-only guide settings', async ({ page }) => {
     await visitPixelOs(page)
     const gameWindow = await openNightshift(page)
 
     await expect(gameWindow.getByRole('heading', { name: 'NIGHTSHIFT.EXE' })).toBeVisible()
     await expect(gameWindow.getByRole('img', { name: /NIGHTSHIFT highway playfield/ })).toBeVisible()
     await expect(gameWindow.getByRole('button', { name: 'START SHIFT' })).toBeVisible()
-    await expect(gameWindow.getByLabel('NIGHTSHIFT game status')).toContainText('SPEED: CRUISE')
+    await expect(gameWindow.getByRole('button', { name: 'LEFT' })).toBeVisible()
+    await expect(gameWindow.getByRole('button', { name: 'RIGHT' })).toBeVisible()
+    await expect(gameWindow.getByRole('button', { name: 'GO' })).toBeVisible()
+    await expect(gameWindow.getByRole('button', { name: 'BRAKE' })).toBeVisible()
+    await expect(gameWindow.getByLabel('NIGHTSHIFT HUD')).toContainText('DIST')
+    await expect(gameWindow.getByLabel('NIGHTSHIFT HUD')).toContainText('BEST')
+    await expect(gameWindow.getByLabel('NIGHTSHIFT HUD')).toContainText('SPEED')
+    await expect(gameWindow.getByLabel('NIGHTSHIFT HUD')).toContainText('PAUSE')
 
     await gameWindow.getByRole('button', { name: 'START SHIFT' }).click()
     await expect(gameWindow.getByText('RUNNING', { exact: true })).toBeVisible()
-    await gameWindow.getByRole('button', { name: 'PAUSE' }).click()
+    await gameWindow.getByRole('button', { name: 'PAUSE / RESUME' }).click()
     await expect(gameWindow.getByText('PAUSED', { exact: true })).toBeVisible()
-    await gameWindow.getByRole('button', { name: 'RESET' }).click()
-    await expect(gameWindow.getByText('READY', { exact: true })).toBeVisible()
+    await gameWindow.getByRole('button', { name: 'HIDE LOCAL GUIDE' }).click()
+    await expect(gameWindow.getByRole('button', { name: 'SHOW LOCAL GUIDE' })).toBeVisible()
+
+    await page.reload()
+    await expect(gameWindow.getByRole('button', { name: 'SHOW LOCAL GUIDE' })).toBeVisible()
   })
 
   test('supports focused keyboard driving without a global input listener', async ({ page }) => {
@@ -38,9 +48,11 @@ test.describe('GAME-10 NIGHTSHIFT Canvas core', () => {
     await page.keyboard.press('Enter')
     await expect(gameWindow.getByText('RUNNING', { exact: true })).toBeVisible()
     await page.keyboard.press('ArrowUp')
-    await expect(gameWindow.getByLabel('NIGHTSHIFT game status')).toContainText('SPEED: BOOST')
-    await page.keyboard.press('Space')
+    await expect(gameWindow.getByLabel('NIGHTSHIFT HUD')).toContainText('BOOST')
+    await page.keyboard.press('p')
     await expect(gameWindow.getByText('PAUSED', { exact: true })).toBeVisible()
+    await page.keyboard.press('Escape')
+    await expect(gameWindow.getByText('RUNNING', { exact: true })).toBeVisible()
   })
 
   test('resolves directly and contains the logical Canvas in a narrow viewport', async ({ browser }) => {
@@ -52,8 +64,10 @@ test.describe('GAME-10 NIGHTSHIFT Canvas core', () => {
     await expect(directRoute.getByRole('img', { name: /NIGHTSHIFT highway playfield/ })).toBeVisible()
     await directRoute.getByRole('button', { name: 'START SHIFT' }).click()
     await expect(directRoute.getByText('RUNNING', { exact: true })).toBeVisible()
-    await directRoute.getByRole('button', { name: 'PAUSE' }).click()
+    await directRoute.getByRole('button', { name: 'PAUSE / RESUME' }).click()
     await expect(directRoute.getByText('PAUSED', { exact: true })).toBeVisible()
+    await directRoute.getByRole('button', { name: 'GO' }).click()
+    await expect(directRoute.getByLabel('NIGHTSHIFT HUD')).toContainText('SPEED')
     expect(await mobile.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true)
 
     await mobile.close()

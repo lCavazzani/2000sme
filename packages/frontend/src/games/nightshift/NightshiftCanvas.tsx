@@ -14,6 +14,8 @@ type NightshiftCanvasProps = {
   tapInput: (patch: Partial<NightshiftInput>) => void
   clearInput: () => void
   onToggleRun: () => void
+  onPauseResume: () => void
+  onRestart: () => void
 }
 
 const ROAD_LEFT = 64
@@ -82,7 +84,7 @@ function keyPatch(key: string): Partial<NightshiftInput> | undefined {
   return undefined
 }
 
-export function NightshiftCanvas({ game, tapInput, clearInput, onToggleRun }: NightshiftCanvasProps) {
+export function NightshiftCanvas({ game, tapInput, clearInput, onToggleRun, onPauseResume, onRestart }: NightshiftCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const imagesRef = useRef<Record<string, HTMLImageElement>>({})
 
@@ -125,12 +127,26 @@ export function NightshiftCanvas({ game, tapInput, clearInput, onToggleRun }: Ni
   const handleKeyDown = (event: KeyboardEvent<HTMLCanvasElement>) => {
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault()
+      event.stopPropagation()
       onToggleRun()
+      return
+    }
+    if (event.key.toLowerCase() === 'p' || event.key === 'Escape') {
+      event.preventDefault()
+      event.stopPropagation()
+      onPauseResume()
+      return
+    }
+    if (event.key.toLowerCase() === 'r') {
+      event.preventDefault()
+      event.stopPropagation()
+      onRestart()
       return
     }
     const patch = keyPatch(event.key)
     if (!patch) return
     event.preventDefault()
+    event.stopPropagation()
     tapInput(patch)
   }
 
@@ -148,7 +164,7 @@ export function NightshiftCanvas({ game, tapInput, clearInput, onToggleRun }: Ni
       tabIndex={0}
       role="img"
       aria-label="NIGHTSHIFT highway playfield. Use the adjacent controls or arrow keys to steer and change speed."
-      aria-keyshortcuts="ArrowLeft ArrowRight ArrowUp ArrowDown Enter Space"
+      aria-keyshortcuts="ArrowLeft ArrowRight ArrowUp ArrowDown Enter Space P Escape R"
       onKeyDown={handleKeyDown}
       onKeyUp={handleKeyUp}
       onBlur={clearInput}
