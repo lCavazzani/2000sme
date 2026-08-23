@@ -71,6 +71,7 @@ describe('applicationRegistry', () => {
       'pet',
       'notepad',
       'about',
+      'signal',
       'minesweeper',
       'nightshift',
       'resume',
@@ -81,6 +82,7 @@ describe('applicationRegistry', () => {
       'pet',
       'notepad',
       'about',
+      'signal',
       'minesweeper',
       'nightshift',
       'resume',
@@ -91,6 +93,7 @@ describe('applicationRegistry', () => {
       'pet',
       'notepad',
       'about',
+      'signal',
       'minesweeper',
       'nightshift',
       'resume',
@@ -105,9 +108,23 @@ describe('applicationRegistry', () => {
       'pet',
       'notepad',
       'about',
+      'signal',
     ])
     expect(applicationsForLauncherGroup('games').map((application) => application.id)).toEqual(['minesweeper', 'nightshift'])
     expect(applicationsForLauncherGroup('career').map((application) => application.id)).toEqual(['resume'])
+  })
+
+  it('registers SIGNAL.EXE consistently across all launch surfaces and direct routes', () => {
+    const signal = findApplication('signal')
+    expect(signal).toMatchObject({
+      label: 'SIGNAL.EXE',
+      title: 'SIGNAL.EXE — MITTENS',
+      launcherGroup: 'system',
+      path: '#/apps/signal',
+      capability: 'desktop-window',
+    })
+    expect(signal?.launchSurfaces).toEqual(['desktop', 'start-menu', 'mobile'])
+    expect(applicationIdFromHash('#/apps/signal')).toBe('signal')
   })
 
   it('registers Minesweeper consistently across all launch surfaces and direct routes', () => {

@@ -6,6 +6,7 @@ import { MinesweeperWindow } from '../games/minesweeper/MinesweeperWindow'
 import { NightshiftWindow } from '../games/nightshift/NightshiftWindow'
 import { PixelGallery } from '../components/apps/PixelGallery'
 import { PixelPet } from '../components/apps/PixelPet'
+import { SignalGuide } from '../components/apps/SignalGuide'
 import { PixelNotepad } from '../components/apps/PixelNotepad'
 import { WordPad } from '../components/apps/WordPad'
 import type { WindowConfig } from '../types/window'
@@ -16,7 +17,7 @@ export type ApplicationCategory = 'career' | 'game' | 'system'
 export const LAUNCHER_GROUPS = ['system', 'games', 'career'] as const
 export type LauncherGroup = (typeof LAUNCHER_GROUPS)[number]
 export type ApplicationCapability = 'desktop-window' | 'direct-route'
-export type ApplicationId = 'my-computer' | 'resume' | 'gallery' | 'pet' | 'notepad' | 'about' | 'minesweeper' | 'nightshift'
+export type ApplicationId = 'my-computer' | 'resume' | 'gallery' | 'pet' | 'notepad' | 'about' | 'signal' | 'minesweeper' | 'nightshift'
 
 export type ApplicationDefinition = WindowConfig & {
   id: ApplicationId
@@ -132,6 +133,24 @@ export const applicationRegistry = [
     width: 380,
     height: 270,
     renderer: AboutPixelOS,
+  }),
+  defineApplication({
+    id: 'signal',
+    label: 'SIGNAL.EXE',
+    title: 'SIGNAL.EXE — MITTENS',
+    category: 'system',
+    launcherGroup: 'system',
+    icon: PIXEL_OS_ASSETS.mittens,
+    mobileLabel: 'Signal Guide',
+    path: '#/apps/signal',
+    shortcut: 'Alt+9',
+    capability: 'desktop-window',
+    launchSurfaces: ['desktop', 'start-menu', 'mobile'],
+    x: 260,
+    y: 104,
+    width: 620,
+    height: 590,
+    renderer: SignalGuide,
   }),
   defineApplication({
     id: 'minesweeper',

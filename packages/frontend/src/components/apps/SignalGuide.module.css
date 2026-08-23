@@ -1,0 +1,268 @@
+.root {
+  display: grid;
+  gap: 8px;
+  min-height: 100%;
+  padding: 8px;
+  color: var(--pixelos-ink, #f2ecff);
+  background: #120b22;
+  font-family: "Pixelify Sans", "Courier New", monospace;
+}
+
+.header,
+.localContract,
+.transcript,
+.actionStrip,
+.composer,
+.mittens,
+.visitor,
+.system {
+  border: 2px solid #0d0819;
+  box-shadow: inset 1px 1px #6d5aa8, inset -1px -1px #0d0819;
+  background: #1c1436;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px;
+}
+
+.header[data-attention='true'] {
+  animation: headerNudge 200ms steps(2, end) 1;
+}
+
+.avatar {
+  width: 64px;
+  height: 64px;
+  flex: 0 0 64px;
+  image-rendering: pixelated;
+  object-fit: contain;
+}
+
+.header h2,
+.header p,
+.localContract,
+.mittens p,
+.visitor p,
+.system p {
+  margin: 0;
+}
+
+.header h2 {
+  color: #4de3d0;
+  font-size: 1.42rem;
+  letter-spacing: 0.06em;
+}
+
+.header p {
+  color: #c5b7ef;
+  font-size: 0.74rem;
+}
+
+.ready {
+  color: #4de3d0 !important;
+  margin-top: 4px !important;
+}
+
+.ready span {
+  color: #4de3d0;
+}
+
+.localContract {
+  padding: 6px 8px;
+  color: #a89ac8;
+  font-size: 0.7rem;
+  line-height: 1.45;
+}
+
+.liveStatus {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.transcript {
+  display: grid;
+  gap: 8px;
+  min-height: 190px;
+  max-height: 320px;
+  margin: 0;
+  padding: 8px;
+  overflow: auto;
+  list-style: none;
+  background: #100b20;
+}
+
+.mittens,
+.visitor,
+.system {
+  display: grid;
+  gap: 4px;
+  max-width: min(88%, 520px);
+  padding: 7px;
+  font-size: 0.77rem;
+  line-height: 1.45;
+}
+
+.mittens {
+  justify-self: start;
+  border-color: #6d5aa8;
+}
+
+.visitor {
+  justify-self: end;
+  border-color: #4de3d0;
+  background: #172c3c;
+}
+
+.system {
+  justify-self: center;
+  max-width: 100%;
+  border-style: dashed;
+  color: #f6b1dc;
+  text-align: center;
+}
+
+.messageLabel {
+  color: #a89ac8;
+  font-size: 0.65rem;
+}
+
+.mittens button,
+.actionStrip button,
+.composer button {
+  min-height: 34px;
+  border: 2px solid #0d0819;
+  box-shadow: inset 1px 1px #6d5aa8, inset -1px -1px #120b22;
+  background: #3b2d5e;
+  color: #f2ecff;
+  font: inherit;
+  font-size: 0.72rem;
+  cursor: pointer;
+}
+
+.mittens button {
+  width: fit-content;
+  padding: 4px 8px;
+}
+
+.actionStrip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 6px;
+}
+
+.actionStrip button {
+  flex: 1 1 100px;
+}
+
+.actionStrip button:nth-last-child(2) {
+  background: #5b2354;
+}
+
+.actionStrip button:active,
+.mittens button:active,
+.composer button:active {
+  box-shadow: inset 2px 2px #0d0819;
+  transform: translate(1px, 1px);
+}
+
+.actionStrip button[disabled],
+.composer button[disabled] {
+  cursor: not-allowed;
+  color: #a89ac8;
+}
+
+.actionStrip button:focus-visible,
+.composer input:focus-visible,
+.composer button:focus-visible,
+.mittens button:focus-visible {
+  outline: 3px solid #4de3d0;
+  outline-offset: 2px;
+}
+
+.composer {
+  display: grid;
+  gap: 5px;
+  padding: 6px;
+}
+
+.composer label {
+  color: #a89ac8;
+  font-size: 0.68rem;
+}
+
+.composer > div {
+  display: flex;
+  gap: 6px;
+}
+
+.composer input {
+  min-width: 0;
+  flex: 1;
+  border: 2px solid #0d0819;
+  background: #100b20;
+  color: #f2ecff;
+  font: inherit;
+  font-size: 0.78rem;
+  padding: 7px;
+}
+
+.composer button {
+  padding: 0 10px;
+}
+
+@keyframes headerNudge {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(3px); }
+}
+
+@media (max-width: 560px) {
+  .root {
+    padding: 5px;
+    gap: 5px;
+  }
+
+  .header {
+    align-items: flex-start;
+  }
+
+  .header h2 {
+    font-size: 1.12rem;
+  }
+
+  .transcript {
+    min-height: 160px;
+    max-height: 280px;
+  }
+
+  .mittens,
+  .visitor {
+    max-width: 96%;
+  }
+
+  .composer > div {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .composer button {
+    min-height: 36px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .header[data-attention='true'] {
+    animation: none;
+  }
+}
+
+html[data-theme-effects='reduced'] .header[data-attention='true'] {
+  animation: none;
+}
