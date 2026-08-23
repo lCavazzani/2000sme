@@ -72,6 +72,7 @@ describe('applicationRegistry', () => {
       'notepad',
       'about',
       'minesweeper',
+      'nightshift',
       'resume',
     ])
     expect(applicationsForSurface('start-menu').map((application) => application.id)).toEqual([
@@ -81,6 +82,7 @@ describe('applicationRegistry', () => {
       'notepad',
       'about',
       'minesweeper',
+      'nightshift',
       'resume',
     ])
     expect(applicationsForSurface('mobile').map((application) => application.id)).toEqual([
@@ -90,6 +92,7 @@ describe('applicationRegistry', () => {
       'notepad',
       'about',
       'minesweeper',
+      'nightshift',
       'resume',
     ])
   })
@@ -103,7 +106,7 @@ describe('applicationRegistry', () => {
       'notepad',
       'about',
     ])
-    expect(applicationsForLauncherGroup('games').map((application) => application.id)).toEqual(['minesweeper'])
+    expect(applicationsForLauncherGroup('games').map((application) => application.id)).toEqual(['minesweeper', 'nightshift'])
     expect(applicationsForLauncherGroup('career').map((application) => application.id)).toEqual(['resume'])
   })
 
@@ -118,6 +121,19 @@ describe('applicationRegistry', () => {
     })
     expect(minesweeper?.launchSurfaces).toEqual(['desktop', 'start-menu', 'mobile'])
     expect(applicationIdFromHash('#/apps/minesweeper')).toBe('minesweeper')
+  })
+
+  it('registers NIGHTSHIFT consistently across all launch surfaces and direct routes', () => {
+    const nightshift = findApplication('nightshift')
+    expect(nightshift).toMatchObject({
+      label: 'NIGHTSHIFT.EXE',
+      title: 'NIGHTSHIFT.EXE',
+      launcherGroup: 'games',
+      path: '#/apps/nightshift',
+      capability: 'desktop-window',
+    })
+    expect(nightshift?.launchSurfaces).toEqual(['desktop', 'start-menu', 'mobile'])
+    expect(applicationIdFromHash('#/apps/nightshift')).toBe('nightshift')
   })
 
   it('returns no application for retired or unsupported IDs and direct routes', () => {

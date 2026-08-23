@@ -19,6 +19,9 @@ export const PIXEL_OS_ASSETS = {
   leonardoEntryHero: '/pixelos/portraits/pixelos-leonardo-entry-hero-00.png',
   leonardoProfile64: '/pixelos/portraits/pixelos-leonardo-profile-64-00.png',
   leonardoProfile32: '/pixelos/portraits/pixelos-leonardo-profile-32-00.png',
+  nightshiftPlayerCar: '/pixelos/games/nightshift/nightshift-player-car-static-00.png',
+  nightshiftTrafficCoupe: '/pixelos/games/nightshift/nightshift-traffic-violet-coupe-static-00.png',
+  nightshiftTrafficVan: '/pixelos/games/nightshift/nightshift-traffic-amber-van-static-00.png',
 } as const
 
 export const PIXEL_OS_GALLERY = [

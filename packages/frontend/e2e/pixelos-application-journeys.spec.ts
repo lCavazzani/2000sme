@@ -8,6 +8,7 @@ const applications = [
   { id: 'notepad', label: 'README.TXT', title: 'README.TXT', path: '#/apps/notepad', mobileLabel: 'README.TXT' },
   { id: 'about', label: 'ABOUT PIXELOS', title: 'ABOUT PIXELOS', path: '#/apps/about', mobileLabel: 'About PixelOS' },
   { id: 'minesweeper', label: 'MINESWEEPER.EXE', title: 'MINESWEEPER.EXE', path: '#/apps/minesweeper', mobileLabel: 'Minesweeper' },
+  { id: 'nightshift', label: 'NIGHTSHIFT.EXE', title: 'NIGHTSHIFT.EXE', path: '#/apps/nightshift', mobileLabel: 'Nightshift' },
   { id: 'resume', label: 'RESUME.PDF', title: 'RESUME.PDF - WORDPAD', path: '#/apps/resume', mobileLabel: 'Resume PDF' },
 ] as const
 
