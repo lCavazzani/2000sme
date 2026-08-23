@@ -9,8 +9,11 @@
 }
 
 .header,
-.statusBar,
+.stateMessage,
+.hud,
 .controls,
+.guideRow,
+.impact,
 .help {
   border: 2px solid #0d0819;
   box-shadow: inset 1px 1px #6d5aa8, inset -1px -1px #0d0819;
@@ -36,6 +39,28 @@
   font-size: 0.78rem;
 }
 
+.stateMessage,
+.impact,
+.help {
+  margin: 0;
+  padding: 6px 8px;
+  font-size: 0.72rem;
+  line-height: 1.45;
+}
+
+.stateMessage {
+  color: #f2ecff;
+}
+
+.impact {
+  color: #f6b1dc;
+}
+
+.impact[data-game-over='true'] {
+  border-color: #df4fbc;
+  color: #ffd0ec;
+}
+
 .stage {
   display: grid;
   place-items: center;
@@ -56,30 +81,33 @@
 }
 
 .canvas:focus-visible,
-.controls button:focus-visible {
+.controls button:focus-visible,
+.guideRow button:focus-visible {
   outline: 3px solid #4de3d0;
   outline-offset: 2px;
 }
 
 .controls {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 6px;
   padding: 6px;
 }
 
-.controls button {
-  min-height: 32px;
+.controls button,
+.guideRow button {
+  min-height: 36px;
   border: 2px solid #0d0819;
   box-shadow: inset 1px 1px #6d5aa8, inset -1px -1px #120b22;
   background: #3b2d5e;
   color: #f2ecff;
   font: inherit;
-  font-size: 0.74rem;
+  font-size: 0.72rem;
   cursor: pointer;
 }
 
-.controls button:active {
+.controls button:active,
+.guideRow button:active {
   box-shadow: inset 2px 2px #0d0819;
   transform: translate(1px, 1px);
 }
@@ -89,27 +117,47 @@
   color: #a89ac8;
 }
 
-.statusBar {
+.hud {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 4px;
+  margin: 0;
   padding: 6px;
-  font-size: 0.72rem;
+  font-size: 0.7rem;
 }
 
-.statusBar span {
+.hud div {
   min-width: 0;
+}
+
+.hud dt {
+  color: #a89ac8;
+}
+
+.hud dd {
+  margin: 2px 0 0;
   overflow: hidden;
+  color: #f2ecff;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.help {
-  margin: 0;
-  padding: 6px 8px;
+.guideRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px;
   color: #a89ac8;
-  font-size: 0.72rem;
-  line-height: 1.45;
+  font-size: 0.68rem;
+}
+
+.guideRow span {
+  text-align: right;
+}
+
+.help {
+  color: #a89ac8;
 }
 
 @media (max-width: 560px) {
@@ -123,12 +171,21 @@
     flex-direction: column;
   }
 
-  .statusBar {
-    grid-template-columns: 1fr 1fr;
+  .controls {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .controls button {
-    flex: 1 1 calc(50% - 4px);
+  .hud {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .guideRow {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .guideRow span {
+    text-align: left;
   }
 }
 
@@ -136,4 +193,8 @@
   .canvas {
     scroll-behavior: auto;
   }
+}
+
+html[data-theme-effects='reduced'] .impact {
+  box-shadow: none;
 }

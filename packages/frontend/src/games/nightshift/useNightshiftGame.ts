@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useWindows } from '../../store/windows'
+import { readNightshiftLocalState, writeNightshiftLocalState } from './localState'
 import {
   DEFAULT_NIGHTSHIFT_INPUT,
   createNightshiftState,
@@ -29,6 +30,7 @@ function isWindowActive(windows: ReturnType<typeof useWindows>['windows']) {
 export function useNightshiftGame() {
   const { windows } = useWindows()
   const [game, setGameState] = useState<NightshiftState>(() => createNightshiftState())
+  const [localState, setLocalState] = useState(readNightshiftLocalState)
   const gameRef = useRef(game)
   const inputRef = useRef<NightshiftInput>(DEFAULT_NIGHTSHIFT_INPUT)
   const frameRef = useRef<number | undefined>(undefined)
@@ -77,6 +79,22 @@ export function useNightshiftGame() {
   }, [clearInput, setGame])
 
   useEffect(() => {
+    const bestDistance = Math.max(localState.bestDistance, Math.floor(game.distance))
+    if (bestDistance === localState.bestDistance) return
+    const nextLocalState = { ...localState, bestDistance }
+    setLocalState(nextLocalState)
+    writeNightshiftLocalState(nextLocalState)
+  }, [game.distance, localState])
+
+  const toggleGuide = useCallback(() => {
+    setLocalState((current) => {
+      const nextLocalState = { ...current, showGuide: !current.showGuide }
+      writeNightshiftLocalState(nextLocalState)
+      return nextLocalState
+    })
+  }, [])
+
+  useEffect(() => {
     if (active || gameRef.current.status !== 'playing') return
     pause()
   }, [active, pause])
@@ -106,6 +124,9 @@ export function useNightshiftGame() {
   return {
     active,
     game,
+    bestDistance: localState.bestDistance,
+    showGuide: localState.showGuide,
+    toggleGuide,
     start,
     pause,
     resume,
