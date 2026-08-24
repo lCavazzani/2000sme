@@ -1,0 +1,11 @@
+{
+  "frameWidth": 16,
+  "frameHeight": 16,
+  "frameCount": 1,
+  "fps": 6.667,
+  "loop": false,
+  "frames": [
+    "pixelos-grey-tabby-paw-00.png"
+  ],
+  "alt": "Decorative grey tabby cat paw mark."
+}
