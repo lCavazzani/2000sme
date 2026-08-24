@@ -121,3 +121,20 @@ The owner supplied `quiet-technical-desk.zip` (archive SHA-256 `f19626c447f7b34c
 | `details/pixelos-grey-tabby-peek.json` | `686b8117f12eb55e46dd37961215efcae4a7fb0ce94a27c0f11951f815f2e272` | metadata | Native frame dimensions and static-loop metadata. |
 
 All imported PXOS-16 rasters remain decorative where marked, use empty alt text with `aria-hidden="true"`, preserve native/integer dimensions, and render with pixelated/crisp edges. The nap detail is hidden below 900px and does not add a CSS motion source.
+
+## PXOS-14 Grey-Tabby Desktop Pet Assets
+
+The owner supplied `grey-tabby-desktop-pet.zip` (archive SHA-256 `a73dc75a3a42d8953e8785fc67e7617c79e2888e491578ffe91330aa900c342f`) for the approved Desktop Pet refactor. PXOS-14 imports the selected grey-tabby local-companion family into `pets/grey-tabby/`, byte-for-byte. It also completes the reserved 16px paw detail from the PXOS-16 Quiet Technical Desk handoff; no preview image or package URL is used at runtime.
+
+| Imported file | SHA-256 | Native dimensions | Approved role |
+|---|---|---:|---|
+| `pets/grey-tabby/grey-tabby-idle-00.png` | `9a6843a330f69b5a9ace4f2ad1cdca9fe0825f92ea580a08fb5cd30f06a1bbc5` | 128 × 128 px | Static meaningful idle fallback for reduced effects, reduced motion, and GIF error. |
+| `pets/grey-tabby/grey-tabby-idle-128.gif` | `3cb3d0a06f90c73ffe0938a57ef0c7d096dc0310289cc65f5522f40ad217d2b0` | 128 × 128 px | Optional full-effects-only idle animation; no CSS bob is added. |
+| `pets/grey-tabby/pixelos-grey-tabby-pet-00.png` | `6e3aaad4f0b3a21107a2378c489eb47018d188d088981ea2e0534f741cf1782d` | 128 × 128 px | Meaningful local Pet acknowledgement frame. |
+| `pets/grey-tabby/pixelos-grey-tabby-treat-00.png` | `33d3e021ecf74d5d35329d4ca40c637d5766f1d3659d0c891abbe0abefa0f35d` | 128 × 128 px | Meaningful local Treat acknowledgement frame. |
+| `pets/grey-tabby/grey-tabby-static-32.png` | `48df9824e18d5236380ff6807f1d19ee0341c74a24baa893758db9cf6ccfe0e9` | 32 × 32 px | Decorative compact local-Pick signature. |
+| `details/pixelos-grey-tabby-paw-00.png` | `9271c5fe6c25fe6923f12c87244f93cdf46e88434f18d3009e610e1742a2705d` | 16 × 16 px | Decorative paw adjacent only to Desktop Pet local-Pick microcopy. |
+| `details/pixelos-grey-tabby-paw-sheet-16.png` | `9271c5fe6c25fe6923f12c87244f93cdf46e88434f18d3009e610e1742a2705d` | 16 × 16 px | Canonical static paw source sheet. |
+| `details/pixelos-grey-tabby-paw.json` | `d0b0a4c043977dcc490debe098fd47016ebf1584ca4da84c6f7dfda62a208532` | metadata | Canonical static paw metadata. |
+
+PXOS-14 renders all meaningful cat scenes at their native 128px size and the compact/paw details at 32px and 16px respectively. The compact signature and paw are empty-alt, `aria-hidden`, pointer-transparent decorative detail; Pet, Treat, Pick, Reset, semantic status, and navigation retain local-only behavior.
