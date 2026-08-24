@@ -22,6 +22,13 @@ export const PIXEL_OS_ASSETS = {
   nightshiftPlayerCar: '/pixelos/games/nightshift/nightshift-player-car-static-00.png',
   nightshiftTrafficCoupe: '/pixelos/games/nightshift/nightshift-traffic-violet-coupe-static-00.png',
   nightshiftTrafficVan: '/pixelos/games/nightshift/nightshift-traffic-amber-van-static-00.png',
+  nightshiftPlayerCarVertical: '/pixelos/games/nightshift/nightshift-player-car-vertical-static-00.png',
+  nightshiftPlayerCarVerticalDamage: '/pixelos/games/nightshift/nightshift-player-car-vertical-damage-static-00.png',
+  nightshiftTrafficCoupeVertical: '/pixelos/games/nightshift/nightshift-traffic-violet-coupe-vertical-static-00.png',
+  nightshiftTrafficVanVertical: '/pixelos/games/nightshift/nightshift-traffic-amber-van-vertical-static-00.png',
+  nightshiftTwilightCity: '/pixelos/games/nightshift/nightshift-twilight-city-parallax-strip-static-00.png',
+  nightshiftTwilightRoadside: '/pixelos/games/nightshift/nightshift-twilight-roadside-strip-static-00.png',
+  nightshiftTwilightReflector: '/pixelos/games/nightshift/nightshift-twilight-road-reflector-tile-static-00.png',
 } as const
 
 export const PIXEL_OS_GALLERY = [

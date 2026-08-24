@@ -26,6 +26,13 @@ describe('pixelosAssets', () => {
       '/pixelos/games/nightshift/nightshift-player-car-static-00.png',
       '/pixelos/games/nightshift/nightshift-traffic-violet-coupe-static-00.png',
       '/pixelos/games/nightshift/nightshift-traffic-amber-van-static-00.png',
+      '/pixelos/games/nightshift/nightshift-player-car-vertical-static-00.png',
+      '/pixelos/games/nightshift/nightshift-player-car-vertical-damage-static-00.png',
+      '/pixelos/games/nightshift/nightshift-traffic-violet-coupe-vertical-static-00.png',
+      '/pixelos/games/nightshift/nightshift-traffic-amber-van-vertical-static-00.png',
+      '/pixelos/games/nightshift/nightshift-twilight-city-parallax-strip-static-00.png',
+      '/pixelos/games/nightshift/nightshift-twilight-roadside-strip-static-00.png',
+      '/pixelos/games/nightshift/nightshift-twilight-road-reflector-tile-static-00.png',
     ])
   })
 

@@ -38,13 +38,12 @@ export function NightshiftWindow() {
     if (game.status === 'game-over') restart()
   }, [game.status, restart])
 
-  const runLabel = game.status === 'ready'
+  const primaryLabel = game.status === 'ready'
     ? 'START SHIFT'
-    : game.status === 'playing'
-      ? 'PAUSE'
-      : game.status === 'paused'
-        ? 'RESUME'
-        : 'SHIFT ENDED'
+    : game.status === 'paused'
+      ? 'RESUME'
+      : 'SHIFT RUNNING'
+  const canPause = game.status === 'playing' || game.status === 'paused'
 
   const stateMessage = game.status === 'ready'
     ? 'READY: START A LOCAL SHIFT.'
@@ -52,7 +51,7 @@ export function NightshiftWindow() {
       ? 'RUNNING: ROAD AHEAD.'
       : game.status === 'paused'
         ? 'PAUSED: PRESS RESUME WHEN READY.'
-        : `SIGNAL LOST: ${distanceLabel(game.distance)}. RESTART IS AVAILABLE.`
+        : `SIGNAL LOST: ${distanceLabel(game.distance)}. RESET IS AVAILABLE.`
 
   return (
     <section className={styles.window} aria-labelledby="nightshift-heading">
@@ -62,6 +61,13 @@ export function NightshiftWindow() {
       </header>
 
       <p className={styles.stateMessage} role="status">{stateMessage}</p>
+
+      <dl className={styles.hud} aria-label="NIGHTSHIFT dashboard">
+        <div><dt>DIST</dt><dd>{distanceLabel(game.distance)}</dd></div>
+        <div><dt>BEST</dt><dd>{distanceLabel(bestDistance)}</dd></div>
+        <div><dt>SPEED</dt><dd>{speedLabel(game.speedBand)}</dd></div>
+        <div><dt>HULL</dt><dd>{Math.max(0, 2 - game.hits)}/2</dd></div>
+      </dl>
 
       <div className={styles.stage}>
         <NightshiftCanvas
@@ -74,27 +80,47 @@ export function NightshiftWindow() {
         />
       </div>
 
-      <div className={styles.controls} aria-label="NIGHTSHIFT local controls">
-        <button type="button" onClick={toggleRun} disabled={!active || game.status === 'game-over'}>{runLabel}</button>
-        <button type="button" onClick={restartAfterGameOver} disabled={game.status !== 'game-over'}>RESTART</button>
-        <button type="button" onClick={() => tapInput({ steer: -1 })}>LEFT</button>
-        <button type="button" onClick={() => tapInput({ steer: 1 })}>RIGHT</button>
-        <button type="button" onClick={() => tapInput({ accelerate: true })}>GO</button>
-        <button type="button" onClick={() => tapInput({ brake: true })}>BRAKE</button>
-        <button type="button" onClick={pauseOrResume} disabled={game.status !== 'playing' && game.status !== 'paused'}>PAUSE / RESUME</button>
+      <div className={styles.actionRail} aria-label="NIGHTSHIFT shift actions">
+        <button
+          type="button"
+          className={styles.primaryAction}
+          onClick={toggleRun}
+          disabled={!active || game.status === 'game-over' || game.status === 'playing'}
+        >
+          {primaryLabel}
+        </button>
+        <button type="button" className={styles.pauseAction} onClick={pauseOrResume} disabled={!canPause}>
+          {game.status === 'paused' ? 'RESUME' : 'PAUSE'}
+        </button>
+        <button type="button" className={styles.resetAction} onClick={restartAfterGameOver} disabled={game.status !== 'game-over'}>
+          RESET
+        </button>
       </div>
 
-      <dl className={styles.hud} aria-label="NIGHTSHIFT HUD">
-        <div><dt>DIST</dt><dd>{distanceLabel(game.distance)}</dd></div>
-        <div><dt>BEST</dt><dd>{distanceLabel(bestDistance)}</dd></div>
-        <div><dt>SPEED</dt><dd>{speedLabel(game.speedBand)}</dd></div>
-        <div><dt>PAUSE</dt><dd>{game.status === 'paused' ? 'ON' : 'OFF'}</dd></div>
-        <div><dt>HULL</dt><dd>{Math.max(0, 2 - game.hits)}/2</dd></div>
-      </dl>
+      <p className={styles.keyboardLegend}>
+        <strong>KEYBOARD:</strong> A / ← and D / → steer. W / ↑ goes faster. S / ↓ brakes. P or Esc pauses. R resets after game over.
+      </p>
+
+      <div className={styles.touchDeck} aria-label="NIGHTSHIFT touch controls">
+        <section className={styles.touchCard} aria-label="Steer controls">
+          <span>STEER</span>
+          <div>
+            <button type="button" onClick={() => tapInput({ steer: -1 })} aria-label="Steer left">←</button>
+            <button type="button" onClick={() => tapInput({ steer: 1 })} aria-label="Steer right">→</button>
+          </div>
+        </section>
+        <section className={styles.touchCard} aria-label="Pace controls">
+          <span>PACE</span>
+          <div>
+            <button type="button" onClick={() => tapInput({ accelerate: true })}>GO</button>
+            <button type="button" onClick={() => tapInput({ brake: true })}>BRAKE</button>
+          </div>
+        </section>
+      </div>
 
       {game.hits > 0 && (
         <p className={styles.impact} data-game-over={game.status === 'game-over'}>
-          {game.status === 'game-over' ? 'STATIC IMPACT: SIGNAL LOST.' : 'IMPACT REGISTERED: SHIFT PAUSED.'}
+          {game.status === 'game-over' ? 'HULL LOST: SIGNAL ENDED.' : 'HULL IMPACT: SHIFT PAUSED.'}
         </p>
       )}
 
@@ -107,7 +133,7 @@ export function NightshiftWindow() {
 
       {showGuide && (
         <p className={styles.help}>
-          Canvas focus: Arrow keys or A/D steer; W/Up accelerates; S/Down brakes; P or Escape pauses; R restarts only after SIGNAL LOST. All controls are local and no score is sent anywhere.
+          Canvas focus: Arrow keys or A/D steer; W/Up accelerates; S/Down brakes; P or Escape pauses; R resets only after HULL LOST. All controls are local and no score is sent anywhere.
         </p>
       )}
     </section>

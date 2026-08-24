@@ -11,7 +11,7 @@ async function openNightshift(page: Page) {
   return page.getByRole('dialog', { name: 'NIGHTSHIFT.EXE window' })
 }
 
-test.describe('GAME-11 NIGHTSHIFT local MVP wrapper', () => {
+test.describe('GAME-14 NIGHTSHIFT visual hierarchy and control deck', () => {
   test('launches through PixelOS with semantic HUD values, touch controls, and local-only guide settings', async ({ page }) => {
     await visitPixelOs(page)
     const gameWindow = await openNightshift(page)
@@ -19,18 +19,15 @@ test.describe('GAME-11 NIGHTSHIFT local MVP wrapper', () => {
     await expect(gameWindow.getByRole('heading', { name: 'NIGHTSHIFT.EXE' })).toBeVisible()
     await expect(gameWindow.getByRole('img', { name: /NIGHTSHIFT highway playfield/ })).toBeVisible()
     await expect(gameWindow.getByRole('button', { name: 'START SHIFT' })).toBeVisible()
-    await expect(gameWindow.getByRole('button', { name: 'LEFT' })).toBeVisible()
-    await expect(gameWindow.getByRole('button', { name: 'RIGHT' })).toBeVisible()
-    await expect(gameWindow.getByRole('button', { name: 'GO' })).toBeVisible()
-    await expect(gameWindow.getByRole('button', { name: 'BRAKE' })).toBeVisible()
-    await expect(gameWindow.getByLabel('NIGHTSHIFT HUD')).toContainText('DIST')
-    await expect(gameWindow.getByLabel('NIGHTSHIFT HUD')).toContainText('BEST')
-    await expect(gameWindow.getByLabel('NIGHTSHIFT HUD')).toContainText('SPEED')
-    await expect(gameWindow.getByLabel('NIGHTSHIFT HUD')).toContainText('PAUSE')
+    await expect(gameWindow.getByText('KEYBOARD:', { exact: false })).toBeVisible()
+    await expect(gameWindow.getByLabel('NIGHTSHIFT dashboard')).toContainText('DIST')
+    await expect(gameWindow.getByLabel('NIGHTSHIFT dashboard')).toContainText('BEST')
+    await expect(gameWindow.getByLabel('NIGHTSHIFT dashboard')).toContainText('SPEED')
+    await expect(gameWindow.getByLabel('NIGHTSHIFT dashboard')).toContainText('HULL')
 
     await gameWindow.getByRole('button', { name: 'START SHIFT' }).click()
     await expect(gameWindow.getByText('RUNNING', { exact: true })).toBeVisible()
-    await gameWindow.getByRole('button', { name: 'PAUSE / RESUME' }).click()
+    await gameWindow.getByRole('button', { name: 'PAUSE' }).click()
     await expect(gameWindow.getByText('PAUSED', { exact: true })).toBeVisible()
     await gameWindow.getByRole('button', { name: 'HIDE LOCAL GUIDE' }).click()
     await expect(gameWindow.getByRole('button', { name: 'SHOW LOCAL GUIDE' })).toBeVisible()
@@ -48,7 +45,7 @@ test.describe('GAME-11 NIGHTSHIFT local MVP wrapper', () => {
     await page.keyboard.press('Enter')
     await expect(gameWindow.getByText('RUNNING', { exact: true })).toBeVisible()
     await page.keyboard.press('ArrowUp')
-    await expect(gameWindow.getByLabel('NIGHTSHIFT HUD')).toContainText('BOOST')
+    await expect(gameWindow.getByLabel('NIGHTSHIFT dashboard')).toContainText('BOOST')
     await page.keyboard.press('p')
     await expect(gameWindow.getByText('PAUSED', { exact: true })).toBeVisible()
     await page.keyboard.press('Escape')
@@ -64,10 +61,10 @@ test.describe('GAME-11 NIGHTSHIFT local MVP wrapper', () => {
     await expect(directRoute.getByRole('img', { name: /NIGHTSHIFT highway playfield/ })).toBeVisible()
     await directRoute.getByRole('button', { name: 'START SHIFT' }).click()
     await expect(directRoute.getByText('RUNNING', { exact: true })).toBeVisible()
-    await directRoute.getByRole('button', { name: 'PAUSE / RESUME' }).click()
+    await directRoute.getByRole('button', { name: 'PAUSE' }).click()
     await expect(directRoute.getByText('PAUSED', { exact: true })).toBeVisible()
     await directRoute.getByRole('button', { name: 'GO' }).click()
-    await expect(directRoute.getByLabel('NIGHTSHIFT HUD')).toContainText('SPEED')
+    await expect(directRoute.getByLabel('NIGHTSHIFT dashboard')).toContainText('SPEED')
     expect(await mobile.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true)
 
     await mobile.close()
