@@ -76,9 +76,11 @@ test.describe('TEST-15 NIGHTSHIFT quality gate', () => {
     const route = page.getByRole('main', { name: 'NIGHTSHIFT.EXE direct route' })
     await route.getByRole('button', { name: 'START SHIFT' }).click()
     await expect(route.getByText('RUNNING', { exact: true })).toBeVisible()
-    await route.getByRole('button', { name: 'GO' }).click()
-    await route.getByRole('button', { name: 'LEFT' }).click()
-    await route.getByRole('button', { name: 'PAUSE / RESUME' }).click()
+    const canvas = route.getByRole('img', { name: /NIGHTSHIFT highway playfield/ })
+    await canvas.focus()
+    await page.keyboard.press('ArrowUp')
+    await page.keyboard.press('ArrowLeft')
+    await route.getByRole('button', { name: 'PAUSE' }).click()
     await expect(route.getByText('PAUSED', { exact: true })).toBeVisible()
 
     const frameStats = await page.evaluate(async () => {

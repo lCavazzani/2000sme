@@ -87,3 +87,19 @@ Three transparent static pixel-art owner portraits were supplied by the project 
 | `portraits/pixelos-leonardo-profile-32-00.png` | `621e1d1e54e56dae0660a777b31d13cb27c0aeaf1b020346e9de5a4e1daf2e19` | 32 × 32 px | Registered compact portrait variant; not used as a desktop application icon or presence indicator. |
 
 All portraits must retain integer pixel scaling and pixelated/crisp-edge rendering. They are static identity imagery only: no live presence, typing state, automated chat claim, authentication, or audio behavior may be attached.
+
+## GAME-14 NIGHTSHIFT Visual Reset Assets
+
+Seven approved original pixel-art source frames were supplied by the project owner in `nightshift-visual-reset.zip` (archive SHA-256 `071611bd48dfa4d08a8419d2a8decee2bcbf55d0ca187d29010d2b1db33cf90a`). GAME-14 imports only the native source frames listed below. Preview mockups, combined sheets, JSON metadata, and handoff documents are not shipped at runtime.
+
+| Imported file | SHA-256 | Native dimensions | Approved role |
+|---|---:|---:|---|
+| `games/nightshift/nightshift-player-car-vertical-static-00.png` | `0e58fedee1167063cb5e61feec10de3604202e1f1afb1966dc488aa09da578cd` | 64 × 64 px | Top-facing NIGHTSHIFT player vehicle for integer Canvas rendering. |
+| `games/nightshift/nightshift-player-car-vertical-damage-static-00.png` | `de8f02f159e5699bcec596d7836251fea5c17265ecce8b1d4cb47b8578d7b078` | 64 × 64 px | Static local-damage player rendering after engine collision state. |
+| `games/nightshift/nightshift-traffic-violet-coupe-vertical-static-00.png` | `6744d26baf4ec26f59d993d96aceb9ad58c343979bfa88b0c4aff4636dab00ab` | 64 × 64 px | Top-facing violet coupe traffic sprite. |
+| `games/nightshift/nightshift-traffic-amber-van-vertical-static-00.png` | `e893293d13d9e04c8c30909754107497574f899b7ff67a00f22561db2d193da7` | 64 × 64 px | Top-facing amber van traffic sprite. |
+| `games/nightshift/nightshift-twilight-city-parallax-strip-static-00.png` | `56ff6293916661da9aa6603d9fb268db3d215575a310a60a6af9cc745b222aee` | 128 × 32 px | Optional integral city backdrop pass. |
+| `games/nightshift/nightshift-twilight-roadside-strip-static-00.png` | `09ebcd0ffc08f73a820485e7443553b98a2aa53d41f59fa8b5ab10c7a4342469` | 128 × 32 px | Optional integral roadside pass. |
+| `games/nightshift/nightshift-twilight-road-reflector-tile-static-00.png` | `d75c23389a3342e77d7642fbdac26dd2d7d4a1a7e1502f3d083905cc9c4b59ac` | 32 × 32 px | Optional cyan road-edge reflector after canonical Canvas road/lane geometry. |
+
+All GAME-14 sources retain integer `drawImage()` destinations, unrotated top-facing orientation, and `imageSmoothingEnabled = false`. The scenery remains decorative and may fail or become static without changing NIGHTSHIFT rules, semantic status, controls, or collision authority.
