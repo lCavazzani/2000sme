@@ -28,8 +28,8 @@
   justify-content: space-between;
   gap: 8px;
   padding: 4px 5px;
-  color: var(--pixelos-edge);
-  background: var(--pixelos-magenta);
+  color: var(--pixelos-ink);
+  background: var(--pixelos-title-active);
   border-bottom: 2px solid var(--pixelos-edge);
   cursor: url('/arrow.cur'), auto;
   font-size: 11px;
@@ -39,7 +39,7 @@
 
 .window[data-window-active='false'] .titleBar {
   color: var(--pixelos-ink);
-  background: var(--pixelos-panel-dark);
+  background: var(--pixelos-title-inactive);
 }
 
 .window :global(.title-bar-text) {

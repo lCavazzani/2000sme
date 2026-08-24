@@ -7,11 +7,15 @@ export const PIXEL_OS_ASSET_SOURCE = {
 const assetRoot = '/pixelos/assets'
 
 export const PIXEL_OS_ASSETS = {
-  wallpaper: `${assetRoot}/dda42e57-923b-4342-b2b1-8ad755273c99.jpg`,
+  wallpaper: '/pixelos/wallpapers/pixelos-signal-ridge-wallpaper-640x360.png',
+  moonrise: `${assetRoot}/dda42e57-923b-4342-b2b1-8ad755273c99.jpg`,
   mittens: `${assetRoot}/7dbdf7f0-0086-4ef8-8cbf-e345ae75e5de.jpg`,
   mascot: `${assetRoot}/109f5dfc-b775-4bf5-9a64-962651f649f6.jpg`,
   harbour: `${assetRoot}/57619517-ec8e-4409-b5e4-9b6c19235f98.jpg`,
   cockpit: `${assetRoot}/b8f2dc8c-d0e5-4b1f-87bb-43b221e8b3a5.jpg`,
+  desktopNapStatic: '/pixelos/details/pixelos-grey-tabby-nap-00.png',
+  desktopNapGif: '/pixelos/details/pixelos-grey-tabby-nap-32.gif',
+  galleryPeek: '/pixelos/details/pixelos-grey-tabby-peek-00.png',
   bootBeacon: '/pixelos/intro/pixelos-boot-beacon-static-00.png',
   ownerEmblem: '/pixelos/intro/pixelos-owner-emblem-static-00.png',
   minesweeperIcon: '/pixelos/icons/pixelos-minesweeper-static-00.png',
@@ -48,7 +52,7 @@ export const PIXEL_OS_GALLERY = [
     id: 'moonrise',
     title: 'MOONRISE.PNG',
     caption: '640 × 360 · 32 colors · the desktop tile',
-    src: PIXEL_OS_ASSETS.wallpaper,
+    src: PIXEL_OS_ASSETS.moonrise,
   },
   {
     id: 'catsill',
@@ -60,26 +64,27 @@ export const PIXEL_OS_GALLERY = [
 
 export const PIXEL_OS_VISUAL_CONTRACT = {
   palette: {
-    void: '#120b22',
-    panel: '#1c1436',
-    panelDark: '#3b2d5e',
-    bevelHighlight: '#6d5aa8',
-    edge: '#0d0819',
-    ink: '#f2ecff',
-    muted: '#a89ac8',
+    void: '#171a2a',
+    panel: '#262a3b',
+    panelDark: '#3a4056',
+    bevelHighlight: '#7e879f',
+    edge: '#0b0f18',
+    ink: '#eef2ff',
+    muted: '#aab4c8',
     cyan: '#4de3d0',
-    magenta: '#df4fbc',
+    magenta: '#c953a3',
+    amber: '#e8ad64',
   },
   chrome: {
     bevelWidth: '2px',
     taskbarHeight: '34px',
     startMenuWidth: '228px',
-    titlebar: 'magenta active titlebar with dark indigo inactive titlebar',
+    titlebar: 'steel-violet active titlebar with cool inactive titlebar',
     fontStack: '"Pixelify Sans", "Courier New", monospace',
   },
   rendering: {
     rasterImageRendering: 'pixelated',
-    overlays: 'scanlines plus vignette with pointer-events disabled',
-    effects: 'step-based sprite bob and cursor blink with a static reduced-motion fallback',
+    overlays: 'full-effects scanlines plus vignette with pointer-events disabled',
+    effects: 'the nap GIF is full-effects only with a static reduced-motion and image-error fallback',
   },
 } as const

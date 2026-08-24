@@ -12,6 +12,50 @@ import { Taskbar } from './Taskbar'
 import { Window } from './Window'
 import { ApplicationContent } from './ApplicationContent'
 
+function shouldUseStaticNap() {
+  if (typeof window === 'undefined') return true
+  return document.documentElement.dataset.themeEffects === 'reduced'
+    || (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false)
+}
+
+function DesktopNapDetail() {
+  const [useStaticNap, setUseStaticNap] = useState(shouldUseStaticNap)
+  const [gifFailed, setGifFailed] = useState(false)
+
+  useEffect(() => {
+    const syncNapSource = () => setUseStaticNap(shouldUseStaticNap())
+    const rootObserver = new MutationObserver(syncNapSource)
+    const reducedMotionQuery = window.matchMedia?.('(prefers-reduced-motion: reduce)')
+
+    rootObserver.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['data-theme-effects'],
+    })
+    reducedMotionQuery?.addEventListener('change', syncNapSource)
+    syncNapSource()
+
+    return () => {
+      rootObserver.disconnect()
+      reducedMotionQuery?.removeEventListener('change', syncNapSource)
+    }
+  }, [])
+
+  const source = useStaticNap || gifFailed
+    ? PIXEL_OS_ASSETS.desktopNapStatic
+    : PIXEL_OS_ASSETS.desktopNapGif
+
+  return (
+    <img
+      className="pixelos-desktop-nap"
+      src={source}
+      alt=""
+      aria-hidden="true"
+      draggable={false}
+      onError={() => setGifFailed(true)}
+    />
+  )
+}
+
 /**
  * Owns desktop orchestration only. Application content and direct-route
  * presentation are intentionally delegated to focused components.
@@ -75,13 +119,7 @@ export function DesktopShell() {
       data-desktop-root
       tabIndex={-1}
     >
-      <img
-        className="pixelos-desktop-sprite pixelos-sprite-bob"
-        src={PIXEL_OS_ASSETS.mittens}
-        alt=""
-        aria-hidden="true"
-        draggable={false}
-      />
+      <DesktopNapDetail />
       <MobileLauncher />
       <section className="desktopIcons" aria-label="Desktop applications">
         {applicationsForSurface('desktop').map((application) => (

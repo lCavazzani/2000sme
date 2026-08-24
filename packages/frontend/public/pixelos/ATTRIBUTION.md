@@ -103,3 +103,21 @@ Seven approved original pixel-art source frames were supplied by the project own
 | `games/nightshift/nightshift-twilight-road-reflector-tile-static-00.png` | `d75c23389a3342e77d7642fbdac26dd2d7d4a1a7e1502f3d083905cc9c4b59ac` | 32 × 32 px | Optional cyan road-edge reflector after canonical Canvas road/lane geometry. |
 
 All GAME-14 sources retain integer `drawImage()` destinations, unrotated top-facing orientation, and `imageSmoothingEnabled = false`. The scenery remains decorative and may fail or become static without changing NIGHTSHIFT rules, semantic status, controls, or collision authority.
+
+## PXOS-16 Quiet Technical Desk Assets
+
+The owner supplied `quiet-technical-desk.zip` (archive SHA-256 `f19626c447f7b34cd597ceead9106c21b805cbb7634392489af2beba3ed9683b`) for the approved Quiet Technical Desk visual polish. PXOS-16 imports only the Signal Ridge wallpaper and the nap/peek detail family, byte-for-byte, from the package `assets/` directory. The paw asset remains reserved for the later PXOS-14 Desktop Pet ticket; previews and handoff documents are not runtime files.
+
+| Imported file | SHA-256 | Native dimensions | Approved role |
+|---|---|---:|---|
+| `wallpapers/pixelos-signal-ridge-wallpaper-640x360.png` | `2013376e49be4d994b9468836aa1a6af4cb05d78dfcfc12fba7aea1be5ef592f` | 640 × 360 px | Static PixelOS desktop/direct-route wallpaper with a readable graphite fallback. |
+| `details/pixelos-grey-tabby-nap-00.png` | `fc33e93e048815d194056404fd19f57b04f0fc846cb971183babfdc3f767e143` | 32 × 32 px | Static desktop nap fallback for reduced effects, reduced motion, or GIF error. |
+| `details/pixelos-grey-tabby-nap-01.png` | `0ba4330c26596f716d8780f006c6a4c6fec1c8bbd43e20285079787a497f837a` | 32 × 32 px | Source frame retained beside the nap metadata and sheet. |
+| `details/pixelos-grey-tabby-nap-32.gif` | `d4473156bde377b0a98b9c97d2430917cf4d891a65cd5dde5f3af6edf14f1263` | 32 × 32 px | Optional full-effects-only two-frame desktop nap loop. |
+| `details/pixelos-grey-tabby-nap-sheet-32.png` | `093780902304e2f28cca3788494f2ce2b31af6aa601df9ab4ab8a5ec9c34a6fc` | 64 × 32 px | Canonical source sheet retained with matching metadata. |
+| `details/pixelos-grey-tabby-nap.json` | `0a4295cf8265e67c5eec279565df295dc1ebd3542208fd55fce5710601f71c74` | metadata | Native frame order and loop metadata. |
+| `details/pixelos-grey-tabby-peek-00.png` | `8c810a4d3c26b19b379e08d4d7fc6c589d7d73ac8fcb40cf17115da44ecf43e4` | 32 × 32 px | Single static decorative Peek in the Pixel Gallery thumbnail-panel corner. |
+| `details/pixelos-grey-tabby-peek-sheet-32.png` | `8c810a4d3c26b19b379e08d4d7fc6c589d7d73ac8fcb40cf17115da44ecf43e4` | 32 × 32 px | Canonical source sheet retained with matching metadata. |
+| `details/pixelos-grey-tabby-peek.json` | `686b8117f12eb55e46dd37961215efcae4a7fb0ce94a27c0f11951f815f2e272` | metadata | Native frame dimensions and static-loop metadata. |
+
+All imported PXOS-16 rasters remain decorative where marked, use empty alt text with `aria-hidden="true"`, preserve native/integer dimensions, and render with pixelated/crisp edges. The nap detail is hidden below 900px and does not add a CSS motion source.
