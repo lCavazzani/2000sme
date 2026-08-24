@@ -58,12 +58,12 @@ test.describe('PixelOS accessibility regression coverage', () => {
 
 
 test.describe('PXOS-5 effects accessibility', () => {
-  test('keeps the decorative sprite pointer-transparent and preserves desktop launcher interaction', async ({ page }) => {
+  test('keeps the decorative desktop nap pointer-transparent and preserves desktop launcher interaction', async ({ page }) => {
     await visitPixelOs(page)
 
-    const sprite = page.locator('.pixelos-desktop-sprite')
-    await expect(sprite).toHaveAttribute('aria-hidden', 'true')
-    await expect(sprite).toHaveCSS('pointer-events', 'none')
+    const nap = page.locator('.pixelos-desktop-nap')
+    await expect(nap).toHaveAttribute('aria-hidden', 'true')
+    await expect(nap).toHaveCSS('pointer-events', 'none')
 
     await page.getByRole('button', { name: 'Open MY MACHINE' }).dblclick()
     await expect(page.getByRole('dialog', { name: 'MY MACHINE window' })).toBeVisible()
@@ -74,7 +74,9 @@ test.describe('PXOS-5 effects accessibility', () => {
     await visitPixelOs(page)
 
     await expect(page.locator('html')).toHaveAttribute('data-theme-effects', 'reduced')
-    await expect(page.locator('.pixelos-desktop-sprite')).toHaveCSS('animation-name', 'none')
+    const nap = page.locator('.pixelos-desktop-nap')
+    await expect(nap).toHaveAttribute('src', '/pixelos/details/pixelos-grey-tabby-nap-00.png')
+    await expect(nap).toHaveCSS('animation-name', 'none')
 
     await page.getByRole('button', { name: 'Open MY MACHINE' }).dblclick()
     await expect(page.locator('.pixelos-cursor-blink')).toHaveCSS('animation-name', 'none')

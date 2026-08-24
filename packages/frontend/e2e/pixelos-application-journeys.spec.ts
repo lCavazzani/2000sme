@@ -63,8 +63,8 @@ test.describe('TEST-12 PixelOS application journeys', () => {
       await expect(icon).toHaveAttribute('alt', '')
     }
 
-    await expect(page.locator('.pixelos-desktop-sprite')).toHaveAttribute('alt', '')
-    await expect(page.locator('.pixelos-desktop-sprite')).toHaveAttribute('aria-hidden', 'true')
+    await expect(page.locator('.pixelos-desktop-nap')).toHaveAttribute('alt', '')
+    await expect(page.locator('.pixelos-desktop-nap')).toHaveAttribute('aria-hidden', 'true')
 
     for (const application of applications) {
       await visitPixelOs(page, `/${application.path}`)
@@ -90,7 +90,9 @@ test.describe('TEST-12 PixelOS application journeys', () => {
     await reducedPage.emulateMedia({ reducedMotion: 'reduce' })
     await visitPixelOs(reducedPage)
     await expect(reducedPage.locator('html')).toHaveAttribute('data-theme-effects', 'reduced')
-    await expect(reducedPage.locator('.pixelos-desktop-sprite')).toHaveCSS('animation-name', 'none')
+    const nap = reducedPage.locator('.pixelos-desktop-nap')
+    await expect(nap).toHaveAttribute('src', '/pixelos/details/pixelos-grey-tabby-nap-00.png')
+    await expect(nap).toHaveCSS('animation-name', 'none')
     await reducedPage.close()
 
     const staleRoutePage = await browser.newPage()
