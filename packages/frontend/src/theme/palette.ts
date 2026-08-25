@@ -1,13 +1,15 @@
 /**
  * Single source of truth for the PixelOS palette.
  *
- * Nothing else in the codebase may declare a colour literal for chrome. CSS
- * consumes these values through `theme/generated/tokens.css`, which is emitted
- * by `scripts/generate-tokens.mjs`; TypeScript consumers (canvas rendering,
- * which cannot read CSS custom properties) import this module directly.
+ * This module owns every colour published as a design token. CSS consumes them
+ * through `virtual:pixelos-tokens.css`, served by the `pixelosTokens` plugin in
+ * `vite.config.ts`; TypeScript consumers (canvas rendering, which cannot read
+ * CSS custom properties) import this module directly.
  *
- * `tokens.sync.test.ts` fails when the generated stylesheet drifts from this
- * file, so a palette change cannot land half-applied.
+ * Scope note: this covers the published token namespaces and the NIGHTSHIFT
+ * scene. A few shell stylesheets still inline background colours; those are
+ * tracked separately and are not guaranteed by `tokens.sync.test.ts`, which
+ * only asserts the rendered token output stays on the palette ramp.
  */
 
 /** Core chrome ramp. Every semantic token below is derived from these. */

@@ -1,10 +1,13 @@
 import { QueryClient } from '@tanstack/react-query'
 
 /**
- * The project catalog is served with `max-age=300` and changes only on deploy,
- * so a matching client-side staleness window avoids refetching on every window
- * open. Retries stay low: a PixelOS application window should surface a failure
- * quickly rather than hold a spinner.
+ * The catalog is served with `max-age=300`, so a matching client staleness
+ * window avoids refetching every time a window opens. D1 content can change
+ * independently of a frontend deploy (an approved seed or maintenance run), so
+ * this is a cache-freshness choice, not a guarantee that the data is static.
+ *
+ * `gcTime` is deliberately much longer than `staleTime`: a cached catalog is
+ * what My Machine falls back to when the Worker becomes unreachable.
  */
 export const appQueryClient = new QueryClient({
   defaultOptions: {

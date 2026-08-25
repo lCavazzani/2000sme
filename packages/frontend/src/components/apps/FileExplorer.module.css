@@ -144,3 +144,10 @@
     grid-template-columns: repeat(2, minmax(104px, 1fr));
   }
 }
+
+.degraded {
+  margin-left: auto;
+  padding-left: 10px;
+  color: var(--os-amber);
+  letter-spacing: 0.03em;
+}

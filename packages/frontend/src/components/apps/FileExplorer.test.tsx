@@ -1,8 +1,9 @@
 import { QueryClientProvider } from '@tanstack/react-query'
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { expect, it, vi } from 'vitest'
 import { appQueryClient } from '../../api/queryClient'
+import { projectCatalogQuery } from '../../api/projects'
 import { jsonResponse } from '../../test/setup'
 import { FileExplorer } from './FileExplorer'
 
@@ -15,6 +16,19 @@ const CATALOG = {
       year: 2026,
       thumbnail: '/desktop-icons/my-computer.svg',
       technologies: [{ name: 'React' }, { name: 'TypeScript' }],
+    },
+  ],
+}
+
+const CACHED_CATALOG = {
+  projects: [
+    {
+      slug: 'cached-entry',
+      name: 'Cached Entry',
+      summary: 'Previously fetched.',
+      year: 2024,
+      thumbnail: '/desktop-icons/my-computer.svg',
+      technologies: [{ name: 'Hono' }],
     },
   ],
 }
@@ -36,15 +50,15 @@ it('renders the live catalog through the My Machine layout', async () => {
 
   const sportifolio = await screen.findByRole('button', { name: '00SPORTIFOLIO' })
   expect(screen.getByRole('button', { name: 'PORTFOLIO (C:)' })).toBeVisible()
-  expect(screen.getByText(/object\(s\)$/)).toBeVisible()
 
   await user.click(sportifolio)
 
   expect(sportifolio).toHaveAttribute('aria-pressed', 'true')
   expect(screen.getByText(/2026 · React, TypeScript/)).toBeVisible()
+  expect(screen.queryByText(/^Offline/)).not.toBeInTheDocument()
 })
 
-it('requests the catalog from the same-origin Worker path', async () => {
+it('requests the catalog from the resolved Worker path', async () => {
   const fetchMock = vi.fn(async () => jsonResponse(CATALOG))
   vi.stubGlobal('fetch', fetchMock)
   renderExplorer()
@@ -56,22 +70,43 @@ it('requests the catalog from the same-origin Worker path', async () => {
   }))
 })
 
-it('contains a catalog failure inside the window and offers a retry', async () => {
-  vi.stubGlobal('fetch', vi.fn(async () => jsonResponse({ error: 'nope' }, { status: 503 })))
+it('keeps showing the previous catalog when a refetch fails', async () => {
+  // Prime the cache with a successful read, then make the network fail.
+  appQueryClient.setQueryData(projectCatalogQuery.queryKey, CACHED_CATALOG.projects)
+  vi.stubGlobal('fetch', vi.fn(async () => jsonResponse({}, { status: 503 })))
   renderExplorer()
 
-  const alert = await screen.findByRole('alert', { name: 'My Machine error' })
-
-  expect(alert).toHaveTextContent(/could not load/i)
-  expect(alert).toHaveTextContent(/unavailable/i)
-  // The shell chrome survives: the path bar is still mounted beside the error.
-  expect(screen.getByLabelText('Current path')).toBeVisible()
-  expect(screen.getByRole('button', { name: 'Retry' })).toBeVisible()
+  expect(await screen.findByRole('button', { name: 'CACHED ENTRY' })).toBeVisible()
+  await waitFor(() => expect(screen.getByText(/last catalog read/i)).toBeVisible())
+  expect(screen.queryByRole('alert')).not.toBeInTheDocument()
 })
 
-it('rejects a catalog payload with an unexpected shape', async () => {
+it('falls back to the bundled catalog when the Worker is unreachable', async () => {
+  vi.stubGlobal('fetch', vi.fn(async () => { throw new TypeError('network down') }))
+  renderExplorer()
+
+  expect(await screen.findByRole('button', { name: '00SPORTIFOLIO' })).toBeVisible()
+  expect(screen.getByText(/bundled catalog/i)).toBeVisible()
+  // Degraded, not broken: no error surface, chrome intact.
+  expect(screen.queryByRole('alert')).not.toBeInTheDocument()
+  expect(screen.getByLabelText('Current path')).toBeVisible()
+})
+
+it('falls back rather than erroring on a malformed payload', async () => {
   vi.stubGlobal('fetch', vi.fn(async () => jsonResponse({ projects: [{ slug: 'broken' }] })))
   renderExplorer()
 
-  expect(await screen.findByRole('alert', { name: 'My Machine error' })).toHaveTextContent(/unexpected shape/i)
+  expect(await screen.findByRole('button', { name: '00SPORTIFOLIO' })).toBeVisible()
+  expect(screen.getByText(/bundled catalog/i)).toBeVisible()
+  expect(screen.queryByRole('alert')).not.toBeInTheDocument()
+})
+
+it('never presents fictional placeholder projects', async () => {
+  vi.stubGlobal('fetch', vi.fn(async () => { throw new TypeError('network down') }))
+  renderExplorer()
+
+  await screen.findByRole('button', { name: '00SPORTIFOLIO' })
+
+  expect(screen.queryByText(/PROJECT ALPHA/i)).not.toBeInTheDocument()
+  expect(screen.queryByText(/PROJECT BETA/i)).not.toBeInTheDocument()
 })

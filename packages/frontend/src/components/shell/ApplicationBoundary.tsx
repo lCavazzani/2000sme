@@ -37,7 +37,9 @@ export class ApplicationBoundary extends Component<ApplicationBoundaryProps, App
     return (
       <section className={styles.root} role="alert" aria-label={`${this.props.application} error`}>
         <p className={styles.heading}>{this.props.application} could not load.</p>
-        <p className={styles.detail}>{error.message}</p>
+        {/* The boundary can catch arbitrary component faults, whose messages may
+            leak internals. Details go to the console; visitors get a stable line. */}
+        <p className={styles.detail}>Something went wrong inside this window. Try opening it again.</p>
         <button type="button" className={styles.retry} onClick={this.retry}>
           Retry
         </button>

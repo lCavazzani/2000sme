@@ -1,9 +1,10 @@
 /**
- * Client for the D1-backed project catalog served by the Worker at
+ * Client for the D1-backed project catalog served by the backend Worker at
  * `/api/projects`. Responses are validated at the boundary rather than cast,
  * because the catalog is a separately deployed service: a shape change should
  * surface as a typed error in the UI, not as `undefined` mid-render.
  */
+import { apiUrl } from '../config/api'
 
 export type ProjectTechnology = { name: string }
 
@@ -28,8 +29,12 @@ export class ProjectCatalogError extends Error {
   }
 }
 
-/** Same-origin in production; Vite proxies `/api` to the local Worker in dev. */
-const CATALOG_URL = '/api/projects'
+/**
+ * Absolute backend origin when configured, same-origin `/api` otherwise so the
+ * Vite dev proxy can forward to `wrangler dev`. The deployed frontend Worker
+ * serves assets only, so it cannot answer `/api/*` itself.
+ */
+const catalogUrl = () => apiUrl('/api/projects')
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value)
@@ -77,7 +82,7 @@ export async function fetchProjectCatalog(signal?: AbortSignal): Promise<Project
   let response: Response
 
   try {
-    response = await fetch(CATALOG_URL, { signal, headers: { Accept: 'application/json' } })
+    response = await fetch(catalogUrl(), { signal, headers: { Accept: 'application/json' } })
   } catch (error) {
     // An aborted request is React Query unmounting the observer, not a failure.
     if (error instanceof DOMException && error.name === 'AbortError') throw error

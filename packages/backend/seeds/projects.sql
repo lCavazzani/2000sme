@@ -40,6 +40,19 @@ ON CONFLICT(id) DO UPDATE SET
     thumbnail_ref = excluded.thumbnail_ref,
     updated_at = excluded.updated_at;
 
+-- Retire the placeholder projects that earlier revisions of this seed inserted.
+-- Removing them from the INSERT above is not enough: a database seeded before
+-- that change still holds the rows, and the catalog query returns every
+-- published project. Child rows go first to respect the foreign keys.
+DELETE FROM project_technologies
+WHERE project_id IN ('project-alpha', 'project-beta');
+
+DELETE FROM project_links
+WHERE project_id IN ('project-alpha', 'project-beta');
+
+DELETE FROM projects
+WHERE id IN ('project-alpha', 'project-beta');
+
 -- Replace child records for the catalog fixtures so repeatable local seeds do
 -- not retain stale technology or link rows after the fixture changes.
 DELETE FROM project_technologies

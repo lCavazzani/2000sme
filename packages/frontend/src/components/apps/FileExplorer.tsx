@@ -1,5 +1,6 @@
-import { Suspense, useMemo, useState } from 'react'
-import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
+import { useMemo, useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { FALLBACK_CATALOG } from '../../api/fallbackCatalog'
 import { projectCatalogQuery, type ProjectCard } from '../../api/projects'
 import { ApplicationBoundary } from '../shell/ApplicationBoundary'
 import styles from './FileExplorer.module.css'
@@ -49,11 +50,49 @@ function toMachineItems(projects: ProjectCard[]): MachineItem[] {
   ]
 }
 
+/** Where the rendered catalog came from, in descending order of freshness. */
+type CatalogSource = 'live' | 'cache' | 'fallback'
+
+const SOURCE_NOTE: Record<CatalogSource, string | null> = {
+  live: null,
+  cache: 'Offline — showing the last catalog read.',
+  fallback: 'Offline — showing the bundled catalog.',
+}
+
+/**
+ * A catalog failure must not blank out My Machine. The window degrades through
+ * previously fetched data, then a bundled snapshot, and always states which one
+ * a visitor is looking at rather than passing stale data off as live.
+ */
+function useCatalog(): { projects: ProjectCard[]; source: CatalogSource; isLoading: boolean } {
+  const { data, error, isLoading } = useQuery(projectCatalogQuery)
+
+  if (isLoading) return { projects: [], source: 'live', isLoading: true }
+  // React Query retains the last successful response when a *refetch* fails,
+  // so data alongside an error is the previous state, not a fresh read.
+  if (data) return { projects: data, source: error ? 'cache' : 'live', isLoading: false }
+  if (error) return { projects: FALLBACK_CATALOG, source: 'fallback', isLoading: false }
+
+  return { projects: [], source: 'live', isLoading: false }
+}
+
 function MachineGrid() {
-  const { data: projects } = useSuspenseQuery(projectCatalogQuery)
+  const { projects, source, isLoading } = useCatalog()
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const items = useMemo(() => toMachineItems(projects), [projects])
   const selectedItem = items.find((item) => item.id === selectedId)
+  const note = SOURCE_NOTE[source]
+
+  if (isLoading) {
+    return (
+      <>
+        <div className={styles.grid} aria-hidden="true" />
+        <footer className={styles.statusBar}>
+          <span role="status">Reading portfolio volume…</span>
+        </footer>
+      </>
+    )
+  }
 
   return (
     <>
@@ -75,19 +114,9 @@ function MachineGrid() {
           )
         })}
       </ul>
-      <footer className={styles.statusBar}>
+      <footer className={styles.statusBar} data-catalog-source={source}>
         <span>{selectedItem ? selectedItem.detail : `${items.length} object(s)`}</span>
-      </footer>
-    </>
-  )
-}
-
-function LoadingGrid() {
-  return (
-    <>
-      <div className={styles.grid} aria-hidden="true" />
-      <footer className={styles.statusBar}>
-        <span role="status">Reading portfolio volume…</span>
+        {note && <span className={styles.degraded} role="status">{note}</span>}
       </footer>
     </>
   )
@@ -99,8 +128,6 @@ function LoadingGrid() {
  * whatever the deployed Worker publishes; there are no fabricated volumes.
  */
 export function FileExplorer() {
-  const queryClient = useQueryClient()
-
   return (
     <section className={styles.root} aria-label="My Machine file browser">
       <nav className={styles.menuBar} aria-label="My Machine menu">
@@ -117,13 +144,9 @@ export function FileExplorer() {
           <span className={`pixelos-cursor-blink ${styles.cursor}`} aria-hidden="true">_</span>
         </div>
       </div>
-      <ApplicationBoundary
-        application="My Machine"
-        onRetry={() => queryClient.resetQueries({ queryKey: projectCatalogQuery.queryKey })}
-      >
-        <Suspense fallback={<LoadingGrid />}>
-          <MachineGrid />
-        </Suspense>
+      {/* Retained for genuine render faults; catalog failures degrade in place. */}
+      <ApplicationBoundary application="My Machine">
+        <MachineGrid />
       </ApplicationBoundary>
     </section>
   )

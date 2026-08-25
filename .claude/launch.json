@@ -9,7 +9,7 @@
     {
       "name": "backend",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["--filter", "00sbackedn", "exec", "wrangler", "dev", "--port", "8787"],
+      "runtimeArgs": ["--filter", "backend", "exec", "wrangler", "dev", "--port", "8787"],
       "port": 8787,
       "autoPort": false
     }
