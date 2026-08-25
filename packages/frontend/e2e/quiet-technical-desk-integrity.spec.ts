@@ -1,6 +1,27 @@
 import { expect, test, type Page } from '@playwright/test'
 
+async function freezeTaskbarClock(page: Page) {
+  await page.addInitScript(`
+    (() => {
+      const NativeDate = Date
+      const fixedTime = new NativeDate('2026-08-21T20:00:00.000Z').valueOf()
+      class StableDate extends NativeDate {
+        constructor(...args) {
+          super(args.length ? args[0] : fixedTime)
+        }
+
+        static now() {
+          return fixedTime
+        }
+      }
+
+      window.Date = StableDate
+    })()
+  `)
+}
+
 async function visitPixelOs(page: Page, path = '/') {
+  await freezeTaskbarClock(page)
   await page.addInitScript(() => window.sessionStorage.setItem('2000sme:pixelos-intro-seen:v1', 'true'))
   await page.goto(path)
   await expect(page.locator('html')).toHaveAttribute('data-os-theme', 'pixelos')
@@ -43,6 +64,7 @@ test.describe('TEST-21 Quiet Technical Desk whole-system integrity', () => {
 
   test('keeps reduced and failure fallbacks readable, removes the narrow nap, and preserves direct-route wallpaper', async ({ browser }) => {
     const reduced = await browser.newPage({ viewport: { width: 1280, height: 760 } })
+    await freezeTaskbarClock(reduced)
     await reduced.addInitScript(() => {
       window.sessionStorage.setItem('2000sme:pixelos-intro-seen:v1', 'true')
       window.localStorage.setItem('2000sme:effects', 'reduced')
@@ -53,10 +75,7 @@ test.describe('TEST-21 Quiet Technical Desk whole-system integrity', () => {
     await expect(reduced.locator('html')).toHaveAttribute('data-theme-effects', 'reduced')
     await expect(nap).toHaveAttribute('src', '/pixelos/details/pixelos-grey-tabby-nap-00.png')
     await expect(desktop).toHaveCSS('background-color', 'rgb(23, 26, 42)')
-    await expect(desktop).toHaveScreenshot('quiet-technical-desk-reduced-desktop.png', {
-      animations: 'disabled',
-      maxDiffPixels: 25,
-    })
+    await expect(desktop).toHaveScreenshot('quiet-technical-desk-reduced-desktop.png', { animations: 'disabled' })
     await reduced.close()
 
     const narrow = await browser.newPage({ viewport: { width: 899, height: 844 } })
@@ -98,8 +117,10 @@ test.describe('TEST-21 Quiet Technical Desk whole-system integrity', () => {
     await expect(peek).toHaveCSS('pointer-events', 'none')
     await expect(gallery).toHaveScreenshot('quiet-technical-desk-gallery-direct.png', { animations: 'disabled' })
 
-    await page.goto('/#/apps/pet')
+    await page.addInitScript(() => window.localStorage.setItem('2000sme:effects', 'reduced'))
+    await page.goto('/?test-effects=reduced#/apps/pet')
     const pet = page.getByRole('main', { name: 'DESKTOP PET direct route' })
+    await expect(page.locator('html')).toHaveAttribute('data-theme-effects', 'reduced')
     await expect(pet.locator('img[src$="pixelos-grey-tabby-paw-00.png"]')).toHaveCount(0)
     await pet.getByRole('button', { name: 'TREAT MITTENS' }).click()
     const paw = pet.locator('img[src$="pixelos-grey-tabby-paw-00.png"]')

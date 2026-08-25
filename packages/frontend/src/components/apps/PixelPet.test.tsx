@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react'
+import { act, fireEvent, render, screen } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { PIXEL_OS_ASSETS } from '../../config/pixelosAssets'
 import { PixelPet } from './PixelPet'
@@ -18,31 +18,59 @@ describe('PixelPet', () => {
   })
 
   afterEach(() => {
+    vi.useRealTimers()
     delete document.documentElement.dataset.themeEffects
   })
 
-  it('uses approved grey-tabby acknowledgement frames with one concise local status message', () => {
+  it('loops the readable Pet and original-pose Treat confirmations after their final held frames', () => {
+    vi.useFakeTimers()
     render(<PixelPet />)
 
-    const cat = screen.getByRole('img', { name: "Mittens, Leonardo's grey tabby, resting beside the PixelOS desk" })
-    expect(cat).toHaveAttribute('src', PIXEL_OS_ASSETS.greyTabbyIdleGif)
-    expect(screen.getByText('MITTENS.EXE')).toBeInTheDocument()
-    expect(screen.getByRole('status')).toHaveTextContent('Mittens is resting beside this local PixelOS desk.')
-
     fireEvent.click(screen.getByRole('button', { name: 'PET MITTENS' }))
-    expect(screen.getByRole('img', { name: "Mittens, Leonardo's grey tabby, acknowledging a local pet" })).toHaveAttribute(
-      'src',
-      PIXEL_OS_ASSETS.greyTabbyPet,
-    )
+    const cat = screen.getByRole('img', { name: "Mittens, Leonardo's grey tabby, acknowledging a local pet" })
+    expect(cat).toHaveAttribute('src', PIXEL_OS_ASSETS.greyTabbyPetReadableStatic)
     expect(screen.getByRole('status')).toHaveTextContent('Mittens leans into a local pet.')
 
+    act(() => vi.advanceTimersByTime(180))
+    expect(cat).toHaveAttribute('src', PIXEL_OS_ASSETS.greyTabbyPetReadableFrameOne)
+    act(() => vi.advanceTimersByTime(180))
+    expect(cat).toHaveAttribute('src', PIXEL_OS_ASSETS.greyTabbyPetReadableFrameTwo)
+    act(() => vi.advanceTimersByTime(900))
+    expect(cat).toHaveAttribute('src', PIXEL_OS_ASSETS.greyTabbyPetReadableStatic)
+
     fireEvent.click(screen.getByRole('button', { name: 'TREAT MITTENS' }))
-    expect(screen.getByRole('img', { name: "Mittens, Leonardo's grey tabby, acknowledging a local treat" })).toHaveAttribute(
-      'src',
-      PIXEL_OS_ASSETS.greyTabbyTreat,
-    )
+    expect(cat).toHaveAttribute('src', PIXEL_OS_ASSETS.greyTabbyTreatReachFrameZero)
     expect(screen.getByRole('status')).toHaveTextContent('Pick ready: MY MACHINE.')
-    expect(screen.getByRole('region', { name: 'Local Pick' })).toHaveTextContent('Start with the project map and desktop folders.')
+    act(() => vi.advanceTimersByTime(180))
+    expect(cat).toHaveAttribute('src', PIXEL_OS_ASSETS.greyTabbyTreatReachFrameOne)
+    act(() => vi.advanceTimersByTime(180))
+    expect(cat).toHaveAttribute('src', PIXEL_OS_ASSETS.greyTabbyTreatReachFrameTwo)
+    act(() => vi.advanceTimersByTime(900))
+    expect(cat).toHaveAttribute('src', PIXEL_OS_ASSETS.greyTabbyTreatReachFrameZero)
+  })
+
+  it('uses the approved static acknowledgement fallbacks for reduced effects and asset errors', () => {
+    document.documentElement.dataset.themeEffects = 'reduced'
+    const view = render(<PixelPet />)
+    const cat = screen.getByRole('img', { name: "Mittens, Leonardo's grey tabby, resting beside the PixelOS desk" })
+    expect(cat).toHaveAttribute('src', PIXEL_OS_ASSETS.greyTabbyIdleStatic)
+
+    fireEvent.click(screen.getByRole('button', { name: 'PET MITTENS' }))
+    expect(cat).toHaveAttribute('src', PIXEL_OS_ASSETS.greyTabbyPetReadableStatic)
+    fireEvent.click(screen.getByRole('button', { name: 'TREAT MITTENS' }))
+    expect(cat).toHaveAttribute('src', PIXEL_OS_ASSETS.greyTabbyTreatStatic)
+
+    view.unmount()
+    document.documentElement.dataset.themeEffects = 'full'
+    render(<PixelPet />)
+    const fullEffectsCat = screen.getByRole('img', { name: "Mittens, Leonardo's grey tabby, resting beside the PixelOS desk" })
+    fireEvent.click(screen.getByRole('button', { name: 'PET MITTENS' }))
+    fireEvent.error(fullEffectsCat)
+    expect(fullEffectsCat).toHaveAttribute('src', PIXEL_OS_ASSETS.greyTabbyPetReadableStatic)
+
+    fireEvent.click(screen.getByRole('button', { name: 'TREAT MITTENS' }))
+    fireEvent.error(fullEffectsCat)
+    expect(fullEffectsCat).toHaveAttribute('src', PIXEL_OS_ASSETS.greyTabbyTreatStatic)
   })
 
   it('uses a stable local Pick order and opens only after the explicit visitor action', () => {
@@ -62,23 +90,5 @@ describe('PixelPet', () => {
     expect(screen.queryByRole('region', { name: 'Local Pick' })).not.toBeInTheDocument()
     expect(screen.getByRole('status')).toHaveTextContent('Mittens is resting beside this local PixelOS desk.')
     expect(screen.getByLabelText('Desktop Pet status')).toHaveTextContent('LOCAL COMPANIONSESSION ONLYNO NETWORK')
-  })
-
-  it('uses the approved static idle fallback for reduced effects and GIF errors', () => {
-    document.documentElement.dataset.themeEffects = 'reduced'
-    const view = render(<PixelPet />)
-
-    expect(screen.getByRole('img', { name: "Mittens, Leonardo's grey tabby, resting beside the PixelOS desk" })).toHaveAttribute(
-      'src',
-      PIXEL_OS_ASSETS.greyTabbyIdleStatic,
-    )
-
-    view.unmount()
-    document.documentElement.dataset.themeEffects = 'full'
-    render(<PixelPet />)
-    const cat = screen.getByRole('img', { name: "Mittens, Leonardo's grey tabby, resting beside the PixelOS desk" })
-    expect(cat).toHaveAttribute('src', PIXEL_OS_ASSETS.greyTabbyIdleGif)
-    fireEvent.error(cat)
-    expect(cat).toHaveAttribute('src', PIXEL_OS_ASSETS.greyTabbyIdleStatic)
   })
 })

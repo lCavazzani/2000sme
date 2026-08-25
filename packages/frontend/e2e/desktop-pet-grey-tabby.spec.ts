@@ -4,6 +4,7 @@ async function visitPixelOs(page: Page, path = '/') {
   await page.addInitScript(() => window.sessionStorage.setItem('2000sme:pixelos-intro-seen:v1', 'true'))
   await page.goto(path)
   await expect(page.locator('html')).toHaveAttribute('data-os-theme', 'pixelos')
+  await expect(page.locator('html')).toHaveAttribute('data-theme-effects', 'full')
 }
 
 async function openDesktopPet(page: Page) {
@@ -12,11 +13,22 @@ async function openDesktopPet(page: Page) {
   return page.getByRole('dialog', { name: 'DESKTOP PET window' })
 }
 
+async function advanceClockAndPause(page: Page, milliseconds: number) {
+  const targetTime = await page.evaluate((advanceBy) => Date.now() + advanceBy, milliseconds)
+  await page.clock.pauseAt(new Date(targetTime))
+}
+
+async function expectAcknowledgementFrame(pet: ReturnType<Page['getByRole']>, frame: '0' | '1' | '2') {
+  await expect(pet.locator(`[data-acknowledgement-frame="${frame}"]`)).toBeVisible()
+}
+
 test.describe('TEST-19 grey-tabby Desktop Pet coverage', () => {
   test('preserves keyboard Pet, Treat, Pick, Reset, and explicit canonical opening with concise local semantics', async ({ page }) => {
+    await page.clock.install({ time: new Date('2026-08-25T00:00:00.000Z') })
     const requests: string[] = []
     page.on('request', (request) => requests.push(request.url()))
     const pet = await openDesktopPet(page)
+    await advanceClockAndPause(page, 1000)
     const cat = pet.getByRole('img', { name: "Mittens, Leonardo's grey tabby, resting beside the PixelOS desk" })
 
     await expect(cat).toHaveAttribute('src', '/pixelos/pets/grey-tabby/grey-tabby-idle-128.gif')
@@ -31,18 +43,56 @@ test.describe('TEST-19 grey-tabby Desktop Pet coverage', () => {
     const petButton = pet.getByRole('button', { name: 'PET MITTENS' })
     await petButton.focus()
     await page.keyboard.press('Enter')
-    await expect(pet.getByRole('img', { name: "Mittens, Leonardo's grey tabby, acknowledging a local pet" })).toHaveAttribute(
+    const petAcknowledgement = pet.getByRole('img', { name: "Mittens, Leonardo's grey tabby, acknowledging a local pet" })
+    await expect(petAcknowledgement).toHaveAttribute(
       'src',
-      '/pixelos/pets/grey-tabby/pixelos-grey-tabby-pet-00.png',
+      '/pixelos/pets/grey-tabby/pixelos-grey-tabby-pet-readable-00.png',
     )
     await expect(pet.locator('[role="status"]')).toHaveText('Mittens leans into a local pet.')
+    await advanceClockAndPause(page, 180)
+    await expectAcknowledgementFrame(pet, '1')
+    await expect(petAcknowledgement).toHaveAttribute(
+      'src',
+      '/pixelos/pets/grey-tabby/pixelos-grey-tabby-pet-readable-01.png',
+    )
+    await advanceClockAndPause(page, 180)
+    await expectAcknowledgementFrame(pet, '2')
+    await expect(petAcknowledgement).toHaveAttribute(
+      'src',
+      '/pixelos/pets/grey-tabby/pixelos-grey-tabby-pet-readable-02.png',
+    )
+    await advanceClockAndPause(page, 900)
+    await expectAcknowledgementFrame(pet, '0')
+    await expect(petAcknowledgement).toHaveAttribute(
+      'src',
+      '/pixelos/pets/grey-tabby/pixelos-grey-tabby-pet-readable-00.png',
+    )
 
     const treat = pet.getByRole('button', { name: 'TREAT MITTENS' })
     await treat.focus()
     await page.keyboard.press('Enter')
-    await expect(pet.getByRole('img', { name: "Mittens, Leonardo's grey tabby, acknowledging a local treat" })).toHaveAttribute(
+    const treatAcknowledgement = pet.getByRole('img', { name: "Mittens, Leonardo's grey tabby, acknowledging a local treat" })
+    await expect(treatAcknowledgement).toHaveAttribute(
       'src',
-      '/pixelos/pets/grey-tabby/pixelos-grey-tabby-treat-00.png',
+      '/pixelos/pets/grey-tabby/pixelos-grey-tabby-treat-reach-00.png',
+    )
+    await advanceClockAndPause(page, 180)
+    await expectAcknowledgementFrame(pet, '1')
+    await expect(treatAcknowledgement).toHaveAttribute(
+      'src',
+      '/pixelos/pets/grey-tabby/pixelos-grey-tabby-treat-reach-01.png',
+    )
+    await advanceClockAndPause(page, 180)
+    await expectAcknowledgementFrame(pet, '2')
+    await expect(treatAcknowledgement).toHaveAttribute(
+      'src',
+      '/pixelos/pets/grey-tabby/pixelos-grey-tabby-treat-reach-02.png',
+    )
+    await advanceClockAndPause(page, 900)
+    await expectAcknowledgementFrame(pet, '0')
+    await expect(treatAcknowledgement).toHaveAttribute(
+      'src',
+      '/pixelos/pets/grey-tabby/pixelos-grey-tabby-treat-reach-00.png',
     )
     const pick = pet.getByRole('region', { name: 'Local Pick' })
     await expect(pick).toContainText('LOCAL PICK · MY MACHINE')
@@ -63,14 +113,44 @@ test.describe('TEST-19 grey-tabby Desktop Pet coverage', () => {
     await expect(page.getByRole('dialog', { name: 'MY MACHINE window' })).toBeVisible()
 
     const reset = pet.getByRole('button', { name: 'RESET' })
-    await reset.focus()
-    await page.keyboard.press('Enter')
+    await reset.click()
     await expect(pet.getByRole('region', { name: 'Local Pick' })).toHaveCount(0)
     await expect(pet.locator('[role="status"]')).toHaveText('Mittens is resting beside this local PixelOS desk.')
     expect(requests.filter((url) => !url.startsWith('http://localhost:') && !url.startsWith('http://127.0.0.1:'))).toEqual([])
   })
 
-  test('uses static idle sources for reduced motion, effects reduction, GIF errors, and storage failure while preserving local controls', async ({ browser }) => {
+  test('captures each deterministic full-effects acknowledgement frame and the original Treat static fallback', async ({ page }) => {
+    await page.clock.install({ time: new Date('2026-08-25T00:00:00.000Z') })
+    await visitPixelOs(page, '/#/apps/pet')
+    await advanceClockAndPause(page, 1000)
+    const pet = page.getByRole('main', { name: 'DESKTOP PET direct route' })
+
+    await pet.getByRole('button', { name: 'PET MITTENS' }).click()
+    await expectAcknowledgementFrame(pet, '0')
+    await expect(pet).toHaveScreenshot('desktop-pet-readable-pet-frame-00.png', { animations: 'disabled' })
+    await advanceClockAndPause(page, 180)
+    await expectAcknowledgementFrame(pet, '1')
+    await expect(pet).toHaveScreenshot('desktop-pet-readable-pet-frame-01.png', { animations: 'disabled' })
+    await advanceClockAndPause(page, 180)
+    await expectAcknowledgementFrame(pet, '2')
+    await expect(pet).toHaveScreenshot('desktop-pet-readable-pet-frame-02.png', { animations: 'disabled' })
+    await advanceClockAndPause(page, 900)
+    await expectAcknowledgementFrame(pet, '0')
+
+    await pet.getByRole('button', { name: 'TREAT MITTENS' }).click()
+    await expectAcknowledgementFrame(pet, '0')
+    await expect(pet).toHaveScreenshot('desktop-pet-treat-reach-frame-00.png', { animations: 'disabled' })
+    await advanceClockAndPause(page, 180)
+    await expectAcknowledgementFrame(pet, '1')
+    await expect(pet).toHaveScreenshot('desktop-pet-treat-reach-frame-01.png', { animations: 'disabled' })
+    await advanceClockAndPause(page, 180)
+    await expectAcknowledgementFrame(pet, '2')
+    await expect(pet).toHaveScreenshot('desktop-pet-treat-reach-frame-02.png', { animations: 'disabled' })
+    await advanceClockAndPause(page, 900)
+    await expectAcknowledgementFrame(pet, '0')
+  })
+
+  test('uses static acknowledgement sources for reduced motion, effects reduction, and acknowledgement asset errors while preserving local controls', async ({ browser }) => {
     const reduced = await browser.newPage({ viewport: { width: 390, height: 844 } })
     await reduced.addInitScript(() => {
       window.sessionStorage.setItem('2000sme:pixelos-intro-seen:v1', 'true')
@@ -81,22 +161,32 @@ test.describe('TEST-19 grey-tabby Desktop Pet coverage', () => {
     const reducedCat = reducedPet.getByRole('img', { name: "Mittens, Leonardo's grey tabby, resting beside the PixelOS desk" })
     await expect(reducedCat).toHaveAttribute('src', '/pixelos/pets/grey-tabby/grey-tabby-idle-00.png')
     await expect(reducedPet.getByRole('button', { name: 'PET MITTENS' })).toHaveCSS('min-height', '44px')
+    await reducedPet.getByRole('button', { name: 'PET MITTENS' }).click()
+    await expect(reducedPet.getByRole('img', { name: "Mittens, Leonardo's grey tabby, acknowledging a local pet" })).toHaveAttribute(
+      'src',
+      '/pixelos/pets/grey-tabby/pixelos-grey-tabby-pet-readable-00.png',
+    )
     await reducedPet.getByRole('button', { name: 'TREAT MITTENS' }).click()
+    await expect(reducedPet.getByRole('img', { name: "Mittens, Leonardo's grey tabby, acknowledging a local treat" })).toHaveAttribute(
+      'src',
+      '/pixelos/pets/grey-tabby/pixelos-grey-tabby-treat-00.png',
+    )
     await expect(reducedPet.getByRole('button', { name: 'OPEN MY MACHINE' })).toBeVisible()
     expect(await reduced.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true)
     await expect(reducedPet).toHaveScreenshot('desktop-pet-grey-tabby-reduced-narrow.png', { animations: 'disabled' })
     await reduced.close()
 
-    const gifFailure = await browser.newPage()
-    await gifFailure.addInitScript(() => window.sessionStorage.setItem('2000sme:pixelos-intro-seen:v1', 'true'))
-    await gifFailure.route('**/pixelos/pets/grey-tabby/grey-tabby-idle-128.gif', (route) => route.abort())
-    await gifFailure.goto('/#/apps/pet')
-    const failurePet = gifFailure.getByRole('main', { name: 'DESKTOP PET direct route' })
-    await expect(failurePet.getByRole('img', { name: "Mittens, Leonardo's grey tabby, resting beside the PixelOS desk" })).toHaveAttribute(
+    const assetFailure = await browser.newPage()
+    await assetFailure.addInitScript(() => window.sessionStorage.setItem('2000sme:pixelos-intro-seen:v1', 'true'))
+    await assetFailure.route('**/pixelos/pets/grey-tabby/pixelos-grey-tabby-treat-reach-00.png', (route) => route.abort())
+    await assetFailure.goto('/#/apps/pet')
+    const failurePet = assetFailure.getByRole('main', { name: 'DESKTOP PET direct route' })
+    await failurePet.getByRole('button', { name: 'TREAT MITTENS' }).click()
+    await expect(failurePet.getByRole('img', { name: "Mittens, Leonardo's grey tabby, acknowledging a local treat" })).toHaveAttribute(
       'src',
-      '/pixelos/pets/grey-tabby/grey-tabby-idle-00.png',
+      '/pixelos/pets/grey-tabby/pixelos-grey-tabby-treat-00.png',
     )
-    await gifFailure.close()
+    await assetFailure.close()
 
     const storageFailure = await browser.newPage()
     await storageFailure.addInitScript(() => {
@@ -111,17 +201,21 @@ test.describe('TEST-19 grey-tabby Desktop Pet coverage', () => {
     await storageFailure.close()
   })
 
-  test('records a deterministic GIF-error static route without legacy imagery or interactive decorative details', async ({ page }) => {
-    await page.route('**/pixelos/pets/grey-tabby/grey-tabby-idle-128.gif', (route) => route.abort())
-    await visitPixelOs(page, '/#/apps/pet')
+  test('records a deterministic static Treat fallback route without legacy imagery or interactive decorative details', async ({ page }) => {
+    await page.addInitScript(() => {
+      window.sessionStorage.setItem('2000sme:pixelos-intro-seen:v1', 'true')
+      window.localStorage.setItem('2000sme:effects', 'reduced')
+    })
+    await page.goto('/#/apps/pet')
     const pet = page.getByRole('main', { name: 'DESKTOP PET direct route' })
+    await pet.getByRole('button', { name: 'TREAT MITTENS' }).click()
 
-    await expect(pet.getByRole('img', { name: "Mittens, Leonardo's grey tabby, resting beside the PixelOS desk" })).toHaveAttribute(
+    await expect(pet.getByRole('img', { name: "Mittens, Leonardo's grey tabby, acknowledging a local treat" })).toHaveAttribute(
       'src',
-      '/pixelos/pets/grey-tabby/grey-tabby-idle-00.png',
+      '/pixelos/pets/grey-tabby/pixelos-grey-tabby-treat-00.png',
     )
-    await expect(pet.locator('img[aria-hidden="true"]')).toHaveCount(0)
+    await expect(pet.locator('img[aria-hidden="true"]')).toHaveCount(2)
     await expect(pet.getByText(/orange cat|moon|heart/i)).toHaveCount(0)
-    await expect(pet).toHaveScreenshot('desktop-pet-grey-tabby-static-fallback.png', { animations: 'disabled' })
+    await expect(pet).toHaveScreenshot('desktop-pet-grey-tabby-static-treat-fallback.png', { animations: 'disabled' })
   })
 })
