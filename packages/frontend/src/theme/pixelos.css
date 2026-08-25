@@ -1,22 +1,3 @@
-:root[data-os-theme='pixelos'] {
-  --pixelos-void: #171a2a;
-  --pixelos-panel: #262a3b;
-  --pixelos-panel-dark: #3a4056;
-  --pixelos-bevel-highlight: #7e879f;
-  --pixelos-edge: #0b0f18;
-  --pixelos-ink: #eef2ff;
-  --pixelos-muted: #aab4c8;
-  --pixelos-cyan: #4de3d0;
-  --pixelos-magenta: #c953a3;
-  --pixelos-amber: #e8ad64;
-  --pixelos-title-active: #4f566f;
-  --pixelos-title-inactive: #30354a;
-  --pixelos-font: 'Pixelify Sans', 'Courier New', monospace;
-  --pixelos-taskbar-height: 36px;
-  --pixelos-bevel-width: 2px;
-  --pixelos-scanline-opacity: 0.20;
-}
-
 :root[data-os-theme='pixelos'] img {
   image-rendering: pixelated;
 }

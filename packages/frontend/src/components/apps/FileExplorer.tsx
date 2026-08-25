@@ -1,5 +1,7 @@
-import { useMemo, useState } from 'react'
-import { projects } from '../../config/projects'
+import { Suspense, useMemo, useState } from 'react'
+import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
+import { projectCatalogQuery, type ProjectCard } from '../../api/projects'
+import { ApplicationBoundary } from '../shell/ApplicationBoundary'
 import styles from './FileExplorer.module.css'
 
 type MachineItem = {
@@ -30,14 +32,8 @@ function PixelMachineGlyph({ kind }: { kind: MachineItem['kind'] }) {
   )
 }
 
-/**
- * PixelOS keeps real portfolio metadata but renders it through the supplied
- * My Machine layout. There are no fabricated machine volumes, external links,
- * or retired project-detail routes.
- */
-export function FileExplorer() {
-  const [selectedId, setSelectedId] = useState<string | null>(null)
-  const items = useMemo<MachineItem[]>(() => [
+function toMachineItems(projects: ProjectCard[]): MachineItem[] {
+  return [
     {
       id: 'portfolio-drive',
       name: 'PORTFOLIO (C:)',
@@ -45,30 +41,22 @@ export function FileExplorer() {
       kind: 'drive',
     },
     ...projects.map((project) => ({
-      id: `project-${project.id}`,
+      id: `project-${project.slug}`,
       name: project.name.toUpperCase(),
-      detail: `${project.year} · ${project.techStack.join(', ')}`,
+      detail: `${project.year} · ${project.technologies.map((technology) => technology.name).join(', ')}`,
       kind: 'folder' as const,
     })),
-  ], [])
+  ]
+}
+
+function MachineGrid() {
+  const { data: projects } = useSuspenseQuery(projectCatalogQuery)
+  const [selectedId, setSelectedId] = useState<string | null>(null)
+  const items = useMemo(() => toMachineItems(projects), [projects])
   const selectedItem = items.find((item) => item.id === selectedId)
 
   return (
-    <section className={styles.root} aria-label="My Machine file browser">
-      <nav className={styles.menuBar} aria-label="My Machine menu">
-        <span>File</span>
-        <span>Edit</span>
-        <span>View</span>
-        <span>Help</span>
-      </nav>
-      <div className={styles.pathBar}>
-        <span className={styles.pathLabel}>Path</span>
-        <div className={styles.pathField} aria-label="Current path">
-          <PixelMachineGlyph kind="drive" />
-          <span>C:\PORTFOLIO\</span>
-          <span className={`pixelos-cursor-blink ${styles.cursor}`} aria-hidden="true">_</span>
-        </div>
-      </div>
+    <>
       <ul className={styles.grid} aria-label="Portfolio machine objects">
         {items.map((item) => {
           const isSelected = selectedId === item.id
@@ -90,6 +78,53 @@ export function FileExplorer() {
       <footer className={styles.statusBar}>
         <span>{selectedItem ? selectedItem.detail : `${items.length} object(s)`}</span>
       </footer>
+    </>
+  )
+}
+
+function LoadingGrid() {
+  return (
+    <>
+      <div className={styles.grid} aria-hidden="true" />
+      <footer className={styles.statusBar}>
+        <span role="status">Reading portfolio volume…</span>
+      </footer>
+    </>
+  )
+}
+
+/**
+ * PixelOS renders the live D1 project catalog through the supplied My Machine
+ * layout. The catalog is fetched rather than bundled, so the desktop reflects
+ * whatever the deployed Worker publishes; there are no fabricated volumes.
+ */
+export function FileExplorer() {
+  const queryClient = useQueryClient()
+
+  return (
+    <section className={styles.root} aria-label="My Machine file browser">
+      <nav className={styles.menuBar} aria-label="My Machine menu">
+        <span>File</span>
+        <span>Edit</span>
+        <span>View</span>
+        <span>Help</span>
+      </nav>
+      <div className={styles.pathBar}>
+        <span className={styles.pathLabel}>Path</span>
+        <div className={styles.pathField} aria-label="Current path">
+          <PixelMachineGlyph kind="drive" />
+          <span>C:\PORTFOLIO\</span>
+          <span className={`pixelos-cursor-blink ${styles.cursor}`} aria-hidden="true">_</span>
+        </div>
+      </div>
+      <ApplicationBoundary
+        application="My Machine"
+        onRetry={() => queryClient.resetQueries({ queryKey: projectCatalogQuery.queryKey })}
+      >
+        <Suspense fallback={<LoadingGrid />}>
+          <MachineGrid />
+        </Suspense>
+      </ApplicationBoundary>
     </section>
   )
 }

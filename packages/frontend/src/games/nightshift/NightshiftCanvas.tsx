@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type KeyboardEvent } from 'react'
 import { PIXEL_OS_ASSETS } from '../../config/pixelosAssets'
+import { nightshiftPalette } from '../../theme/palette'
 import {
   NIGHTSHIFT_LOGICAL_HEIGHT,
   NIGHTSHIFT_LOGICAL_WIDTH,
@@ -52,26 +53,26 @@ function drawPixelRoad(context: CanvasRenderingContext2D, images: NightshiftImag
   const reduced = effectsReduced()
   const offset = reduced ? 0 : Math.floor(distance * 0.2)
 
-  context.fillStyle = '#574478'
+  context.fillStyle = nightshiftPalette.sky
   context.fillRect(0, 0, NIGHTSHIFT_LOGICAL_WIDTH, NIGHTSHIFT_LOGICAL_HEIGHT)
 
   drawRepeatedStrip(context, images.city, 6, Math.floor(offset * 0.25))
 
-  context.fillStyle = '#8774ad'
+  context.fillStyle = nightshiftPalette.ground
   context.fillRect(0, 38, NIGHTSHIFT_LOGICAL_WIDTH, NIGHTSHIFT_LOGICAL_HEIGHT - 38)
   drawRepeatedStrip(context, images.roadside, 42, Math.floor(offset * 0.55))
 
-  context.fillStyle = '#211b40'
+  context.fillStyle = nightshiftPalette.roadShoulder
   context.fillRect(ROAD_LEFT - 5, 0, ROAD_WIDTH + 10, NIGHTSHIFT_LOGICAL_HEIGHT)
-  context.fillStyle = '#302852'
+  context.fillStyle = nightshiftPalette.roadSurface
   context.fillRect(ROAD_LEFT, 0, ROAD_WIDTH, NIGHTSHIFT_LOGICAL_HEIGHT)
 
-  context.fillStyle = '#4de3d0'
+  context.fillStyle = nightshiftPalette.laneEdge
   context.fillRect(ROAD_LEFT, 0, 3, NIGHTSHIFT_LOGICAL_HEIGHT)
   context.fillRect(ROAD_RIGHT - 3, 0, 3, NIGHTSHIFT_LOGICAL_HEIGHT)
 
   const dashOffset = reduced ? 0 : Math.floor(distance * 0.65) % 28
-  context.fillStyle = '#d5c8ef'
+  context.fillStyle = nightshiftPalette.laneDash
   for (const x of [128, 192]) {
     for (let y = -28 + dashOffset; y < NIGHTSHIFT_LOGICAL_HEIGHT; y += 28) {
       context.fillRect(x, y, 2, 14)
@@ -103,7 +104,7 @@ function drawVehicle(
 
   context.fillStyle = fallback
   context.fillRect(x + 16, y + 8, 32, 48)
-  context.fillStyle = '#19142d'
+  context.fillStyle = nightshiftPalette.windshield
   context.fillRect(x + 22, y + 16, 20, 24)
 }
 
@@ -154,7 +155,7 @@ export function NightshiftCanvas({ game, tapInput, clearInput, onToggleRun, onPa
         imagesRef.current[traffic.kind],
         traffic.lane,
         traffic.y,
-        traffic.kind === 'coupe' ? '#c953a3' : '#e8ad64',
+        traffic.kind === 'coupe' ? nightshiftPalette.trafficCoupe : nightshiftPalette.trafficVan,
       )
     }
     drawVehicle(
@@ -162,7 +163,7 @@ export function NightshiftCanvas({ game, tapInput, clearInput, onToggleRun, onPa
       game.hits > 0 ? imagesRef.current.playerDamage : imagesRef.current.player,
       game.playerLane,
       NIGHTSHIFT_PLAYER_Y,
-      game.hits > 0 ? '#ffb454' : '#4de3d0',
+      game.hits > 0 ? nightshiftPalette.playerDamaged : nightshiftPalette.player,
     )
   }, [assetVersion, game])
 
