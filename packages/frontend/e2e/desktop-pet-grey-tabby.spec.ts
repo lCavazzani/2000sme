@@ -28,7 +28,7 @@ test.describe('TEST-19 grey-tabby Desktop Pet coverage', () => {
     const requests: string[] = []
     page.on('request', (request) => requests.push(request.url()))
     const pet = await openDesktopPet(page)
-    await advanceClockAndPause(page, 1)
+    await advanceClockAndPause(page, 1000)
     const cat = pet.getByRole('img', { name: "Mittens, Leonardo's grey tabby, resting beside the PixelOS desk" })
 
     await expect(cat).toHaveAttribute('src', '/pixelos/pets/grey-tabby/grey-tabby-idle-128.gif')
@@ -61,6 +61,12 @@ test.describe('TEST-19 grey-tabby Desktop Pet coverage', () => {
       'src',
       '/pixelos/pets/grey-tabby/pixelos-grey-tabby-pet-readable-02.png',
     )
+    await advanceClockAndPause(page, 900)
+    await expectAcknowledgementFrame(pet, '0')
+    await expect(petAcknowledgement).toHaveAttribute(
+      'src',
+      '/pixelos/pets/grey-tabby/pixelos-grey-tabby-pet-readable-00.png',
+    )
 
     const treat = pet.getByRole('button', { name: 'TREAT MITTENS' })
     await treat.focus()
@@ -81,6 +87,12 @@ test.describe('TEST-19 grey-tabby Desktop Pet coverage', () => {
     await expect(treatAcknowledgement).toHaveAttribute(
       'src',
       '/pixelos/pets/grey-tabby/pixelos-grey-tabby-treat-reach-02.png',
+    )
+    await advanceClockAndPause(page, 900)
+    await expectAcknowledgementFrame(pet, '0')
+    await expect(treatAcknowledgement).toHaveAttribute(
+      'src',
+      '/pixelos/pets/grey-tabby/pixelos-grey-tabby-treat-reach-00.png',
     )
     const pick = pet.getByRole('region', { name: 'Local Pick' })
     await expect(pick).toContainText('LOCAL PICK · MY MACHINE')
@@ -110,7 +122,7 @@ test.describe('TEST-19 grey-tabby Desktop Pet coverage', () => {
   test('captures each deterministic full-effects acknowledgement frame and the original Treat static fallback', async ({ page }) => {
     await page.clock.install({ time: new Date('2026-08-25T00:00:00.000Z') })
     await visitPixelOs(page, '/#/apps/pet')
-    await advanceClockAndPause(page, 1)
+    await advanceClockAndPause(page, 1000)
     const pet = page.getByRole('main', { name: 'DESKTOP PET direct route' })
 
     await pet.getByRole('button', { name: 'PET MITTENS' }).click()
@@ -122,6 +134,8 @@ test.describe('TEST-19 grey-tabby Desktop Pet coverage', () => {
     await advanceClockAndPause(page, 180)
     await expectAcknowledgementFrame(pet, '2')
     await expect(pet).toHaveScreenshot('desktop-pet-readable-pet-frame-02.png', { animations: 'disabled' })
+    await advanceClockAndPause(page, 900)
+    await expectAcknowledgementFrame(pet, '0')
 
     await pet.getByRole('button', { name: 'TREAT MITTENS' }).click()
     await expectAcknowledgementFrame(pet, '0')
@@ -132,6 +146,8 @@ test.describe('TEST-19 grey-tabby Desktop Pet coverage', () => {
     await advanceClockAndPause(page, 180)
     await expectAcknowledgementFrame(pet, '2')
     await expect(pet).toHaveScreenshot('desktop-pet-treat-reach-frame-02.png', { animations: 'disabled' })
+    await advanceClockAndPause(page, 900)
+    await expectAcknowledgementFrame(pet, '0')
   })
 
   test('uses static acknowledgement sources for reduced motion, effects reduction, and acknowledgement asset errors while preserving local controls', async ({ browser }) => {
