@@ -8,7 +8,8 @@
     "build": "tsc -b && VITE_API_ORIGIN=https://00sbackedn.cavazzanileonardo.workers.dev vite build",
     "build:cloud-development": "tsc -b && VITE_API_ORIGIN=https://00sbackedn-development.cavazzanileonardo.workers.dev vite build --mode development",
     "assert:production-api-origin": "node scripts/assert-production-api-origin.mjs",
-    "lint": "oxlint",
+    "lint": "oxlint && pnpm lint:tokens",
+    "lint:tokens": "node scripts/check-shell-tokens.mjs",
     "test": "vitest run",
     "test:a11y": "playwright test",
     "preview": "vite preview"
