@@ -159,3 +159,21 @@ The owner supplied `pixelos-grey-tabby-pet-readable-confirm-128.gif` (SHA-256 `2
 | `pets/grey-tabby/pixelos-grey-tabby-treat-reach.json` | `1d11b96da52654b526f29d6d53a4a3e38bde9b96deaa75221187ddd34eb53515` | metadata | Owner-supplied 180 ms / 180 ms / 900 ms no-loop contract. |
 
 FE-X renders acknowledgement frames only at their native 128px stage size with `image-rendering: crisp-edges` followed by `image-rendering: pixelated`. PixelOS effects-off, reduced motion, and image-load failure retain static, meaningful acknowledgement fallbacks; action status, Pick, Reset, keyboard/touch targets, local/session-only behavior, and no-network guarantees remain authoritative.
+
+## PXOS-17 / FE-X SIGNAL.EXE Leonardo Local Portfolio Guide
+
+The owner supplied `signal-exe-leonardo-implementation-handoff-package.zip` (SHA-256 `3eb630b812ce456baa7db41b8542d355647b6d0a3b5c0cebc4db6566e17e137e`) for the user-approved SIGNAL.EXE Leonardo follow-up. FE-X copies the supplied runtime assets into source-controlled local public paths. No archive URL, preview image, external Messenger asset, or runtime network request is used.
+
+| Imported file | SHA-256 | Native dimensions | FE-X role |
+|---|---|---:|---|
+| `portraits/pixelos-leonardo-entry-hero-smart-blink-128.gif` | `01df55ca18bda1746dcb54ed26af779160210539097ac041d47550ca2a3fdbf0` | 128 × 128 px | Full-effects desktop owner-rail smart blink only. |
+| `portraits/pixelos-leonardo-entry-hero-static-128.png` | `8491a1773fefbd35b159f8f92fafd49a38fd7094c6d609cc25443cbaa98c33a8` | 128 × 128 px | Static launcher icon and reduced-motion, narrow-layout, and image-error owner-rail fallback. |
+| `icons/signal/pixelos-signal-tool-projects-00.png` | `adbc8fe176412331ae056fe64c5ba5162bbed37c487d302c463cb9dd5dde9056` | 32 × 32 px | Decorative Projects toolbar icon. |
+| `icons/signal/pixelos-signal-tool-resume-00.png` | `26e3d7d2768c25ccad53c7d95b4b55c1dbd80aba4ecbf8c3dd0f5258297e315c` | 32 × 32 px | Decorative Resume toolbar icon. |
+| `icons/signal/pixelos-signal-tool-about-00.png` | `eee17330b146849d8d45d55e433923eab01e6b2652315972cb3a176c97354fac` | 32 × 32 px | Decorative About toolbar icon. |
+| `icons/signal/pixelos-signal-tool-wink-00.png` | `b281ea720504ba19907411b91ef092595da1b4ea7f67d7191957bbf056cb0f64` | 32 × 32 px | Decorative local Wink toolbar icon. |
+| `icons/signal/pixelos-signal-tool-attention-00.png` | `91eacb886e8f297b5037aa0a78b8acbc34b08a0b5836366b6ea5d7abb808d2e0` | 32 × 32 px | Decorative local Attention toolbar icon. |
+| `icons/signal/pixelos-signal-tool-send-00.png` | `8a90518d20b3b9214af171ba9f197538e0ca5a85cd773a158d4a380fef471fd7` | 32 × 32 px | Decorative Send Local icon. |
+| `icons/signal/pixelos-signal-tool-open-app-00.png` | `7b63be87ddf5741dd74f05dab60565f8f72e6939d8060905320a887dcac5d4e2` | 32 × 32 px | Decorative explicit local application-opening icon. |
+
+The owner rail runs the supplied blink GIF only in full effects on desktop. It resolves to the supplied static 128px portrait for reduced effects, system reduced motion, narrow layouts, and image failure. All 32px icon assets are empty-alt, `aria-hidden` decorative frames beside labelled controls; they do not replace semantic button text. The conversation remains one deterministic local transcript: no visitor text is stored, analyzed, or sent, and no remote delivery, account, contact, presence, typing, read-receipt, audio, analytics, or API/LLM surface is introduced.
