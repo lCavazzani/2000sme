@@ -1,0 +1,20 @@
+{
+  "frameWidth": 128,
+  "frameHeight": 128,
+  "frameCount": 3,
+  "loop": false,
+  "frameDurationsMs": [
+    180,
+    180,
+    900
+  ],
+  "frames": [
+    "pixelos-grey-tabby-pet-readable-00.png",
+    "pixelos-grey-tabby-pet-readable-01.png",
+    "pixelos-grey-tabby-pet-readable-02.png"
+  ],
+  "staticFallback": "pixelos-grey-tabby-pet-readable-00.png",
+  "state": "pet-open-eyed-readable-confirmation",
+  "alt": "Mittens, Leonardo's grey tabby, acknowledging a local pet with an open-eyed heart cue.",
+  "derivedFrom": "pixelos-grey-tabby-pet-readable-confirm-128.gif"
+}

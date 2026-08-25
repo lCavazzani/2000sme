@@ -22,8 +22,15 @@ describe('pixelosAssets', () => {
       '/pixelos/details/pixelos-grey-tabby-peek-00.png',
       '/pixelos/pets/grey-tabby/grey-tabby-idle-00.png',
       '/pixelos/pets/grey-tabby/grey-tabby-idle-128.gif',
-      '/pixelos/pets/grey-tabby/pixelos-grey-tabby-pet-00.png',
+      '/pixelos/pets/grey-tabby/pixelos-grey-tabby-pet-readable-00.png',
+      '/pixelos/pets/grey-tabby/pixelos-grey-tabby-pet-readable-01.png',
+      '/pixelos/pets/grey-tabby/pixelos-grey-tabby-pet-readable-02.png',
+      '/pixelos/pets/grey-tabby/pixelos-grey-tabby-pet-readable-confirm-128.gif',
       '/pixelos/pets/grey-tabby/pixelos-grey-tabby-treat-00.png',
+      '/pixelos/pets/grey-tabby/pixelos-grey-tabby-treat-reach-00.png',
+      '/pixelos/pets/grey-tabby/pixelos-grey-tabby-treat-reach-01.png',
+      '/pixelos/pets/grey-tabby/pixelos-grey-tabby-treat-reach-02.png',
+      '/pixelos/pets/grey-tabby/pixelos-grey-tabby-treat-reach-confirm-128.gif',
       '/pixelos/pets/grey-tabby/grey-tabby-static-32.png',
       '/pixelos/details/pixelos-grey-tabby-paw-00.png',
       '/pixelos/intro/pixelos-boot-beacon-static-00.png',
@@ -44,6 +51,8 @@ describe('pixelosAssets', () => {
       '/pixelos/games/nightshift/nightshift-twilight-roadside-strip-static-00.png',
       '/pixelos/games/nightshift/nightshift-twilight-road-reflector-tile-static-00.png',
     ])
+    expect(PIXEL_OS_ASSETS).not.toHaveProperty('greyTabbyPet')
+    expect(PIXEL_OS_ASSETS).not.toHaveProperty('greyTabbyTreat')
   })
 
   it('keeps the supplied gallery names and source references stable for future PixelOS applications', () => {
