@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "build:cloud-development": "tsc -b && VITE_GUESTBOOK_API_ORIGIN=https://00sbackedn-development.cavazzanileonardo.workers.dev vite build --mode development",
+    "build:cloud-development": "tsc -b && vite build --mode development",
     "assert:production-api-origin": "node scripts/assert-production-api-origin.mjs",
     "lint": "oxlint",
     "test": "vitest run",
@@ -14,7 +14,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@tanstack/react-query": "^5.101.4",
     "marked": "^18.0.9",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",

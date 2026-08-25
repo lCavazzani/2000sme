@@ -18,7 +18,7 @@ export const projects: Project[] = [
     id: 'sportifolio',
     name: '00sportifolio',
     description:
-      'Personal portfolio built as a Windows 98 desktop simulation. Features draggable/resizable windows, theme switching between Win98, WinXP, and Win7, a Cloudflare Workers API with D1, rate-limited guestbook, and a pnpm monorepo with GitHub Actions CI/CD.',
+      'Personal portfolio built as PixelOS, an interactive pixel-art desktop environment. Features draggable/resizable windows, a registry-driven application shell, playable Minesweeper and NIGHTSHIFT games, a Cloudflare Workers API with D1, and a pnpm monorepo with GitHub Actions CI/CD.',
     techStack: ['React', 'TypeScript', 'Cloudflare Workers', 'Hono', 'D1', 'Vite', 'pnpm'],
     links: [
       { label: 'GitHub', url: 'https://github.com/lCavazzani/2000sme' },
@@ -26,24 +26,6 @@ export const projects: Project[] = [
     ],
     icon: '/desktop-icons/my-computer.svg',
     year: 2026,
-  },
-  {
-    id: 'project-alpha',
-    name: 'Project Alpha',
-    description: 'Replace with a real project description.',
-    techStack: ['Node.js', 'TypeScript', 'PostgreSQL', 'Docker'],
-    links: [{ label: 'GitHub', url: 'https://github.com/lCavazzani' }],
-    icon: '/desktop-icons/my-computer.svg',
-    year: 2025,
-  },
-  {
-    id: 'project-beta',
-    name: 'Project Beta',
-    description: 'Replace with a real project description.',
-    techStack: ['Python', 'FastAPI', 'Redis', 'Terraform'],
-    links: [{ label: 'GitHub', url: 'https://github.com/lCavazzani' }],
-    icon: '/desktop-icons/my-computer.svg',
-    year: 2024,
   },
 ]
 

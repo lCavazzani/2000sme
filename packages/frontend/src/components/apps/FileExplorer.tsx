@@ -14,9 +14,9 @@ function PixelMachineGlyph({ kind }: { kind: MachineItem['kind'] }) {
     return (
       <svg viewBox="0 0 32 32" className={styles.machineGlyph} aria-hidden="true">
         <path d="M3 9h26v15H3z" fill="currentColor" />
-        <path d="M6 12h20v5H6z" fill="#120b22" />
-        <path d="M22 20h3v3h-3z" fill="#4de3d0" />
-        <path d="M7 20h11v3H7z" fill="#6d5aa8" />
+        <path d="M6 12h20v5H6z" fill="var(--os-edge)" />
+        <path d="M22 20h3v3h-3z" fill="var(--os-cyan)" />
+        <path d="M7 20h11v3H7z" fill="var(--pixelos-bevel-highlight)" />
       </svg>
     )
   }
@@ -24,8 +24,8 @@ function PixelMachineGlyph({ kind }: { kind: MachineItem['kind'] }) {
   return (
     <svg viewBox="0 0 32 32" className={styles.machineGlyph} aria-hidden="true">
       <path d="M3 8h11l3 3h12v14H3z" fill="currentColor" />
-      <path d="M5 13h22v10H5z" fill="#3b2d5e" />
-      <path d="M5 13h22v3H5z" fill="#4de3d0" />
+      <path d="M5 13h22v10H5z" fill="var(--os-app-toolbar-surface)" />
+      <path d="M5 13h22v3H5z" fill="var(--os-cyan)" />
     </svg>
   )
 }
