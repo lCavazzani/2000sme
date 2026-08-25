@@ -1,5 +1,6 @@
 import type { ComponentType } from 'react'
 import { PIXEL_OS_ASSETS } from './pixelosAssets'
+import { initialWindowGeometryFor } from './initialWindowGeometry'
 import { AboutPixelOS } from '../components/apps/AboutPixelOS'
 import { FileExplorer } from '../components/apps/FileExplorer'
 import { MinesweeperWindow } from '../games/minesweeper/MinesweeperWindow'
@@ -34,8 +35,15 @@ export type ApplicationDefinition = WindowConfig & {
   renderer?: ComponentType
 }
 
-function defineApplication(application: ApplicationDefinition): ApplicationDefinition {
-  return application
+type ApplicationRegistration = Omit<ApplicationDefinition, 'x' | 'y' | 'width' | 'height'>
+
+/**
+ * Keeps application identity and launch metadata separate from editable geometry.
+ * Every desktop-window app receives fresh initial bounds from
+ * initialWindowGeometry.ts, which also supplies Reset Bounds defaults.
+ */
+function defineApplication(application: ApplicationRegistration): ApplicationDefinition {
+  return { ...application, ...initialWindowGeometryFor(application.id) }
 }
 
 /**
@@ -56,10 +64,6 @@ export const applicationRegistry = [
     shortcut: 'Alt+1',
     capability: 'desktop-window',
     launchSurfaces: ['desktop', 'start-menu', 'mobile'],
-    x: 120,
-    y: 50,
-    width: 640,
-    height: 440,
     renderer: FileExplorer,
   }),
   defineApplication({
@@ -74,10 +78,6 @@ export const applicationRegistry = [
     shortcut: 'Alt+3',
     capability: 'desktop-window',
     launchSurfaces: ['desktop', 'start-menu', 'mobile'],
-    x: 210,
-    y: 70,
-    width: 560,
-    height: 400,
     renderer: PixelGallery,
   }),
   defineApplication({
@@ -92,10 +92,6 @@ export const applicationRegistry = [
     shortcut: 'Alt+4',
     capability: 'desktop-window',
     launchSurfaces: ['desktop', 'start-menu', 'mobile'],
-    x: 560,
-    y: 90,
-    width: 300,
-    height: 360,
     renderer: PixelPet,
   }),
   defineApplication({
@@ -110,10 +106,6 @@ export const applicationRegistry = [
     shortcut: 'Alt+2',
     capability: 'desktop-window',
     launchSurfaces: ['desktop', 'start-menu', 'mobile'],
-    x: 150,
-    y: 96,
-    width: 460,
-    height: 360,
     renderer: PixelNotepad,
   }),
   defineApplication({
@@ -128,10 +120,6 @@ export const applicationRegistry = [
     shortcut: 'Alt+6',
     capability: 'desktop-window',
     launchSurfaces: ['desktop', 'start-menu', 'mobile'],
-    x: 300,
-    y: 180,
-    width: 380,
-    height: 270,
     renderer: AboutPixelOS,
   }),
   defineApplication({
@@ -146,10 +134,6 @@ export const applicationRegistry = [
     shortcut: 'Alt+9',
     capability: 'desktop-window',
     launchSurfaces: ['desktop', 'start-menu', 'mobile'],
-    x: 260,
-    y: 104,
-    width: 620,
-    height: 590,
     renderer: SignalGuide,
   }),
   defineApplication({
@@ -164,10 +148,6 @@ export const applicationRegistry = [
     shortcut: 'Alt+7',
     capability: 'desktop-window',
     launchSurfaces: ['desktop', 'start-menu', 'mobile'],
-    x: 340,
-    y: 76,
-    width: 500,
-    height: 560,
     renderer: MinesweeperWindow,
   }),
   defineApplication({
@@ -182,10 +162,6 @@ export const applicationRegistry = [
     shortcut: 'Alt+8',
     capability: 'desktop-window',
     launchSurfaces: ['desktop', 'start-menu', 'mobile'],
-    x: 370,
-    y: 96,
-    width: 680,
-    height: 580,
     renderer: NightshiftWindow,
   }),
   defineApplication({
@@ -200,10 +176,6 @@ export const applicationRegistry = [
     shortcut: 'Alt+5',
     capability: 'desktop-window',
     launchSurfaces: ['desktop', 'start-menu', 'mobile'],
-    x: 150,
-    y: 96,
-    width: 760,
-    height: 540,
     renderer: WordPad,
   }),
 ] as const satisfies readonly ApplicationDefinition[]
