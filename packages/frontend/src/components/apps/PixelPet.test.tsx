@@ -22,7 +22,7 @@ describe('PixelPet', () => {
     delete document.documentElement.dataset.themeEffects
   })
 
-  it('plays the readable Pet and original-pose Treat confirmations exactly once before holding their final frames', () => {
+  it('loops the readable Pet and original-pose Treat confirmations after their final held frames', () => {
     vi.useFakeTimers()
     render(<PixelPet />)
 
@@ -36,7 +36,7 @@ describe('PixelPet', () => {
     act(() => vi.advanceTimersByTime(180))
     expect(cat).toHaveAttribute('src', PIXEL_OS_ASSETS.greyTabbyPetReadableFrameTwo)
     act(() => vi.advanceTimersByTime(900))
-    expect(cat).toHaveAttribute('src', PIXEL_OS_ASSETS.greyTabbyPetReadableFrameTwo)
+    expect(cat).toHaveAttribute('src', PIXEL_OS_ASSETS.greyTabbyPetReadableStatic)
 
     fireEvent.click(screen.getByRole('button', { name: 'TREAT MITTENS' }))
     expect(cat).toHaveAttribute('src', PIXEL_OS_ASSETS.greyTabbyTreatReachFrameZero)
@@ -45,6 +45,8 @@ describe('PixelPet', () => {
     expect(cat).toHaveAttribute('src', PIXEL_OS_ASSETS.greyTabbyTreatReachFrameOne)
     act(() => vi.advanceTimersByTime(180))
     expect(cat).toHaveAttribute('src', PIXEL_OS_ASSETS.greyTabbyTreatReachFrameTwo)
+    act(() => vi.advanceTimersByTime(900))
+    expect(cat).toHaveAttribute('src', PIXEL_OS_ASSETS.greyTabbyTreatReachFrameZero)
   })
 
   it('uses the approved static acknowledgement fallbacks for reduced effects and asset errors', () => {

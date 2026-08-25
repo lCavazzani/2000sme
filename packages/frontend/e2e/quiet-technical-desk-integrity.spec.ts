@@ -117,8 +117,10 @@ test.describe('TEST-21 Quiet Technical Desk whole-system integrity', () => {
     await expect(peek).toHaveCSS('pointer-events', 'none')
     await expect(gallery).toHaveScreenshot('quiet-technical-desk-gallery-direct.png', { animations: 'disabled' })
 
-    await page.goto('/#/apps/pet')
+    await page.addInitScript(() => window.localStorage.setItem('2000sme:effects', 'reduced'))
+    await page.goto('/?test-effects=reduced#/apps/pet')
     const pet = page.getByRole('main', { name: 'DESKTOP PET direct route' })
+    await expect(page.locator('html')).toHaveAttribute('data-theme-effects', 'reduced')
     await expect(pet.locator('img[src$="pixelos-grey-tabby-paw-00.png"]')).toHaveCount(0)
     await pet.getByRole('button', { name: 'TREAT MITTENS' }).click()
     const paw = pet.locator('img[src$="pixelos-grey-tabby-paw-00.png"]')

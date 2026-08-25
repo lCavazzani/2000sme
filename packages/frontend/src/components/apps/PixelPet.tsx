@@ -20,6 +20,8 @@ type PetVisual = {
 
 const PET_DISPLAY_NAME = 'MITTENS.EXE'
 const ACKNOWLEDGEMENT_STEP_MS = 180
+const ACKNOWLEDGEMENT_FINAL_HOLD_MS = 900
+const ACKNOWLEDGEMENT_CYCLE_MS = ACKNOWLEDGEMENT_STEP_MS * 2 + ACKNOWLEDGEMENT_FINAL_HOLD_MS
 
 const PICK_DESTINATIONS: readonly PickDestination[] = [
   {
@@ -135,12 +137,23 @@ export function PixelPet() {
       return
     }
 
-    const secondFrame = window.setTimeout(() => setAcknowledgementFrame(1), ACKNOWLEDGEMENT_STEP_MS)
-    const finalFrame = window.setTimeout(() => setAcknowledgementFrame(2), ACKNOWLEDGEMENT_STEP_MS * 2)
+    let secondFrame = 0
+    let finalFrame = 0
+    let restartCycle = 0
+
+    const playCycle = () => {
+      setAcknowledgementFrame(0)
+      secondFrame = window.setTimeout(() => setAcknowledgementFrame(1), ACKNOWLEDGEMENT_STEP_MS)
+      finalFrame = window.setTimeout(() => setAcknowledgementFrame(2), ACKNOWLEDGEMENT_STEP_MS * 2)
+      restartCycle = window.setTimeout(playCycle, ACKNOWLEDGEMENT_CYCLE_MS)
+    }
+
+    playCycle()
 
     return () => {
       window.clearTimeout(secondFrame)
       window.clearTimeout(finalFrame)
+      window.clearTimeout(restartCycle)
     }
   }, [action, useStaticFrame, visualFailed])
 
