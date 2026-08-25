@@ -12,20 +12,32 @@ import styles from './SignalGuide.module.css'
 
 type SignalMessage = {
   id: number
-  kind: 'mittens' | 'visitor' | 'system'
+  kind: 'guide' | 'visitor' | 'system'
   text: string
   topic?: SignalTopic
 }
 
+type ToolAction = SignalTopic | 'wink' | 'attention'
+
 const INITIAL_MESSAGES: readonly SignalMessage[] = [
-  { id: 1, kind: 'mittens', text: 'Hi, I am Mittens.' },
-  { id: 2, kind: 'mittens', text: 'Ask about Leonardo, projects, the resume, or PixelOS.' },
+  { id: 1, kind: 'guide', text: 'This local portfolio guide shares the work behind this PixelOS desktop.' },
+  { id: 2, kind: 'guide', text: 'Use a tool, or ask about projects, experience, the resume, skills, or PixelOS.' },
 ]
 
-const QUICK_TOPICS: readonly SignalTopic[] = ['projects', 'resume', 'about']
+const QUICK_TOOLS: readonly { topic: SignalTopic; label: string; icon: string }[] = [
+  { topic: 'projects', label: 'PROJECTS', icon: PIXEL_OS_ASSETS.signalToolProjects },
+  { topic: 'resume', label: 'RESUME', icon: PIXEL_OS_ASSETS.signalToolResume },
+  { topic: 'about', label: 'ABOUT', icon: PIXEL_OS_ASSETS.signalToolAbout },
+]
 
-function labelForTopic(topic: SignalTopic): string {
-  return topic.toUpperCase()
+function messageLabel(kind: SignalMessage['kind']) {
+  if (kind === 'guide') return 'LEONARDO'
+  if (kind === 'visitor') return 'YOU'
+  return 'LOCAL EVENT'
+}
+
+function ToolIcon({ src }: { src: string }) {
+  return <img src={src} alt="" aria-hidden="true" className={styles.toolIcon} />
 }
 
 export function SignalGuide() {
@@ -33,12 +45,17 @@ export function SignalGuide() {
   const { effects } = useTheme()
   const [messages, setMessages] = useState<readonly SignalMessage[]>(INITIAL_MESSAGES)
   const [draft, setDraft] = useState('')
-  const [announcement, setAnnouncement] = useState('GUIDE READY')
+  const [announcement, setAnnouncement] = useState('LOCAL GUIDE READY')
   const [event, setEvent] = useState<'wink' | 'attention' | null>(null)
   const [winkReady, setWinkReady] = useState(true)
   const [attentionReady, setAttentionReady] = useState(true)
+  const [portraitError, setPortraitError] = useState(false)
   const quickPromptRef = useRef<HTMLButtonElement>(null)
   const nextIdRef = useRef(3)
+  const fullEffects = effects === 'full'
+  const animatedPortrait = fullEffects && !portraitError
+    ? PIXEL_OS_ASSETS.leonardoSignalSmartBlinkGif
+    : PIXEL_OS_ASSETS.leonardoSignalStatic
 
   useEffect(() => {
     quickPromptRef.current?.focus()
@@ -47,95 +64,139 @@ export function SignalGuide() {
   const appendTopic = (topic: SignalTopic, visitorText = visitorPromptForTopic(topic)) => {
     const reply = SIGNAL_GUIDE_REPLIES[topic]
     const visitor: SignalMessage = { id: nextIdRef.current++, kind: 'visitor', text: visitorText, topic }
-    const mittens: SignalMessage = { id: nextIdRef.current++, kind: 'mittens', text: reply.text, topic }
-    setMessages((current) => [...current, visitor, mittens])
+    const guide: SignalMessage = { id: nextIdRef.current++, kind: 'guide', text: reply.text, topic }
+    setMessages((current) => [...current, visitor, guide])
     setAnnouncement(reply.text)
   }
 
   const submitDraft = () => {
     const text = draft.trim()
     if (!text) return
-    const topic = signalTopicFromInput(text)
-    appendTopic(topic, text)
+    appendTopic(signalTopicFromInput(text), text)
     setDraft('')
+  }
+
+  const appendEvent = (kind: Extract<ToolAction, 'wink' | 'attention'>, text: string) => {
+    setEvent(kind)
+    setMessages((current) => [...current, { id: nextIdRef.current++, kind: 'system', text }])
+    setAnnouncement(text)
   }
 
   const triggerWink = () => {
     if (!winkReady) return
     setWinkReady(false)
-    setEvent('wink')
-    setMessages((current) => [...current, { id: nextIdRef.current++, kind: 'system', text: 'MITTENS SENT A LOCAL WINK.' }])
-    setAnnouncement('Mittens sent a local wink.')
+    appendEvent('wink', 'LOCAL WINK MARKED. NO MESSAGE WAS SENT.')
     window.setTimeout(() => setWinkReady(true), 2_000)
   }
 
   const triggerAttention = () => {
     if (!attentionReady) return
     setAttentionReady(false)
-    setEvent('attention')
-    const text = effects === 'reduced'
-      ? 'ATTENTION MARKED LOCALLY. EFFECTS ARE REDUCED.'
-      : 'ATTENTION MARKED LOCALLY.'
-    setMessages((current) => [...current, { id: nextIdRef.current++, kind: 'system', text }])
-    setAnnouncement(text)
+    appendEvent(
+      'attention',
+      effects === 'reduced'
+        ? 'ATTENTION MARKED LOCALLY. EFFECTS ARE REDUCED.'
+        : 'ATTENTION MARKED LOCALLY.',
+    )
     window.setTimeout(() => setAttentionReady(true), 3_000)
   }
 
   return (
-    <section className={styles.root} aria-labelledby="signal-heading">
-      <header className={styles.header} data-attention={event === 'attention' && effects === 'full'} tabIndex={-1}>
-        <img src={PIXEL_OS_ASSETS.mittens} alt="" className={styles.avatar} />
+    <section className={styles.root} aria-labelledby="signal-heading" data-event={event ?? undefined}>
+      <div className={styles.sessionRibbon} aria-label="Local session">LEONARDO · PORTFOLIO GUIDE · ONE LOCAL CONVERSATION</div>
+
+      <header className={styles.ownerHeader}>
+        <img src={PIXEL_OS_ASSETS.leonardoProfile64} alt="" aria-hidden="true" className={styles.headerPortrait} />
         <div>
-          <h2 id="signal-heading">MITTENS</h2>
-          <p>PIXEL OS GUIDE · LOCAL</p>
-          <p className={styles.ready}><span aria-hidden="true">●</span> GUIDE READY</p>
+          <h2 id="signal-heading">LEONARDO CAVAZZANI</h2>
+          <p>SENIOR FRONTEND DEVELOPER · LOCAL PORTFOLIO GUIDE</p>
+          <p>ASK ABOUT PROJECTS, EXPERIENCE, OR SKILLS.</p>
         </div>
       </header>
 
-      <p className={styles.localContract}>ONE LOCAL CONVERSATION. TYPED TEXT IS NEVER SENT, STORED, OR ANALYZED.</p>
       <output className={styles.liveStatus} aria-live="polite">{announcement}</output>
 
-      <ol className={styles.transcript} aria-label="Mittens local guide conversation">
-        {messages.map((message) => {
-          const reply = message.topic ? SIGNAL_GUIDE_REPLIES[message.topic] : undefined
-          return (
-            <li key={message.id} className={styles[message.kind]}>
-              <span className={styles.messageLabel}>{message.kind === 'mittens' ? 'MITTENS' : message.kind === 'visitor' ? 'YOU' : 'LOCAL EVENT'}</span>
-              <p>{message.text}</p>
-              {message.kind === 'mittens' && reply?.action && (
-                <button type="button" onClick={() => openWindowById(reply.action!.applicationId)}>{reply.action.label}</button>
-              )}
-            </li>
-          )
-        })}
-      </ol>
-
-      <div className={styles.actionStrip} aria-label="Mittens quick prompts and local actions">
-        {QUICK_TOPICS.map((topic, index) => (
-          <button
-            key={topic}
-            type="button"
-            ref={index === 0 ? quickPromptRef : undefined}
-            onClick={() => appendTopic(topic)}
-          >
-            {labelForTopic(topic)}
+      <div className={styles.toolRow} aria-label="Leonardo local guide tools">
+        <div className={styles.actionStrip}>
+          {QUICK_TOOLS.map((tool, index) => (
+            <button
+              key={tool.topic}
+              type="button"
+              ref={index === 0 ? quickPromptRef : undefined}
+              onClick={() => appendTopic(tool.topic)}
+            >
+              <ToolIcon src={tool.icon} />
+              <span>{tool.label}</span>
+            </button>
+          ))}
+          <button type="button" onClick={triggerWink} disabled={!winkReady}>
+            <ToolIcon src={PIXEL_OS_ASSETS.signalToolWink} />
+            <span>WINK</span>
           </button>
-        ))}
-        <button type="button" onClick={triggerWink} disabled={!winkReady}>WINK</button>
-        <button type="button" onClick={triggerAttention} disabled={!attentionReady}>ATTENTION</button>
+          <button type="button" onClick={triggerAttention} disabled={!attentionReady}>
+            <ToolIcon src={PIXEL_OS_ASSETS.signalToolAttention} />
+            <span>ATTENTION</span>
+          </button>
+        </div>
+        <p className={styles.localContract}>LOCAL ONLY · NO NETWORK · NO STORAGE</p>
       </div>
 
-      <form className={styles.composer} onSubmit={(event) => { event.preventDefault(); submitDraft() }}>
-        <label htmlFor="signal-local-question">ASK THE LOCAL GUIDE</label>
+      <div className={styles.conversationLayout}>
+        <section className={styles.conversationCanvas} aria-label="Leonardo portfolio guide reading canvas">
+          <p className={styles.eventStrip}>LEONARDO&apos;S LOCAL PORTFOLIO GUIDE · REPLIES STAY ON THIS DEVICE</p>
+          <ol className={styles.transcript} aria-label="Leonardo local portfolio guide conversation">
+            {messages.map((message) => {
+              const reply = message.topic ? SIGNAL_GUIDE_REPLIES[message.topic] : undefined
+              return (
+                <li key={message.id} className={styles[message.kind]}>
+                  <span className={styles.messageLabel}>{messageLabel(message.kind)}</span>
+                  <p>{message.text}</p>
+                  {message.kind === 'guide' && reply?.action && (
+                    <button type="button" onClick={() => openWindowById(reply.action!.applicationId)}>
+                      <ToolIcon src={PIXEL_OS_ASSETS.signalToolOpenApp} />
+                      <span>{reply.action.label}</span>
+                    </button>
+                  )}
+                </li>
+              )
+            })}
+          </ol>
+        </section>
+
+        <aside className={styles.ownerRail} aria-label="Leonardo local portfolio guide profile">
+          <picture>
+            <source media="(max-width: 760px)" srcSet={PIXEL_OS_ASSETS.leonardoSignalStatic} />
+            <img
+              src={animatedPortrait}
+              alt=""
+              aria-hidden="true"
+              className={styles.ownerPortrait}
+              onError={() => setPortraitError(true)}
+            />
+          </picture>
+          <div className={styles.ownerRailCopy}>
+            <p>LEONARDO CAVAZZANI</p>
+            <p>SENIOR FRONTEND DEVELOPER</p>
+            <p>LOCAL PORTFOLIO GUIDE</p>
+            <span>OWNER CONTEXT</span>
+          </div>
+        </aside>
+      </div>
+
+      <form className={styles.composer} onSubmit={(formEvent) => { formEvent.preventDefault(); submitDraft() }}>
+        <label htmlFor="signal-local-question">MESSAGE THE LOCAL PORTFOLIO GUIDE</label>
         <div>
           <input
             id="signal-local-question"
             value={draft}
-            onChange={(event) => setDraft(event.target.value)}
-            placeholder="Ask Mittens locally…"
+            onChange={(inputEvent) => setDraft(inputEvent.target.value)}
+            placeholder="Ask about the work…"
             autoComplete="off"
           />
-          <button type="submit" disabled={!draft.trim()}>SEND LOCAL</button>
+          <button type="submit" disabled={!draft.trim()}>
+            <ToolIcon src={PIXEL_OS_ASSETS.signalToolSend} />
+            <span>SEND LOCAL</span>
+          </button>
         </div>
       </form>
 

@@ -17,7 +17,7 @@ const staticIconSources: Partial<Record<ApplicationId, string>> = {
   'my-computer': '/pixelos/icons/pixelos-my-machine-static-00.png',
   gallery: '/pixelos/icons/pixelos-gallery-static-00.png',
   pet: '/pixelos/icons/pixelos-desktop-pet-static-00.png',
-  signal: PIXEL_OS_ASSETS.mittens,
+  signal: PIXEL_OS_ASSETS.leonardoSignalStatic,
   notepad: '/pixelos/icons/pixelos-readme-static-00.png',
   about: '/pixelos/icons/pixelos-about-me-static-00.png',
   resume: '/pixelos/icons/pixelos-resume-static-00.png',

@@ -12,7 +12,7 @@ export type SignalGuideReply = {
 
 export const SIGNAL_GUIDE_REPLIES: Record<SignalTopic, SignalGuideReply> = {
   welcome: {
-    text: 'Hi, I am Mittens, your local PixelOS guide. Ask about Leonardo, projects, the resume, skills, or how this desktop works.',
+    text: 'This is Leonardo’s local portfolio guide. Ask about projects, the resume, skills, or how this desktop works.',
   },
   projects: {
     text: 'MY MACHINE contains a portfolio-safe project grid and the work behind this PixelOS desktop.',
@@ -39,7 +39,7 @@ export const SIGNAL_GUIDE_REPLIES: Record<SignalTopic, SignalGuideReply> = {
     text: 'Use PROJECTS, RESUME, or ABOUT, type a local topic, or trigger one bounded WINK or ATTENTION event. Nothing leaves this browser.',
   },
   fallback: {
-    text: 'I only match local portfolio topics: projects, resume, experience, skills, about, contact, or help. Nothing you type is sent or stored.',
+    text: 'This local portfolio guide matches projects, resume, experience, skills, about, contact, or help. Nothing you type is sent or stored.',
   },
 }
 
@@ -66,7 +66,7 @@ export function signalTopicFromInput(value: string): SignalTopic {
 
 export function visitorPromptForTopic(topic: SignalTopic): string {
   return {
-    welcome: 'Hello, Mittens.',
+    welcome: 'Hello, local portfolio guide.',
     projects: 'Show me the projects.',
     resume: 'Open the resume.',
     experience: 'Tell me about Leonardo’s experience.',
@@ -74,6 +74,6 @@ export function visitorPromptForTopic(topic: SignalTopic): string {
     about: 'What is PixelOS?',
     contact: 'How does contact work here?',
     help: 'How can this local guide help?',
-    fallback: 'Ask Mittens a local portfolio question.',
+    fallback: 'Ask the local portfolio guide a question.',
   }[topic]
 }

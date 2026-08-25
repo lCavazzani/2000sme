@@ -53,6 +53,7 @@ describe('applicationRegistry', () => {
     expect(findApplication('notepad')?.icon).toBe('/pixelos/icons/pixelos-readme-static-00.png')
     expect(findApplication('about')?.icon).toBe('/pixelos/icons/pixelos-about-me-static-00.png')
     expect(findApplication('resume')?.icon).toBe('/pixelos/icons/pixelos-resume-static-00.png')
+    expect(findApplication('signal')?.icon).toBe('/pixelos/portraits/pixelos-leonardo-entry-hero-static-128.png')
   })
 
   it('derives every launcher surface from the same registry without duplicate destinations', () => {
@@ -118,7 +119,8 @@ describe('applicationRegistry', () => {
     const signal = findApplication('signal')
     expect(signal).toMatchObject({
       label: 'SIGNAL.EXE',
-      title: 'SIGNAL.EXE — MITTENS',
+      title: 'SIGNAL.EXE — LEONARDO',
+      mobileLabel: 'Leonardo Guide',
       launcherGroup: 'system',
       path: '#/apps/signal',
       capability: 'desktop-window',
