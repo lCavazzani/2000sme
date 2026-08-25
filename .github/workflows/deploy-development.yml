@@ -164,7 +164,7 @@ jobs:
             -H 'Accept: application/json' \
             https://00sbackedn-development.cavazzanileonardo.workers.dev/api/projects)"
           echo "$catalog" | jq -e 'has("projects") and (.projects | type == "array")' > /dev/null
-          echo "$catalog" | jq -e '[.projects[]? | select((.slug|type=="string") and (.name|type=="string") and (.year|type=="number"))] | length == (.projects|length)' > /dev/null
+          echo "$catalog" | jq -e '(.projects | length) as $project_count | [.projects[]? | select((.slug|type=="string") and (.name|type=="string") and (.year|type=="number"))] | length == $project_count' > /dev/null
           echo "Catalog exposes $(echo "$catalog" | jq '.projects | length') project(s)."
           # The retired placeholders must never reappear in a published catalog.
           if echo "$catalog" | jq -e '[.projects[]?.slug] | any(. == "project-alpha" or . == "project-beta")' > /dev/null; then
