@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useLayoutEffect, useState } from 'react'
 import { PIXEL_OS_ASSETS } from '../../config/pixelosAssets'
 import type { ApplicationId } from '../../config/applicationRegistry'
 import { useWindows } from '../../store/windows'
 import styles from './PixelPet.module.css'
 
 type PetAction = 'idle' | 'pet' | 'treat'
+type AcknowledgementFrame = 0 | 1 | 2
 
 type PickDestination = {
   id: ApplicationId
@@ -12,7 +13,13 @@ type PickDestination = {
   reason: string
 }
 
+type PetVisual = {
+  src: string
+  alt: string
+}
+
 const PET_DISPLAY_NAME = 'MITTENS.EXE'
+const ACKNOWLEDGEMENT_STEP_MS = 180
 
 const PICK_DESTINATIONS: readonly PickDestination[] = [
   {
@@ -37,17 +44,29 @@ const PICK_DESTINATIONS: readonly PickDestination[] = [
   },
 ]
 
-function shouldUseStaticIdle() {
+const petReadableFrames = [
+  PIXEL_OS_ASSETS.greyTabbyPetReadableStatic,
+  PIXEL_OS_ASSETS.greyTabbyPetReadableFrameOne,
+  PIXEL_OS_ASSETS.greyTabbyPetReadableFrameTwo,
+] as const
+
+const treatReachFrames = [
+  PIXEL_OS_ASSETS.greyTabbyTreatReachFrameZero,
+  PIXEL_OS_ASSETS.greyTabbyTreatReachFrameOne,
+  PIXEL_OS_ASSETS.greyTabbyTreatReachFrameTwo,
+] as const
+
+function shouldUseStaticVisual() {
   if (typeof window === 'undefined') return true
   return document.documentElement.dataset.themeEffects !== 'full'
     || (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false)
 }
 
-function useStaticIdle() {
-  const [useStatic, setUseStatic] = useState(shouldUseStaticIdle)
+function useStaticVisual() {
+  const [useStatic, setUseStatic] = useState(shouldUseStaticVisual)
 
   useEffect(() => {
-    const sync = () => setUseStatic(shouldUseStaticIdle())
+    const sync = () => setUseStatic(shouldUseStaticVisual())
     const rootObserver = new MutationObserver(sync)
     const reducedMotionQuery = window.matchMedia?.('(prefers-reduced-motion: reduce)')
 
@@ -67,23 +86,32 @@ function useStaticIdle() {
   return useStatic
 }
 
-function visualFor(action: PetAction, useStaticIdle: boolean, gifFailed: boolean) {
+function visualFor(
+  action: PetAction,
+  useStaticFrame: boolean,
+  visualFailed: boolean,
+  acknowledgementFrame: AcknowledgementFrame,
+): PetVisual {
   if (action === 'pet') {
     return {
-      src: PIXEL_OS_ASSETS.greyTabbyPet,
+      src: useStaticFrame || visualFailed
+        ? PIXEL_OS_ASSETS.greyTabbyPetReadableStatic
+        : petReadableFrames[acknowledgementFrame],
       alt: "Mittens, Leonardo's grey tabby, acknowledging a local pet",
     }
   }
 
   if (action === 'treat') {
     return {
-      src: PIXEL_OS_ASSETS.greyTabbyTreat,
+      src: useStaticFrame || visualFailed
+        ? PIXEL_OS_ASSETS.greyTabbyTreatStatic
+        : treatReachFrames[acknowledgementFrame],
       alt: "Mittens, Leonardo's grey tabby, acknowledging a local treat",
     }
   }
 
   return {
-    src: useStaticIdle || gifFailed
+    src: useStaticFrame || visualFailed
       ? PIXEL_OS_ASSETS.greyTabbyIdleStatic
       : PIXEL_OS_ASSETS.greyTabbyIdleGif,
     alt: "Mittens, Leonardo's grey tabby, resting beside the PixelOS desk",
@@ -93,20 +121,40 @@ function visualFor(action: PetAction, useStaticIdle: boolean, gifFailed: boolean
 export function PixelPet() {
   const { openWindowById } = useWindows()
   const [action, setAction] = useState<PetAction>('idle')
-  const [gifFailed, setGifFailed] = useState(false)
+  const [visualFailed, setVisualFailed] = useState(false)
+  const [acknowledgementFrame, setAcknowledgementFrame] = useState<AcknowledgementFrame>(0)
   const [nextPickIndex, setNextPickIndex] = useState(0)
   const [pick, setPick] = useState<PickDestination | null>(null)
   const [status, setStatus] = useState('Mittens is resting beside this local PixelOS desk.')
-  const useStaticIdleFrame = useStaticIdle()
-  const visual = visualFor(action, useStaticIdleFrame, gifFailed)
+  const useStaticFrame = useStaticVisual()
+  const visual = visualFor(action, useStaticFrame, visualFailed, acknowledgementFrame)
+
+  useLayoutEffect(() => {
+    if (action === 'idle' || useStaticFrame || visualFailed) {
+      setAcknowledgementFrame(0)
+      return
+    }
+
+    const secondFrame = window.setTimeout(() => setAcknowledgementFrame(1), ACKNOWLEDGEMENT_STEP_MS)
+    const finalFrame = window.setTimeout(() => setAcknowledgementFrame(2), ACKNOWLEDGEMENT_STEP_MS * 2)
+
+    return () => {
+      window.clearTimeout(secondFrame)
+      window.clearTimeout(finalFrame)
+    }
+  }, [action, useStaticFrame, visualFailed])
 
   const petMittens = () => {
+    setVisualFailed(false)
+    setAcknowledgementFrame(0)
     setAction('pet')
     setStatus('Mittens leans into a local pet.')
   }
 
   const treatMittens = () => {
     const nextPick = PICK_DESTINATIONS[nextPickIndex]
+    setVisualFailed(false)
+    setAcknowledgementFrame(0)
     setAction('treat')
     setPick(nextPick)
     setNextPickIndex((index) => (index + 1) % PICK_DESTINATIONS.length)
@@ -114,6 +162,8 @@ export function PixelPet() {
   }
 
   const resetCompanion = () => {
+    setVisualFailed(false)
+    setAcknowledgementFrame(0)
     setAction('idle')
     setPick(null)
     setNextPickIndex(0)
@@ -128,12 +178,12 @@ export function PixelPet() {
 
   return (
     <section className={styles.root} aria-label="Desktop Pet">
-      <div className={styles.scene} data-pet-action={action}>
+      <div className={styles.scene} data-pet-action={action} data-acknowledgement-frame={acknowledgementFrame}>
         <img
           src={visual.src}
           alt={visual.alt}
           className={styles.catImage}
-          onError={() => setGifFailed(true)}
+          onError={() => setVisualFailed(true)}
         />
       </div>
 

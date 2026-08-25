@@ -138,3 +138,24 @@ The owner supplied `grey-tabby-desktop-pet.zip` (archive SHA-256 `a73dc75a3a42d8
 | `details/pixelos-grey-tabby-paw.json` | `d0b0a4c043977dcc490debe098fd47016ebf1584ca4da84c6f7dfda62a208532` | metadata | Canonical static paw metadata. |
 
 PXOS-14 renders all meaningful cat scenes at their native 128px size and the compact/paw details at 32px and 16px respectively. The compact signature and paw are empty-alt, `aria-hidden`, pointer-transparent decorative detail; Pet, Treat, Pick, Reset, semantic status, and navigation retain local-only behavior.
+
+## FE-X Desktop Pet Acknowledgement Replacements
+
+The owner supplied `pixelos-grey-tabby-pet-readable-confirm-128.gif` (SHA-256 `29c5ff3263029b16c19b5f8303b6b7313345896b7e2f744c0ff245ff51570d9e`) and `desktop-pet-original-pose-treat-reach-package.zip` (SHA-256 `e4d9866d09ecd6070327eb2c8f895b6c10aee8a7f650d2e7494586a6aa541043`) for the FE-X Desktop Pet acknowledgement follow-up. FE-X uses deterministic local PNG-frame playback rather than trusting browser GIF looping. The Pet-readable three-frame PNG family and its sheet/metadata are deterministically extracted from the supplied owner GIF; the Treat-reach family is imported byte-for-byte from the supplied archive. No preview asset, archive URL, or external request is used at runtime.
+
+| Imported or derived file | SHA-256 | Native dimensions | FE-X role |
+|---|---|---:|---|
+| `pets/grey-tabby/pixelos-grey-tabby-pet-readable-00.png` | `acfff33aa8862f3a01e7b81f4e7e593555267d93665f07218ac4cf1b941f0d68` | 128 × 128 px | Open-eyed Pet acknowledgement static fallback and initial frame. |
+| `pets/grey-tabby/pixelos-grey-tabby-pet-readable-01.png` | `28cf5dc0c74d67eb4a1df69db8774eaf9bed2e60dc0a7c045f6eaaa0c6250713` | 128 × 128 px | Pet acknowledgement middle frame at 180 ms. |
+| `pets/grey-tabby/pixelos-grey-tabby-pet-readable-02.png` | `600e3010cbaa93375d849500ba57525675249b79fe9904b7611d781aee4c14e8` | 128 × 128 px | Pet acknowledgement final held frame after 360 ms. |
+| `pets/grey-tabby/pixelos-grey-tabby-pet-readable-confirm-128.gif` | `29c5ff3263029b16c19b5f8303b6b7313345896b7e2f744c0ff245ff51570d9e` | 128 × 128 px | Owner-supplied convenience confirmation asset; not relied upon for runtime one-shot playback. |
+| `pets/grey-tabby/pixelos-grey-tabby-pet-readable-sheet-128.png` | `b89f03133b76d5ca17b3b3189fe00dc633881ed7a0e53a6ad8241bb73b89cb76` | 384 × 128 px | Deterministic Pet source sheet retained with metadata. |
+| `pets/grey-tabby/pixelos-grey-tabby-pet-readable.json` | `028561dacb42d524a52382c37dad55cf3ce8f2655608bd8ed910165352a6c762` | metadata | Derived local frame order and one-shot timing record. |
+| `pets/grey-tabby/pixelos-grey-tabby-treat-reach-00.png` | `81ec542dd8b4122b5fb1acc2b5c312ffec22e81662ff57a66ae651a9691efae0` | 128 × 128 px | Original-pose Treat initial frame with readable bowl. |
+| `pets/grey-tabby/pixelos-grey-tabby-treat-reach-01.png` | `004394e27aeb85637f6c65f51e8788a76ed242989243df0852e0121b9067606a` | 128 × 128 px | Treat reach middle frame at 180 ms. |
+| `pets/grey-tabby/pixelos-grey-tabby-treat-reach-02.png` | `6be4935e927c3d0b524b05c46e2f6b03c33032cb1553550481dc46cbd92c4a86` | 128 × 128 px | Treat reach final held frame after 360 ms. |
+| `pets/grey-tabby/pixelos-grey-tabby-treat-reach-confirm-128.gif` | `561e4f693f53ac7475856f0c85371a88305fdf56cd92ac689c36b25f9555eddb` | 128 × 128 px | Owner-supplied convenience confirmation asset; not relied upon for runtime one-shot playback. |
+| `pets/grey-tabby/pixelos-grey-tabby-treat-reach-sheet-128.png` | `45c21ae34cb09e2bbcf86e79258a99808ddd9a107d5f2904610164037be3bf7e` | 384 × 128 px | Canonical Treat reach source sheet retained with matching metadata. |
+| `pets/grey-tabby/pixelos-grey-tabby-treat-reach.json` | `1d11b96da52654b526f29d6d53a4a3e38bde9b96deaa75221187ddd34eb53515` | metadata | Owner-supplied 180 ms / 180 ms / 900 ms no-loop contract. |
+
+FE-X renders acknowledgement frames only at their native 128px stage size with `image-rendering: crisp-edges` followed by `image-rendering: pixelated`. PixelOS effects-off, reduced motion, and image-load failure retain static, meaningful acknowledgement fallbacks; action status, Pick, Reset, keyboard/touch targets, local/session-only behavior, and no-network guarantees remain authoritative.

@@ -26,6 +26,7 @@
   max-width: 100%;
   border: var(--pixelos-bevel-width) solid var(--os-edge);
   box-shadow: 2px 2px 0 var(--os-edge), -1px -1px 0 var(--pixelos-bevel-highlight);
+  image-rendering: crisp-edges;
   image-rendering: pixelated;
 }
 
@@ -112,6 +113,7 @@
 .pickSignature {
   width: 32px;
   height: 32px;
+  image-rendering: crisp-edges;
   image-rendering: pixelated;
 }
 
@@ -119,6 +121,7 @@
   width: 16px;
   height: 16px;
   margin-bottom: 2px;
+  image-rendering: crisp-edges;
   image-rendering: pixelated;
 }
 
