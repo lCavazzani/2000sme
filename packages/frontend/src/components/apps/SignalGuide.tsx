@@ -12,28 +12,24 @@ import styles from './SignalGuide.module.css'
 
 type SignalMessage = {
   id: number
-  kind: 'guide' | 'visitor' | 'system'
+  kind: 'guide' | 'visitor'
   text: string
   topic?: SignalTopic
 }
 
-type ToolAction = SignalTopic | 'wink' | 'attention'
-
 const INITIAL_MESSAGES: readonly SignalMessage[] = [
   { id: 1, kind: 'guide', text: 'This local portfolio guide shares the work behind this PixelOS desktop.' },
-  { id: 2, kind: 'guide', text: 'Use a tool, or ask about projects, experience, the resume, skills, or PixelOS.' },
+  { id: 2, kind: 'guide', text: 'Use a tool at right, or ask about projects, experience, the resume, skills, or PixelOS.' },
 ]
 
-const QUICK_TOOLS: readonly { topic: SignalTopic; label: string; icon: string }[] = [
+const OWNER_RAIL_TOOLS: readonly { topic: SignalTopic; label: string; icon: string }[] = [
   { topic: 'projects', label: 'PROJECTS', icon: PIXEL_OS_ASSETS.signalToolProjects },
   { topic: 'resume', label: 'RESUME', icon: PIXEL_OS_ASSETS.signalToolResume },
   { topic: 'about', label: 'ABOUT', icon: PIXEL_OS_ASSETS.signalToolAbout },
 ]
 
 function messageLabel(kind: SignalMessage['kind']) {
-  if (kind === 'guide') return 'LEONARDO'
-  if (kind === 'visitor') return 'YOU'
-  return 'LOCAL EVENT'
+  return kind === 'guide' ? 'LEONARDO' : 'YOU'
 }
 
 function ToolIcon({ src }: { src: string }) {
@@ -46,14 +42,10 @@ export function SignalGuide() {
   const [messages, setMessages] = useState<readonly SignalMessage[]>(INITIAL_MESSAGES)
   const [draft, setDraft] = useState('')
   const [announcement, setAnnouncement] = useState('LOCAL GUIDE READY')
-  const [event, setEvent] = useState<'wink' | 'attention' | null>(null)
-  const [winkReady, setWinkReady] = useState(true)
-  const [attentionReady, setAttentionReady] = useState(true)
   const [portraitError, setPortraitError] = useState(false)
   const quickPromptRef = useRef<HTMLButtonElement>(null)
   const nextIdRef = useRef(3)
-  const fullEffects = effects === 'full'
-  const animatedPortrait = fullEffects && !portraitError
+  const animatedPortrait = effects === 'full' && !portraitError
     ? PIXEL_OS_ASSETS.leonardoSignalSmartBlinkGif
     : PIXEL_OS_ASSETS.leonardoSignalStatic
 
@@ -76,33 +68,8 @@ export function SignalGuide() {
     setDraft('')
   }
 
-  const appendEvent = (kind: Extract<ToolAction, 'wink' | 'attention'>, text: string) => {
-    setEvent(kind)
-    setMessages((current) => [...current, { id: nextIdRef.current++, kind: 'system', text }])
-    setAnnouncement(text)
-  }
-
-  const triggerWink = () => {
-    if (!winkReady) return
-    setWinkReady(false)
-    appendEvent('wink', 'LOCAL WINK MARKED. NO MESSAGE WAS SENT.')
-    window.setTimeout(() => setWinkReady(true), 2_000)
-  }
-
-  const triggerAttention = () => {
-    if (!attentionReady) return
-    setAttentionReady(false)
-    appendEvent(
-      'attention',
-      effects === 'reduced'
-        ? 'ATTENTION MARKED LOCALLY. EFFECTS ARE REDUCED.'
-        : 'ATTENTION MARKED LOCALLY.',
-    )
-    window.setTimeout(() => setAttentionReady(true), 3_000)
-  }
-
   return (
-    <section className={styles.root} aria-labelledby="signal-heading" data-event={event ?? undefined}>
+    <section className={styles.root} aria-labelledby="signal-heading">
       <div className={styles.sessionRibbon} aria-label="Local session">LEONARDO · PORTFOLIO GUIDE · ONE LOCAL CONVERSATION</div>
 
       <header className={styles.ownerHeader}>
@@ -115,31 +82,6 @@ export function SignalGuide() {
       </header>
 
       <output className={styles.liveStatus} aria-live="polite">{announcement}</output>
-
-      <div className={styles.toolRow} aria-label="Leonardo local guide tools">
-        <div className={styles.actionStrip}>
-          {QUICK_TOOLS.map((tool, index) => (
-            <button
-              key={tool.topic}
-              type="button"
-              ref={index === 0 ? quickPromptRef : undefined}
-              onClick={() => appendTopic(tool.topic)}
-            >
-              <ToolIcon src={tool.icon} />
-              <span>{tool.label}</span>
-            </button>
-          ))}
-          <button type="button" onClick={triggerWink} disabled={!winkReady}>
-            <ToolIcon src={PIXEL_OS_ASSETS.signalToolWink} />
-            <span>WINK</span>
-          </button>
-          <button type="button" onClick={triggerAttention} disabled={!attentionReady}>
-            <ToolIcon src={PIXEL_OS_ASSETS.signalToolAttention} />
-            <span>ATTENTION</span>
-          </button>
-        </div>
-        <p className={styles.localContract}>LOCAL ONLY · NO NETWORK · NO STORAGE</p>
-      </div>
 
       <div className={styles.conversationLayout}>
         <section className={styles.conversationCanvas} aria-label="Leonardo portfolio guide reading canvas">
@@ -176,16 +118,28 @@ export function SignalGuide() {
           </picture>
           <div className={styles.ownerRailCopy}>
             <p>LEONARDO CAVAZZANI</p>
-            <p>SENIOR FRONTEND DEVELOPER</p>
-            <p>LOCAL PORTFOLIO GUIDE</p>
-            <span>OWNER CONTEXT</span>
+            <p>SENIOR SOFTWARE DEVELOPER</p>
+            <p>PORTFOLIO GUIDE</p>
+          </div>
+          <div className={styles.ownerRailTools} aria-label="Leonardo local guide tools">
+            {OWNER_RAIL_TOOLS.map((tool, index) => (
+              <button
+                key={tool.topic}
+                type="button"
+                ref={index === 0 ? quickPromptRef : undefined}
+                onClick={() => appendTopic(tool.topic)}
+              >
+                <ToolIcon src={tool.icon} />
+                <span>{tool.label}</span>
+              </button>
+            ))}
           </div>
         </aside>
       </div>
 
       <form className={styles.composer} onSubmit={(formEvent) => { formEvent.preventDefault(); submitDraft() }}>
         <label htmlFor="signal-local-question">MESSAGE THE LOCAL PORTFOLIO GUIDE</label>
-        <div>
+        <div className={styles.composerRow}>
           <input
             id="signal-local-question"
             value={draft}
@@ -195,16 +149,10 @@ export function SignalGuide() {
           />
           <button type="submit" disabled={!draft.trim()}>
             <ToolIcon src={PIXEL_OS_ASSETS.signalToolSend} />
-            <span>SEND LOCAL</span>
+            <span>SEND</span>
           </button>
         </div>
       </form>
-
-      <div className="status-bar" aria-label="SIGNAL local privacy status">
-        <p className="status-bar-field">LOCAL GUIDE</p>
-        <p className="status-bar-field">NO NETWORK</p>
-        <p className="status-bar-field">NO HISTORY</p>
-      </div>
     </section>
   )
 }

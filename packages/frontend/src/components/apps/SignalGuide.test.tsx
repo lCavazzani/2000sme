@@ -1,7 +1,7 @@
 import { fireEvent, render, screen, within } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
-import { ThemeProvider } from '../../theme/ThemeProvider'
 import { WindowsProvider } from '../../store/windows'
+import { ThemeProvider } from '../../theme/ThemeProvider'
 import { SignalGuide } from './SignalGuide'
 
 function renderGuide() {
@@ -15,31 +15,38 @@ function renderGuide() {
 }
 
 describe('SIGNAL.EXE Leonardo local portfolio guide', () => {
-  it('focuses a labelled quick tool and appends a deterministic local projects reply', () => {
+  it('places the three labelled topic tools in the owner rail and appends a deterministic local projects reply', () => {
     renderGuide()
 
-    const projects = screen.getByRole('button', { name: 'PROJECTS' })
+    const ownerRail = screen.getByLabelText('Leonardo local portfolio guide profile')
+    const projects = within(ownerRail).getByRole('button', { name: 'PROJECTS' })
     expect(projects).toHaveFocus()
-    expect(screen.getByLabelText('MESSAGE THE LOCAL PORTFOLIO GUIDE')).not.toHaveFocus()
+    expect(within(ownerRail).getByRole('button', { name: 'RESUME' })).toBeVisible()
+    expect(within(ownerRail).getByRole('button', { name: 'ABOUT' })).toBeVisible()
+    expect(screen.queryByRole('button', { name: 'WINK' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'ATTENTION' })).not.toBeInTheDocument()
 
     fireEvent.click(projects)
     expect(screen.getByText('Show me the projects.')).toBeVisible()
     expect(within(screen.getByLabelText('Leonardo local portfolio guide conversation')).getByText(/MY MACHINE contains a portfolio-safe project grid/i)).toBeVisible()
     expect(screen.getByRole('button', { name: 'OPEN MY MACHINE' })).toBeVisible()
-    expect(screen.getByText('LOCAL ONLY · NO NETWORK · NO STORAGE')).toBeVisible()
   })
 
-  it('matches typed local input and authors a safe Leonardo fallback without network activity', () => {
+  it('uses one inline Send control for typed deterministic local replies without network activity', () => {
     const fetchSpy = vi.spyOn(window, 'fetch')
     renderGuide()
 
     const composer = screen.getByLabelText('MESSAGE THE LOCAL PORTFOLIO GUIDE')
+    const send = screen.getByRole('button', { name: 'SEND' })
+    expect(send).toBeDisabled()
+
     fireEvent.change(composer, { target: { value: 'Tell me about your TypeScript skills' } })
-    fireEvent.click(screen.getByRole('button', { name: 'SEND LOCAL' }))
+    expect(send).toBeEnabled()
+    fireEvent.click(send)
     expect(within(screen.getByLabelText('Leonardo local portfolio guide conversation')).getByText(/This portfolio demonstrates React, TypeScript/i)).toBeVisible()
 
     fireEvent.change(composer, { target: { value: 'weather?' } })
-    fireEvent.click(screen.getByRole('button', { name: 'SEND LOCAL' }))
+    fireEvent.click(send)
     expect(within(screen.getByLabelText('Leonardo local portfolio guide conversation')).getByText(/This local portfolio guide matches projects, resume, experience/i)).toBeVisible()
     expect(fetchSpy).not.toHaveBeenCalled()
     fetchSpy.mockRestore()
@@ -55,15 +62,13 @@ describe('SIGNAL.EXE Leonardo local portfolio guide', () => {
     expect(portrait).toHaveAttribute('src', expect.stringContaining('pixelos-leonardo-entry-hero-static-128.png'))
   })
 
-  it('keeps WINK bounded and exposes the local-only privacy status without live-person language', () => {
+  it('keeps hidden local semantics while removing redundant privacy, owner-context, and transient event surfaces', () => {
     renderGuide()
 
-    const wink = screen.getByRole('button', { name: 'WINK' })
-    fireEvent.click(wink)
-    expect(within(screen.getByLabelText('Leonardo local portfolio guide conversation')).getByText('LOCAL WINK MARKED. NO MESSAGE WAS SENT.')).toBeVisible()
-    expect(wink).toBeDisabled()
-    expect(screen.getByLabelText('SIGNAL local privacy status')).toHaveTextContent('NO NETWORK')
-    expect(screen.getByLabelText('SIGNAL local privacy status')).toHaveTextContent('NO HISTORY')
+    expect(screen.getByText('LOCAL GUIDE READY')).toHaveAttribute('aria-live', 'polite')
+    expect(screen.queryByText('LOCAL ONLY · NO NETWORK · NO STORAGE')).not.toBeInTheDocument()
+    expect(screen.queryByText('OWNER CONTEXT')).not.toBeInTheDocument()
+    expect(screen.queryByLabelText('SIGNAL local privacy status')).not.toBeInTheDocument()
     expect(screen.queryByText(/online|typing|available/i)).not.toBeInTheDocument()
   })
 })
