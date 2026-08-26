@@ -90,19 +90,29 @@ describe('project catalog public contract', () => {
     expect(await request('/api/projects').then((response) => response.text())).not.toContain('Private')
   })
 
-  it('preserves approved-origin CORS and cache behavior without granting an unapproved origin', async () => {
-    const allowedOrigin = 'https://2000sme.cavazzanileonardo.workers.dev'
-    const allowed = await request('/api/projects', { headers: { Origin: allowedOrigin } })
-    expect(allowed.headers.get('Access-Control-Allow-Origin')).toBe(allowedOrigin)
+  it('allows the canonical root origin for catalog requests and preflight without broadening methods or headers', async () => {
+    const canonicalOrigin = 'https://lcavazzani.com'
+    const allowed = await request('/api/projects', { headers: { Origin: canonicalOrigin } })
+    expect(allowed.headers.get('Access-Control-Allow-Origin')).toBe(canonicalOrigin)
 
     const preflight = await request('/api/projects', {
       method: 'OPTIONS',
-      headers: { Origin: allowedOrigin, 'Access-Control-Request-Method': 'GET' },
+      headers: { Origin: canonicalOrigin, 'Access-Control-Request-Method': 'GET' },
     })
-    expect(preflight.headers.get('Access-Control-Allow-Origin')).toBe(allowedOrigin)
+    expect(preflight.headers.get('Access-Control-Allow-Origin')).toBe(canonicalOrigin)
     expect(preflight.headers.get('Access-Control-Allow-Methods')).toContain('GET')
+    expect(preflight.headers.get('Access-Control-Allow-Headers')).toContain('Content-Type')
+  })
 
-    const unapproved = await request('/api/projects', { headers: { Origin: 'https://unapproved.example' } })
-    expect(unapproved.headers.get('Access-Control-Allow-Origin')).toBeNull()
+  it('retains legacy Worker and local development CORS origins while rejecting canonical look-alikes', async () => {
+    const legacyOrigin = 'https://2000sme.cavazzanileonardo.workers.dev'
+    const legacy = await request('/api/projects', { headers: { Origin: legacyOrigin } })
+    expect(legacy.headers.get('Access-Control-Allow-Origin')).toBe(legacyOrigin)
+
+    const local = await request('/api/projects', { headers: { Origin: 'http://localhost:5173' } })
+    expect(local.headers.get('Access-Control-Allow-Origin')).toBe('http://localhost:5173')
+
+    const lookAlike = await request('/api/projects', { headers: { Origin: 'https://not-lcavazzani.com' } })
+    expect(lookAlike.headers.get('Access-Control-Allow-Origin')).toBeNull()
   })
 })
