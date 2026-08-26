@@ -67,9 +67,9 @@ describe('guestbook retirement contract', () => {
     expect(await guestbookCount()).toBe(before)
   })
 
-  it('does not expose an alternate destructive method and retains global CORS policy', async () => {
+  it('does not expose an alternate destructive method and accepts the canonical root origin', async () => {
     const before = await guestbookCount()
-    const origin = 'https://2000sme.cavazzanileonardo.workers.dev'
+    const origin = 'https://lcavazzani.com'
 
     const response = await request('/api/guestbook/legacy-entry', {
       method: 'DELETE',
@@ -80,5 +80,17 @@ describe('guestbook retirement contract', () => {
     expect(response.headers.get('Access-Control-Allow-Origin')).toBe(origin)
     expect((await response.json()) as RetiredGuestbookError).toMatchObject({ code: 'guestbook_retired' })
     expect(await guestbookCount()).toBe(before)
+  })
+
+  it('does not reflect an unrecognized canonical-origin look-alike on retired guestbook preflight', async () => {
+    const preflight = await request('/api/guestbook', {
+      method: 'OPTIONS',
+      headers: {
+        Origin: 'https://not-lcavazzani.com',
+        'Access-Control-Request-Method': 'POST',
+      },
+    })
+
+    expect(preflight.headers.get('Access-Control-Allow-Origin')).toBeNull()
   })
 })

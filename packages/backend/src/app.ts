@@ -5,6 +5,7 @@ import { createProjectRoutes } from './domains/projects/projects.routes'
 import { securityHeaders } from './shared/security-headers'
 
 const ALLOWED_ORIGINS = [
+  'https://lcavazzani.com',
   'https://2000sme.cavazzanileonardo.workers.dev',
   'https://2000sme-development.cavazzanileonardo.workers.dev',
 ]
