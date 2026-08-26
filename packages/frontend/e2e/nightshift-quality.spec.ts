@@ -31,7 +31,10 @@ async function visitPixelOs(page: Page, path = '/') {
 }
 
 async function openNightshift(page: Page) {
-  await page.getByRole('button', { name: 'Open NIGHTSHIFT.EXE' }).dblclick()
+  await page.getByRole('button', { name: 'Start', exact: true }).click()
+  await page.getByRole('navigation', { name: 'Start menu' })
+    .getByRole('button', { name: 'NIGHTSHIFT.EXE' })
+    .click()
   return page.getByRole('dialog', { name: 'NIGHTSHIFT.EXE window' })
 }
 

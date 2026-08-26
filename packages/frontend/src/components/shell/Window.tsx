@@ -18,10 +18,6 @@ function focusLauncher(id: string) {
   }, 0)
 }
 
-function isTextEntryTarget(target: EventTarget | null) {
-  return target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement || target instanceof HTMLSelectElement
-}
-
 export function Window({ id, children }: WindowProps) {
   const {
     windows,
@@ -73,9 +69,15 @@ export function Window({ id, children }: WindowProps) {
 
   const handleKeyDown = useCallback(
     (event: KeyboardEvent<HTMLDivElement>) => {
-      if (isTextEntryTarget(event.target)) return
+      // A focused application may explicitly reserve Escape (for example,
+      // NIGHTSHIFT uses it for pause). Respect that contract before applying
+      // the desktop-window close shortcut.
+      if (event.defaultPrevented) return
 
-      if (event.altKey && event.key === 'F9') {
+      if (event.key === 'Escape') {
+        event.preventDefault()
+        close()
+      } else if (event.altKey && event.key === 'F9') {
         event.preventDefault()
         minimize()
       } else if (event.altKey && event.key === 'F10') {
@@ -84,9 +86,6 @@ export function Window({ id, children }: WindowProps) {
       } else if (event.altKey && event.key === 'Home') {
         event.preventDefault()
         resetWindowBounds(id)
-      } else if (event.key === 'Escape') {
-        event.preventDefault()
-        close()
       }
     },
     [close, id, minimize, resetWindowBounds, toggleMaximizeWindow],

@@ -71,10 +71,7 @@ describe('applicationRegistry', () => {
       'gallery',
       'pet',
       'notepad',
-      'about',
-      'signal',
       'minesweeper',
-      'nightshift',
       'resume',
     ])
     expect(applicationsForSurface('start-menu').map((application) => application.id)).toEqual([
@@ -125,7 +122,7 @@ describe('applicationRegistry', () => {
       path: '#/apps/signal',
       capability: 'desktop-window',
     })
-    expect(signal?.launchSurfaces).toEqual(['desktop', 'start-menu', 'mobile'])
+    expect(signal?.launchSurfaces).toEqual(['start-menu', 'mobile'])
     expect(applicationIdFromHash('#/apps/signal')).toBe('signal')
   })
 
@@ -151,7 +148,7 @@ describe('applicationRegistry', () => {
       path: '#/apps/nightshift',
       capability: 'desktop-window',
     })
-    expect(nightshift?.launchSurfaces).toEqual(['desktop', 'start-menu', 'mobile'])
+    expect(nightshift?.launchSurfaces).toEqual(['start-menu', 'mobile'])
     expect(applicationIdFromHash('#/apps/nightshift')).toBe('nightshift')
   })
 

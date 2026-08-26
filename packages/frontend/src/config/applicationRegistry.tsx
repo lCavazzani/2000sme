@@ -119,7 +119,7 @@ export const applicationRegistry = [
     path: '#/apps/about',
     shortcut: 'Alt+6',
     capability: 'desktop-window',
-    launchSurfaces: ['desktop', 'start-menu', 'mobile'],
+    launchSurfaces: ['start-menu', 'mobile'],
     renderer: AboutPixelOS,
   }),
   defineApplication({
@@ -133,7 +133,7 @@ export const applicationRegistry = [
     path: '#/apps/signal',
     shortcut: 'Alt+9',
     capability: 'desktop-window',
-    launchSurfaces: ['desktop', 'start-menu', 'mobile'],
+    launchSurfaces: ['start-menu', 'mobile'],
     renderer: SignalGuide,
   }),
   defineApplication({
@@ -161,7 +161,7 @@ export const applicationRegistry = [
     path: '#/apps/nightshift',
     shortcut: 'Alt+8',
     capability: 'desktop-window',
-    launchSurfaces: ['desktop', 'start-menu', 'mobile'],
+    launchSurfaces: ['start-menu', 'mobile'],
     renderer: NightshiftWindow,
   }),
   defineApplication({

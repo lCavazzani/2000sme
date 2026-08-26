@@ -24,7 +24,8 @@ export const INITIAL_WINDOW_GEOMETRY = {
   signal: { x: 260, y: 104, width: 620, height: 590 },
   minesweeper: { x: 340, y: 76, width: 500, height: 560 },
   nightshift: { x: 370, y: 96, width: 680, height: 580 },
-  resume: { x: 150, y: 96, width: 760, height: 540 },
+  // Keep the desktop icon column clear while opening the primary portfolio document.
+  resume: { x: 500, y: 56, width: 760, height: 540 },
 } as const satisfies Record<ApplicationId, InitialWindowGeometry>
 
 /** Returns a fresh object so callers cannot mutate the centralized defaults. */

@@ -34,8 +34,18 @@ async function beginFreshIntro(page: Page) {
   await page.reload()
 }
 
+const startMenuOnlyLaunchers = new Set(['ABOUT PIXELOS', 'SIGNAL.EXE', 'NIGHTSHIFT.EXE'])
+
 async function openApplication(page: Page, launcherLabel: string, windowLabel = launcherLabel) {
-  await page.getByRole('button', { name: `Open ${launcherLabel}` }).dblclick()
+  if (startMenuOnlyLaunchers.has(launcherLabel)) {
+    await page.getByRole('button', { name: 'Start', exact: true }).click()
+    await page.getByRole('navigation', { name: 'Start menu' })
+      .getByRole('button', { name: launcherLabel })
+      .click()
+  } else {
+    await page.getByRole('button', { name: `Open ${launcherLabel}` }).dblclick()
+  }
+
   const window = page.getByRole('dialog', { name: `${windowLabel} window` })
   await expect(window).toBeVisible()
   return window
@@ -77,13 +87,13 @@ test.describe('TEST-13 PixelOS visual regression baselines', () => {
     await visitReturningDesktop(page)
     await expect(page).toHaveScreenshot('pixelos-desktop-effects-on.png', stableScreenshot)
 
-    await page.getByRole('button', { name: 'Start' }).click()
+    await page.getByRole('button', { name: 'Start', exact: true }).click()
     await expect(page.getByRole('navigation', { name: 'Start menu' })).toBeVisible()
     await expect(page).toHaveScreenshot('pixelos-start-menu.png', stableScreenshot)
     await page.keyboard.press('Escape')
 
     await openApplication(page, 'MY MACHINE')
-    await page.getByRole('button', { name: 'Start' }).click()
+    await page.getByRole('button', { name: 'Start', exact: true }).click()
     await page.getByRole('navigation', { name: 'Start menu' }).getByRole('button', { name: 'RESUME.PDF' }).click()
     await expect(page.getByRole('dialog', { name: 'RESUME.PDF - WORDPAD window' })).toBeVisible()
     await expect(page).toHaveScreenshot('pixelos-active-inactive-windows-and-taskbar.png', stableScreenshot)

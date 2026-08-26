@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import {
   applicationIdFromHash,
+  applicationRegistry,
   applicationsForSurface,
 } from '../../config/applicationRegistry'
 import { PIXEL_OS_ASSETS } from '../../config/pixelosAssets'
@@ -66,6 +67,7 @@ export function DesktopShell() {
   const [hash, setHash] = useState(() => window.location.hash)
   const [shouldRestoreDesktopFocus, setShouldRestoreDesktopFocus] = useState(false)
   const desktopRef = useRef<HTMLElement>(null)
+  const hasAutoOpenedResumeRef = useRef(false)
   const directApplicationId = applicationIdFromHash(hash)
 
   useEffect(() => {
@@ -76,10 +78,8 @@ export function DesktopShell() {
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
-      if (!event.altKey || !/^Digit[1-6]$/.test(event.code)) return
-      const application = applicationsForSurface('desktop').find(
-        (candidate) => candidate.shortcut === `Alt+${event.key}`,
-      )
+      if (!event.altKey || !/^Digit[1-9]$/.test(event.code)) return
+      const application = applicationRegistry.find((candidate) => candidate.shortcut === `Alt+${event.key}`)
       if (!application) return
       event.preventDefault()
       openWindowById(application.id)
@@ -88,6 +88,13 @@ export function DesktopShell() {
     window.addEventListener('keydown', onKeyDown)
     return () => window.removeEventListener('keydown', onKeyDown)
   }, [openWindowById])
+
+  useEffect(() => {
+    if (directApplicationId || hasAutoOpenedResumeRef.current) return
+
+    hasAutoOpenedResumeRef.current = true
+    openWindowById('resume')
+  }, [directApplicationId, openWindowById])
 
   useEffect(() => {
     if (directApplicationId || !shouldRestoreDesktopFocus) return
