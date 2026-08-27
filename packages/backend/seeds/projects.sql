@@ -72,4 +72,4 @@ WHERE project_id = 'sportifolio';
 
 INSERT INTO project_links (project_id, label, url, sort_order) VALUES
     ('sportifolio', 'GitHub', 'https://github.com/lCavazzani/2000sme', 0),
-    ('sportifolio', 'Live', 'https://2000sme.cavazzanileonardo.workers.dev', 1);
+    ('sportifolio', 'Live', 'https://lcavazzani.com', 1);
