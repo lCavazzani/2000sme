@@ -2,7 +2,7 @@
 
 > **Purpose:** This is the human-maintained, current-state briefing for every project agent. Read it with the latest CI release evidence, `development` branch, and relevant project-board ticket before providing project-specific guidance or making a change.
 >
-> **Last reconciled:** 2026-08-19 MDT against `development` `765799a`, release evidence [Deploy #32220399581](https://github.com/lCavazzani/2000sme/actions/runs/32220399581), and the project board.
+> **Last reconciled:** 2026-08-27 MDT against the TEST-22 canonical-release configuration candidate. Live root verification remains pending; do not infer it from a successful Worker deployment alone.
 
 ## Product and Release Baseline
 
@@ -16,7 +16,7 @@
 | PixelOS applications to add | Pixel Gallery, Mittens/Desktop Pet, Minesweeper, About PixelOS, and README.TXT Notepad. |
 | Applications to retire | Visitor Scrapbook/Guestbook, Contact, Control Panel, and My Portfolio. |
 | Integration branch | `development` is the current integration branch. |
-| Production frontend | `https://2000sme.cavazzanileonardo.workers.dev` — deployed only from `master`. |
+| Production frontend | Canonical target: `https://lcavazzani.com` — deployed only from `master`; retain `https://2000sme.cavazzanileonardo.workers.dev` as a technical fallback until TEST-22 verifies the canonical root. |
 | Production backend | `https://00sbackedn.cavazzanileonardo.workers.dev` — deployed only from `master`. |
 | Development frontend | `https://2000sme-development.cavazzanileonardo.workers.dev` — deployed from `development`; use for integration review, never as production evidence. |
 | Development backend | `https://00sbackedn-development.cavazzanileonardo.workers.dev` — isolated D1/KV bindings; used only by the development frontend. |
@@ -33,9 +33,8 @@ The board’s **🚦 Execution Queue — Unblock First** view remains the work-o
 
 | Issue | Tracking | Consequence |
 |---|---|---|
-| Current production UI remains on the legacy theme/application presentation until PixelOS core is released | PXOS-1 through PXOS-5 | Production does not yet reflect the new product decision. |
-| The public Guestbook is scheduled for removal, but the production service remains exposed until the safe retirement work lands | BE-11; BUG-3; BUG-4 | Visitors can still encounter the legacy guestbook and its known production risks during the transition. |
-| PixelOS core must preserve the existing OS behavior while replacing visible chrome | PXOS-2; TEST-11 | A visual rewrite can regress window, route, keyboard, taskbar, or responsive behavior without the required gate. |
+| Canonical root is pending live verification | TEST-22 | Do not present `https://lcavazzani.com` as recruiter-facing until it serves the selected production Worker and passes canonical HTTPS, redirect, route, CORS, asset, and mobile/reduced-effects checks. |
+| Production release evidence must be read with the canonical smoke result | TEST-22 | A successful Worker deployment alone does not prove the custom-domain path is reachable. |
 
 Do not claim PixelOS is deployed, or the legacy guestbook is retired, until the relevant board work is Done and a subsequent release-evidence artifact proves the production deployment.
 

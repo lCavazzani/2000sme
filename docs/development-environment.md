@@ -6,14 +6,14 @@ PixelOS has two independently deployed Cloudflare Workers environments. The **de
 
 | Environment | Source branch | Frontend | Backend | Data |
 |---|---|---|---|---|
-| Production | `master` | `https://2000sme.cavazzanileonardo.workers.dev` | `https://00sbackedn.cavazzanileonardo.workers.dev` | `portfolio-db` and `RATE_LIMIT` |
+| Production | `master` | Canonical target: `https://lcavazzani.com` (technical fallback: `https://2000sme.cavazzanileonardo.workers.dev`) | `https://00sbackedn.cavazzanileonardo.workers.dev` | `portfolio-db` and `RATE_LIMIT` |
 | Development | `development` | `https://2000sme-development.cavazzanileonardo.workers.dev` | `https://00sbackedn-development.cavazzanileonardo.workers.dev` | `portfolio-db-development` and `RATE_LIMIT_DEVELOPMENT` |
 
 ## Delivery Flow
 
 A developer opens a feature pull request against `development`. After review and merge, the **Deploy Development** workflow validates quality, applies D1 migrations to the isolated development database, deploys both development Workers, runs smoke checks against the development URLs, and publishes a `development-evidence` artifact.
 
-A promotion to `master` continues to run the existing **Deploy** workflow. That workflow deploys only the production Workers and publishes the production `release-evidence` artifact. A development deployment must never be presented as production proof.
+A promotion to `master` continues to run the existing **Deploy** workflow. That workflow deploys only the production Workers, smoke-checks the canonical root, and publishes the production `release-evidence` artifact. A development deployment must never be presented as production proof.
 
 ## Developer Notes
 

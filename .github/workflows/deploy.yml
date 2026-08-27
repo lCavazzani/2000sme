@@ -43,6 +43,9 @@ jobs:
       - name: Verify production API origin safety
         run: pnpm --filter 00sfrontend assert:production-api-origin
 
+      - name: Verify canonical production URL configuration
+        run: pnpm assert:canonical-production-url
+
       - name: Upload validated frontend artifact
         uses: actions/upload-artifact@v4
         with:
@@ -119,7 +122,7 @@ jobs:
       - name: Smoke test public frontend
         run: |
           sleep 5
-          curl --fail --silent --show-error --retry 3 --retry-delay 3 https://2000sme.cavazzanileonardo.workers.dev/ | grep -q 'id="root"'
+          curl --fail --silent --show-error --retry 3 --retry-delay 3 https://lcavazzani.com/ | grep -q 'id="root"'
 
   release-evidence:
     name: Publish Release Evidence
@@ -133,7 +136,7 @@ jobs:
 
       - name: Generate release evidence
         env:
-          PUBLIC_FRONTEND_URL: https://2000sme.cavazzanileonardo.workers.dev
+          PUBLIC_FRONTEND_URL: https://lcavazzani.com
           PUBLIC_BACKEND_URL: https://00sbackedn.cavazzanileonardo.workers.dev
         run: node scripts/generate-release-evidence.mjs
 
