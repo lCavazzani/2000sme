@@ -77,6 +77,7 @@
 }
 
 .thumbnailPanel {
+  position: relative;
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
   min-width: 0;
@@ -85,10 +86,25 @@
   box-shadow: inset 1px 0 0 var(--pixelos-bevel-highlight);
 }
 
+.peek {
+  position: absolute;
+  z-index: 0;
+  top: 4px;
+  right: 8px;
+  width: 32px;
+  height: 32px;
+  pointer-events: none;
+  user-select: none;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
 .thumbnailHeading {
+  position: relative;
+  z-index: 1;
   margin: 0;
-  padding: 9px 10px 7px;
-  color: var(--os-magenta);
+  padding: 9px 48px 7px 10px;
+  color: var(--os-muted);
   border-bottom: 1px solid var(--pixelos-bevel-highlight);
   font-size: 0.72rem;
   letter-spacing: 0.08em;
@@ -128,7 +144,7 @@
 }
 
 .thumbnailButton:focus-visible {
-  outline: 2px solid var(--os-magenta);
+  outline: 2px solid var(--os-cyan);
   outline-offset: 2px;
 }
 

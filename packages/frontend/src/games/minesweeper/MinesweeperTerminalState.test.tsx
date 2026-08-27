@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 const gameHook = vi.hoisted(() => vi.fn())
@@ -57,6 +57,22 @@ describe('MinesweeperWindow terminal state presentation', () => {
 
     expect(screen.getByRole('status')).toHaveTextContent('CLEARED: EVERY SAFE CELL IS REVEALED.')
     expect(screen.getByRole('button', { name: 'Start a new Minesweeper game' })).toHaveTextContent(':D')
+  })
+
+  it('renders a local won-board overlay, focuses New Game, and retains the status bar as the only live announcement', () => {
+    const result = gameResult('won')
+    gameHook.mockReturnValue(result)
+    render(<MinesweeperWindow />)
+
+    const newGame = screen.getByRole('button', { name: 'NEW GAME' })
+    expect(screen.getByRole('heading', { name: 'ALL CLEAR' })).toBeVisible()
+    expect(screen.getByText('BOARD SECURED')).toBeVisible()
+    expect(screen.getByText('TIME 018')).toBeVisible()
+    expect(newGame).toHaveFocus()
+    expect(screen.getAllByRole('status')).toHaveLength(1)
+
+    fireEvent.click(newGame)
+    expect(result.reset).toHaveBeenCalledOnce()
   })
 
   it('communicates a lost game and exposes engine-known mines with a non-color cue', () => {

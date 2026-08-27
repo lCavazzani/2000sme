@@ -12,13 +12,15 @@ function isLocalOrPrivateHost(hostname: string) {
 }
 
 /**
- * This is intentionally public browser configuration. It must never contain a
- * credential: Vite exposes VITE_* values in the compiled frontend bundle.
+ * The frontend Worker serves static assets only — it has no `main` script and
+ * no `/api/*` route — so the deployed browser bundle must call the backend
+ * Worker on its own origin. Locally, an empty origin keeps same-origin `/api`
+ * paths so the Vite dev proxy can forward to `wrangler dev`.
  *
- * With no configured public origin, requests use same-origin `/api/*` paths.
- * Vite routes those paths to the local Worker only in development server mode.
+ * This is intentionally public browser configuration and must never hold a
+ * credential: Vite inlines every `VITE_*` value into the shipped bundle.
  */
-export function resolveGuestbookApiOrigin(configuredOrigin: string | undefined, isProduction: boolean) {
+export function resolveApiOrigin(configuredOrigin: string | undefined, isProduction: boolean) {
   const normalizedOrigin = configuredOrigin?.trim()
   if (!normalizedOrigin) return ''
 
@@ -27,12 +29,15 @@ export function resolveGuestbookApiOrigin(configuredOrigin: string | undefined, 
 
   const url = new URL(origin)
   if (url.protocol !== 'https:' || isLocalOrPrivateHost(url.hostname)) {
-    throw new Error('VITE_GUESTBOOK_API_ORIGIN must be a public HTTPS origin in production builds.')
+    throw new Error('VITE_API_ORIGIN must be a public HTTPS origin in production builds.')
   }
 
   return origin
 }
 
-const configuredOrigin = import.meta.env.VITE_GUESTBOOK_API_ORIGIN
-export const guestbookApiOrigin = resolveGuestbookApiOrigin(configuredOrigin, import.meta.env.PROD)
-export const guestbookApiUrl = guestbookApiOrigin ? `${guestbookApiOrigin}/api/guestbook` : '/api/guestbook'
+export const apiOrigin = resolveApiOrigin(import.meta.env.VITE_API_ORIGIN, import.meta.env.PROD)
+
+/** Same-origin (dev proxy) when no origin is configured; absolute otherwise. */
+export function apiUrl(path: `/${string}`) {
+  return apiOrigin ? `${apiOrigin}${path}` : path
+}

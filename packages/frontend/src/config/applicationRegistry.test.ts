@@ -53,6 +53,7 @@ describe('applicationRegistry', () => {
     expect(findApplication('notepad')?.icon).toBe('/pixelos/icons/pixelos-readme-static-00.png')
     expect(findApplication('about')?.icon).toBe('/pixelos/icons/pixelos-about-me-static-00.png')
     expect(findApplication('resume')?.icon).toBe('/pixelos/icons/pixelos-resume-static-00.png')
+    expect(findApplication('signal')?.icon).toBe('/pixelos/portraits/pixelos-leonardo-entry-hero-static-128.png')
   })
 
   it('derives every launcher surface from the same registry without duplicate destinations', () => {
@@ -70,7 +71,6 @@ describe('applicationRegistry', () => {
       'gallery',
       'pet',
       'notepad',
-      'about',
       'minesweeper',
       'resume',
     ])
@@ -80,7 +80,9 @@ describe('applicationRegistry', () => {
       'pet',
       'notepad',
       'about',
+      'signal',
       'minesweeper',
+      'nightshift',
       'resume',
     ])
     expect(applicationsForSurface('mobile').map((application) => application.id)).toEqual([
@@ -89,7 +91,9 @@ describe('applicationRegistry', () => {
       'pet',
       'notepad',
       'about',
+      'signal',
       'minesweeper',
+      'nightshift',
       'resume',
     ])
   })
@@ -102,9 +106,24 @@ describe('applicationRegistry', () => {
       'pet',
       'notepad',
       'about',
+      'signal',
     ])
-    expect(applicationsForLauncherGroup('games').map((application) => application.id)).toEqual(['minesweeper'])
+    expect(applicationsForLauncherGroup('games').map((application) => application.id)).toEqual(['minesweeper', 'nightshift'])
     expect(applicationsForLauncherGroup('career').map((application) => application.id)).toEqual(['resume'])
+  })
+
+  it('registers SIGNAL.EXE consistently across all launch surfaces and direct routes', () => {
+    const signal = findApplication('signal')
+    expect(signal).toMatchObject({
+      label: 'SIGNAL.EXE',
+      title: 'SIGNAL.EXE — LEONARDO',
+      mobileLabel: 'Leonardo Guide',
+      launcherGroup: 'system',
+      path: '#/apps/signal',
+      capability: 'desktop-window',
+    })
+    expect(signal?.launchSurfaces).toEqual(['start-menu', 'mobile'])
+    expect(applicationIdFromHash('#/apps/signal')).toBe('signal')
   })
 
   it('registers Minesweeper consistently across all launch surfaces and direct routes', () => {
@@ -118,6 +137,19 @@ describe('applicationRegistry', () => {
     })
     expect(minesweeper?.launchSurfaces).toEqual(['desktop', 'start-menu', 'mobile'])
     expect(applicationIdFromHash('#/apps/minesweeper')).toBe('minesweeper')
+  })
+
+  it('registers NIGHTSHIFT consistently across all launch surfaces and direct routes', () => {
+    const nightshift = findApplication('nightshift')
+    expect(nightshift).toMatchObject({
+      label: 'NIGHTSHIFT.EXE',
+      title: 'NIGHTSHIFT.EXE',
+      launcherGroup: 'games',
+      path: '#/apps/nightshift',
+      capability: 'desktop-window',
+    })
+    expect(nightshift?.launchSurfaces).toEqual(['start-menu', 'mobile'])
+    expect(applicationIdFromHash('#/apps/nightshift')).toBe('nightshift')
   })
 
   it('returns no application for retired or unsupported IDs and direct routes', () => {

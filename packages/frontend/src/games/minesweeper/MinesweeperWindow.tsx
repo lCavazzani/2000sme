@@ -1,6 +1,7 @@
 import { useRef, useState, type KeyboardEvent } from 'react'
 import { MinesweeperBoard } from './MinesweeperBoard'
 import styles from './MinesweeperWindow.module.css'
+import { VictoryOverlay } from './VictoryOverlay'
 import { useMinesweeperGame } from './useMinesweeperGame'
 
 type ActiveMenu = 'game' | 'help' | null
@@ -138,7 +139,10 @@ export function MinesweeperWindow() {
           </aside>
         )}
 
-        <MinesweeperBoard game={game} onReveal={reveal} onFlag={flag} />
+        <div className={styles.boardStage}>
+          <MinesweeperBoard game={game} onReveal={reveal} onFlag={flag} />
+          {game.status === 'won' && <VictoryOverlay elapsedSeconds={elapsedSeconds} onNewGame={reset} />}
+        </div>
       </div>
 
       <div className={styles.statusBar} data-minesweeper-status={game.status} role="status" aria-live="polite">

@@ -1,0 +1,49 @@
+.root {
+  display: grid;
+  align-content: center;
+  justify-items: start;
+  gap: 8px;
+  height: 100%;
+  padding: 18px;
+  color: var(--os-ink);
+  background: var(--os-app-inset-surface);
+  font-family: var(--os-font-stack);
+  font-size: 0.76rem;
+}
+
+.heading {
+  margin: 0;
+  color: var(--os-magenta);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.detail {
+  margin: 0;
+  color: var(--os-muted);
+  line-height: 1.5;
+}
+
+.retry {
+  min-height: 30px;
+  margin-top: 4px;
+  padding: 6px 14px;
+  color: var(--os-ink);
+  border: 0;
+  background: var(--os-panel);
+  box-shadow: var(--os-control-inset);
+  font: inherit;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.retry:active {
+  box-shadow: inset 2px 2px var(--pixelos-bevel-highlight), inset -2px -2px var(--os-edge);
+}
+
+.retry:focus-visible {
+  outline: 2px dotted var(--os-cyan);
+  outline-offset: -4px;
+}

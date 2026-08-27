@@ -45,6 +45,21 @@ export function Taskbar() {
     })
   }, [isStartMenuOpen])
 
+  useEffect(() => {
+    if (!isStartMenuOpen) return
+
+    const dismissStartMenuOnEscape = (event: globalThis.KeyboardEvent) => {
+      if (event.key !== 'Escape' || event.defaultPrevented) return
+
+      event.preventDefault()
+      setIsStartMenuOpen(false)
+      window.requestAnimationFrame(() => startButtonRef.current?.focus())
+    }
+
+    window.addEventListener('keydown', dismissStartMenuOnEscape)
+    return () => window.removeEventListener('keydown', dismissStartMenuOnEscape)
+  }, [isStartMenuOpen])
+
   const startMenuApplications = applicationsForSurface('start-menu')
   const startMenuGroups = LAUNCHER_GROUPS.map((group) => ({
     group,

@@ -12,7 +12,7 @@
     "db:seed:local": "wrangler d1 execute portfolio-db --local --file=seeds/projects.sql",
     "db:seed:remote": "wrangler d1 execute portfolio-db --remote --file=seeds/projects.sql",
     "test": "vitest run --config vitest.config.ts",
-    "test:security": "vitest run --config vitest.config.ts test/guestbook-retirement.test.ts test/security-headers.test.ts"
+    "test:security": "vitest run --config vitest.config.ts test/guestbook-retirement.test.ts test/security-headers.test.ts test/prelaunch-security-review.test.ts"
   },
   "dependencies": {
     "hono": "^4.13.1"

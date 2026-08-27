@@ -7,27 +7,39 @@ const applications = [
   { id: 'pet', label: 'DESKTOP PET', title: 'DESKTOP PET', path: '#/apps/pet', mobileLabel: 'Desktop Pet' },
   { id: 'notepad', label: 'README.TXT', title: 'README.TXT', path: '#/apps/notepad', mobileLabel: 'README.TXT' },
   { id: 'about', label: 'ABOUT PIXELOS', title: 'ABOUT PIXELOS', path: '#/apps/about', mobileLabel: 'About PixelOS' },
+  { id: 'signal', label: 'SIGNAL.EXE', title: 'SIGNAL.EXE — LEONARDO', path: '#/apps/signal', mobileLabel: 'Leonardo Guide' },
   { id: 'minesweeper', label: 'MINESWEEPER.EXE', title: 'MINESWEEPER.EXE', path: '#/apps/minesweeper', mobileLabel: 'Minesweeper' },
+  { id: 'nightshift', label: 'NIGHTSHIFT.EXE', title: 'NIGHTSHIFT.EXE', path: '#/apps/nightshift', mobileLabel: 'Nightshift' },
   { id: 'resume', label: 'RESUME.PDF', title: 'RESUME.PDF - WORDPAD', path: '#/apps/resume', mobileLabel: 'Resume PDF' },
 ] as const
 
-const suppliedApplicationIcons = {
+const desktopApplicationIds = new Set([
+  'my-computer',
+  'gallery',
+  'pet',
+  'notepad',
+  'minesweeper',
+  'resume',
+])
+
+const suppliedDesktopApplicationIcons = {
   'my-computer': '/pixelos/icons/pixelos-my-machine-static-00.png',
   gallery: '/pixelos/icons/pixelos-gallery-static-00.png',
   pet: '/pixelos/icons/pixelos-desktop-pet-static-00.png',
   notepad: '/pixelos/icons/pixelos-readme-static-00.png',
-  about: '/pixelos/icons/pixelos-about-me-static-00.png',
   resume: '/pixelos/icons/pixelos-resume-static-00.png',
 } as const
 
 async function visitPixelOs(page: Page, path = '/') {
-  await page.goto('/')
-  await page.evaluate(() => {
+  await page.addInitScript(() => {
     window.sessionStorage.clear()
     window.sessionStorage.setItem('2000sme:pixelos-intro-seen:v1', 'true')
   })
-  await page.reload()
-  if (path !== '/') await page.goto(path)
+  await page.route('**/api/projects', (route) => route.fulfill({
+    contentType: 'application/json',
+    body: JSON.stringify({ projects: [] }),
+  }))
+  await page.goto(path)
   await expect(page.locator('html')).toHaveAttribute('data-os-theme', 'pixelos')
 }
 
@@ -39,11 +51,23 @@ async function expectNoSeriousOrCriticalViolations(page: Page, selector: string)
   expect(seriousOrCritical).toEqual([])
 }
 
+async function openFromDesktopOrStartMenu(page: Page, application: (typeof applications)[number]) {
+  if (desktopApplicationIds.has(application.id)) {
+    await page.getByRole('button', { name: `Open ${application.label}` }).dblclick()
+    return
+  }
+
+  await page.getByRole('button', { name: 'Start', exact: true }).click()
+  await page.getByRole('navigation', { name: 'Start menu' })
+    .getByRole('button', { name: application.label })
+    .click()
+}
+
 test.describe('TEST-12 PixelOS application journeys', () => {
-  test('launches every application from the desktop and resolves every direct route', async ({ page }) => {
+  test('uses the simplified desktop icon set, preserves Start-menu access, and resolves every direct route', async ({ page }) => {
     for (const application of applications) {
       await visitPixelOs(page)
-      await page.getByRole('button', { name: `Open ${application.label}` }).dblclick()
+      await openFromDesktopOrStartMenu(page, application)
       await expect(page.getByRole('dialog', { name: `${application.title} window` })).toBeVisible()
 
       await visitPixelOs(page, `/${application.path}`)
@@ -53,17 +77,17 @@ test.describe('TEST-12 PixelOS application journeys', () => {
     }
   })
 
-  test('keeps supplied images decorative and every direct application route free of serious accessibility violations', async ({ page }) => {
+  test('keeps desktop icons decorative and every direct application route free of serious accessibility violations', async ({ page }) => {
     await visitPixelOs(page)
 
-    for (const [applicationId, iconPath] of Object.entries(suppliedApplicationIcons)) {
+    for (const [applicationId, iconPath] of Object.entries(suppliedDesktopApplicationIcons)) {
       const icon = page.locator(`[data-window-launcher="${applicationId}"]`).first().locator('img')
       await expect(icon).toHaveAttribute('src', new RegExp(`${iconPath}$`))
       await expect(icon).toHaveAttribute('alt', '')
     }
 
-    await expect(page.locator('.pixelos-desktop-sprite')).toHaveAttribute('alt', '')
-    await expect(page.locator('.pixelos-desktop-sprite')).toHaveAttribute('aria-hidden', 'true')
+    await expect(page.locator('.pixelos-desktop-nap')).toHaveAttribute('alt', '')
+    await expect(page.locator('.pixelos-desktop-nap')).toHaveAttribute('aria-hidden', 'true')
 
     for (const application of applications) {
       await visitPixelOs(page, `/${application.path}`)
@@ -71,13 +95,18 @@ test.describe('TEST-12 PixelOS application journeys', () => {
     }
   })
 
-  test('preserves keyboard focus, reduced-effects rendering, stale-route fallback, and narrow launcher routes', async ({ browser }) => {
-    const keyboardPage = await browser.newPage()
+  test('auto-opens Resume away from desktop icons and preserves Escape, reduced-effects, stale-route, and narrow-launcher behavior', async ({ browser }) => {
+    const keyboardPage = await browser.newPage({ viewport: { width: 1280, height: 840 } })
     await visitPixelOs(keyboardPage)
 
+    const resumeWindow = keyboardPage.getByRole('dialog', { name: 'RESUME.PDF - WORDPAD window' })
+    await expect(resumeWindow).toBeVisible()
+    expect((await resumeWindow.boundingBox())?.x).toBeGreaterThanOrEqual(500)
+    await keyboardPage.keyboard.press('Escape')
+    await expect(resumeWindow).toBeHidden()
+
     const start = keyboardPage.getByRole('button', { name: 'Start' })
-    await start.focus()
-    await keyboardPage.keyboard.press('Enter')
+    await start.click()
     const startMenu = keyboardPage.getByRole('navigation', { name: 'Start menu' })
     await expect(startMenu.getByRole('button', { name: 'MY MACHINE' })).toBeFocused()
     await keyboardPage.keyboard.press('Escape')
@@ -89,7 +118,9 @@ test.describe('TEST-12 PixelOS application journeys', () => {
     await reducedPage.emulateMedia({ reducedMotion: 'reduce' })
     await visitPixelOs(reducedPage)
     await expect(reducedPage.locator('html')).toHaveAttribute('data-theme-effects', 'reduced')
-    await expect(reducedPage.locator('.pixelos-desktop-sprite')).toHaveCSS('animation-name', 'none')
+    const nap = reducedPage.locator('.pixelos-desktop-nap')
+    await expect(nap).toHaveAttribute('src', '/pixelos/details/pixelos-grey-tabby-nap-00.png')
+    await expect(nap).toHaveCSS('animation-name', 'none')
     await reducedPage.close()
 
     const staleRoutePage = await browser.newPage()

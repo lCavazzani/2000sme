@@ -1,0 +1,378 @@
+.root {
+  --signal-canvas: #e7e3ef;
+  --signal-incoming: #fbf8ff;
+  --signal-outgoing: #c4f1eb;
+  --signal-event: #f2dfb4;
+  --signal-composer: #b9c0d0;
+  --signal-input: #faf7ff;
+  --signal-edge: #0b0f18;
+  --signal-ink: #2a2442;
+  display: grid;
+  gap: 8px;
+  min-height: 100%;
+  padding: 8px;
+  color: var(--pixelos-ink, #f2ecff);
+  background: #171a2a;
+  font-family: "Pixelify Sans", "Courier New", monospace;
+}
+
+.sessionRibbon,
+.ownerHeader,
+.conversationCanvas,
+.ownerRail,
+.composer {
+  border: 2px solid var(--signal-edge);
+  box-shadow: inset 1px 1px var(--pixelos-bevel-highlight, #7e879f), inset -1px -1px var(--signal-edge);
+}
+
+.sessionRibbon {
+  padding: 7px 9px;
+  background: #20263a;
+  color: var(--pixelos-cyan, #4de3d0);
+  font-size: 0.68rem;
+  letter-spacing: 0.03em;
+}
+
+.ownerHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  background: #262a3b;
+}
+
+.headerPortrait {
+  width: 64px;
+  height: 64px;
+  flex: 0 0 64px;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+.ownerHeader h2,
+.ownerHeader p,
+.eventStrip,
+.guide p,
+.visitor p,
+.ownerRailCopy p {
+  margin: 0;
+}
+
+.ownerHeader h2 {
+  color: var(--pixelos-cyan, #4de3d0);
+  font-size: 1.04rem;
+  letter-spacing: 0.04em;
+}
+
+.ownerHeader p {
+  color: var(--pixelos-ink, #f2ecff);
+  font-size: 0.68rem;
+  line-height: 1.5;
+}
+
+.liveStatus {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.conversationLayout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 204px;
+  gap: 8px;
+  min-height: 336px;
+}
+
+.conversationCanvas {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: 8px;
+  min-width: 0;
+  padding: 10px;
+  background: var(--signal-canvas);
+}
+
+.eventStrip {
+  padding: 7px 9px;
+  border: 1px solid var(--signal-edge);
+  background: var(--signal-event);
+  color: var(--signal-ink);
+  font-size: 0.66rem;
+  line-height: 1.35;
+  text-align: center;
+}
+
+.transcript {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  min-height: 220px;
+  max-height: 340px;
+  margin: 0;
+  padding: 6px 10px;
+  overflow: auto;
+  list-style: none;
+}
+
+.guide,
+.visitor {
+  display: grid;
+  gap: 4px;
+  max-width: min(88%, 560px);
+  border: 1px solid var(--signal-edge);
+  padding: 8px 10px;
+  color: var(--signal-ink);
+  font-size: 0.74rem;
+  line-height: 1.5;
+}
+
+.guide {
+  justify-self: start;
+  background: var(--signal-incoming);
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 10px), 10px calc(100% - 10px), 0 100%);
+  padding-bottom: 17px;
+}
+
+.visitor {
+  justify-self: end;
+  background: var(--signal-outgoing);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, calc(100% - 10px) calc(100% - 10px), 0 calc(100% - 10px));
+  padding-bottom: 17px;
+}
+
+.messageLabel {
+  color: #554b72;
+  font-size: 0.62rem;
+}
+
+.ownerRailTools button,
+.guide button,
+.composer button {
+  min-height: 44px;
+  border: 2px solid var(--signal-edge);
+  box-shadow: inset 1px 1px var(--pixelos-bevel-highlight, #7e879f), inset -1px -1px var(--signal-edge);
+  font: inherit;
+  font-size: 0.68rem;
+  cursor: pointer;
+}
+
+.ownerRailTools button,
+.composer button,
+.guide button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 5px 8px;
+}
+
+.toolIcon {
+  width: 32px;
+  height: 32px;
+  flex: 0 0 32px;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+.ownerRailTools button {
+  width: 100%;
+  justify-content: flex-start;
+  background: #3a4056;
+  color: var(--pixelos-ink, #f2ecff);
+}
+
+.guide button {
+  width: fit-content;
+  margin-top: 2px;
+  background: #d9d3e7;
+  color: var(--signal-ink);
+}
+
+.ownerRailTools button:active,
+.guide button:active,
+.composer button:active {
+  box-shadow: inset 2px 2px var(--signal-edge);
+  transform: translate(1px, 1px);
+}
+
+.composer button[disabled] {
+  cursor: not-allowed;
+  color: var(--pixelos-muted, #aab4c8);
+}
+
+.ownerRailTools button:focus-visible,
+.composer input:focus-visible,
+.composer button:focus-visible,
+.guide button:focus-visible {
+  outline: 3px solid var(--pixelos-cyan, #4de3d0);
+  outline-offset: 2px;
+}
+
+.ownerRail {
+  display: grid;
+  align-content: start;
+  gap: 12px;
+  padding: 14px;
+  background: var(--signal-composer);
+  color: var(--signal-ink);
+}
+
+.ownerRail picture {
+  display: block;
+  width: 128px;
+  height: 128px;
+  margin: 0 auto;
+  border: 2px solid var(--signal-edge);
+  background: #171a2a;
+}
+
+.ownerPortrait {
+  display: block;
+  width: 128px;
+  height: 128px;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+.ownerRailCopy {
+  display: grid;
+  gap: 5px;
+  font-size: 0.64rem;
+  line-height: 1.45;
+}
+
+.ownerRailTools {
+  display: grid;
+  gap: 8px;
+}
+
+.composer {
+  display: grid;
+  gap: 8px;
+  padding: 10px 12px;
+  background: var(--signal-composer);
+  color: var(--signal-ink);
+}
+
+.composer label {
+  font-size: 0.66rem;
+}
+
+.composerRow {
+  display: flex;
+  gap: 8px;
+}
+
+.composer input {
+  min-width: 0;
+  min-height: 56px;
+  flex: 1;
+  border: 2px solid var(--signal-edge);
+  background: var(--signal-input);
+  color: var(--signal-ink);
+  font: inherit;
+  font-size: 0.76rem;
+  padding: 8px 10px;
+}
+
+.composer button {
+  min-width: 168px;
+  min-height: 56px;
+  flex: 0 0 176px;
+  background: var(--pixelos-cyan, #4de3d0);
+  color: #10313a;
+}
+
+@media (max-width: 760px) {
+  .conversationLayout {
+    grid-template-columns: 1fr;
+  }
+
+  .ownerRail {
+    grid-template-columns: 64px minmax(0, 1fr);
+    align-items: center;
+    gap: 9px;
+    min-height: 72px;
+    padding: 7px;
+  }
+
+  .ownerRail picture,
+  .ownerPortrait {
+    width: 64px;
+    height: 64px;
+  }
+
+  .ownerRailCopy {
+    gap: 2px;
+  }
+
+  .ownerRailTools {
+    grid-column: 1 / -1;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  .ownerRailTools button {
+    min-width: 0;
+    justify-content: center;
+    gap: 4px;
+    padding-inline: 4px;
+  }
+
+  .ownerRailTools .toolIcon {
+    width: 24px;
+    height: 24px;
+    flex-basis: 24px;
+  }
+}
+
+@media (max-width: 560px) {
+  .root {
+    gap: 6px;
+    padding: 5px;
+  }
+
+  .ownerHeader h2 {
+    font-size: 0.84rem;
+  }
+
+  .ownerHeader p {
+    font-size: 0.58rem;
+  }
+
+  .conversationLayout {
+    min-height: 0;
+  }
+
+  .conversationCanvas {
+    padding: 7px;
+  }
+
+  .transcript {
+    min-height: 180px;
+    max-height: 300px;
+    padding-inline: 3px;
+  }
+
+  .guide,
+  .visitor {
+    max-width: 96%;
+  }
+}
+
+@media (max-width: 480px) {
+  .composerRow {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .composer button {
+    width: 100%;
+    min-width: 0;
+    flex-basis: auto;
+  }
+}

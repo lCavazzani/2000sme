@@ -1,0 +1,12 @@
+{
+  "frameWidth": 32,
+  "frameHeight": 32,
+  "frameCount": 2,
+  "fps": 1.47,
+  "loop": true,
+  "frames": [
+    "pixelos-grey-tabby-nap-00.png",
+    "pixelos-grey-tabby-nap-01.png"
+  ],
+  "alt": "Decorative sleeping grey tabby cat with a subtle tail twitch."
+}

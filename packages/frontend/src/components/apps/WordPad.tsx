@@ -1,6 +1,7 @@
 import { useCallback, useMemo, useState } from 'react'
 import { marked } from 'marked'
 import resumeContent from '../../content/resume.md?raw'
+import { PIXEL_OS_ASSETS } from '../../config/pixelosAssets'
 import { openPrintWindow } from '../../utils/pdfGenerator'
 import styles from './WordPad.module.css'
 
@@ -50,6 +51,22 @@ export function WordPad() {
       )}
 
       <div className={styles.docArea} data-resume-document-area>
+        <aside className={styles.ownerIdentity} aria-label="Resume owner">
+          <img
+            className={styles.ownerProfilePortrait}
+            src={PIXEL_OS_ASSETS.leonardoProfile64}
+            width={64}
+            height={64}
+            alt=""
+            aria-hidden="true"
+            draggable={false}
+          />
+          <div>
+            <p className={styles.ownerIdentityLabel}>RESUME OWNER</p>
+            <p className={styles.ownerIdentityName}>LEONARDO CAVAZZANI</p>
+            <p className={styles.ownerIdentityRole}>Senior Software Engineer</p>
+          </div>
+        </aside>
         <div
           className={styles.page}
           // eslint-disable-next-line react/no-danger

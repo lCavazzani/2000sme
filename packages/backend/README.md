@@ -51,7 +51,9 @@ pnpm --filter backend db:migrate:remote
 
 ## Catalog seed data
 
-`seeds/projects.sql` is repeatable fixture data for `sportifolio`, Project Alpha, and Project Beta. It is deliberately separate from migrations because catalog content can change independently of database schema. Running it upserts the three catalog records and replaces their fixture technologies and links.
+`seeds/projects.sql` is repeatable fixture data for the approved catalog, currently the single `sportifolio` record. It is deliberately separate from migrations because catalog content can change independently of database schema. Running it upserts that record and replaces its fixture technologies and links.
+
+The seed is idempotent in both directions: it also deletes the retired `project-alpha` and `project-beta` placeholders, because removing them from the `INSERT` list does not remove rows from a database an earlier revision already seeded. Re-running the seed is therefore the supported way to bring an existing environment to the approved catalog.
 
 Load the fixture into local D1 after migrations:
 

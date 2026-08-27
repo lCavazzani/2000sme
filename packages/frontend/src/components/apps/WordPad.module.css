@@ -195,6 +195,56 @@
 
 :global(.window) .docArea { padding-bottom: 82px; }
 
+.ownerIdentity {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: 740px;
+  box-sizing: border-box;
+  margin: 0 auto 12px;
+  padding: 10px 12px;
+  border: 2px solid var(--os-edge);
+  color: var(--os-ink);
+  background: #201333;
+  box-shadow: inset 1px 1px 0 var(--pixelos-bevel-highlight);
+  font-family: var(--os-font-stack);
+}
+
+.ownerProfilePortrait {
+  width: 64px;
+  height: 64px;
+  flex: 0 0 64px;
+  object-fit: contain;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+.ownerIdentityLabel,
+.ownerIdentityName,
+.ownerIdentityRole {
+  margin: 0;
+}
+
+.ownerIdentityLabel {
+  color: var(--os-cyan);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+}
+
+.ownerIdentityName {
+  margin-top: 3px;
+  color: var(--os-ink);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.ownerIdentityRole {
+  margin-top: 2px;
+  color: var(--os-muted);
+  font-size: 0.68rem;
+}
+
 .page {
   max-width: 740px;
   box-sizing: border-box;
@@ -297,5 +347,6 @@
   .primaryDownload { width: 100%; min-width: 0; }
   .toolbarRow { overflow-x: auto; scrollbar-gutter: stable; }
   .docArea { padding: 10px; }
+  .ownerIdentity { gap: 9px; padding: 8px; }
   .page { padding: 25px 20px; font-size: 10.5pt; }
 }

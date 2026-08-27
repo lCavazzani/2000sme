@@ -31,6 +31,21 @@ describe('WordPad resume viewer', () => {
     expect(screen.getByRole('status')).toHaveTextContent('The resume print dialog opened in a new window')
   })
 
+  it('renders one static labeled resume owner context with the approved decorative profile portrait', () => {
+    render(<WordPad />)
+
+    const owner = screen.getByLabelText('Resume owner')
+    expect(owner).toHaveTextContent('RESUME OWNER')
+    expect(owner).toHaveTextContent('LEONARDO CAVAZZANI')
+    expect(owner).toHaveTextContent('Senior Software Engineer')
+
+    const portrait = owner.querySelector('img')
+    expect(portrait).toHaveAttribute('src', '/pixelos/portraits/pixelos-leonardo-profile-64-00.png')
+    expect(portrait).toHaveAttribute('width', '64')
+    expect(portrait).toHaveAttribute('height', '64')
+    expect(portrait).toHaveAttribute('alt', '')
+  })
+
   it('keeps a distinct persistent download action available for the desktop window', () => {
     openPrintWindowMock.mockReturnValue(true)
     render(<WordPad />)

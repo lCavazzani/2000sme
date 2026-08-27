@@ -5,6 +5,13 @@
       "name": "frontend",
       "url": "http://localhost:5175",
       "port": 5175
+    },
+    {
+      "name": "backend",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["--filter", "backend", "exec", "wrangler", "dev", "--port", "8787"],
+      "port": 8787,
+      "autoPort": false
     }
   ]
 }

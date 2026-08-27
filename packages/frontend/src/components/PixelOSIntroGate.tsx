@@ -103,8 +103,10 @@ export function PixelOSIntroGate() {
       <section className={styles.enterPanel} aria-labelledby="pixelos-enter-title">
         <h1 id="pixelos-enter-title" className={styles.enterTitle}><PixelWordmark compact /></h1>
         <img
-          className={styles.ownerEmblem}
-          src={PIXEL_OS_ASSETS.ownerEmblem}
+          className={styles.ownerPortrait}
+          src={PIXEL_OS_ASSETS.leonardoEntryHero}
+          width={128}
+          height={128}
           alt=""
           aria-hidden="true"
           draggable={false}

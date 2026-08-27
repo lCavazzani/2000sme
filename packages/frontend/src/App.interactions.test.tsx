@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import App from './App'
@@ -15,17 +15,18 @@ describe('desktop shell interactions', () => {
     window.sessionStorage.clear()
   })
 
-  it('opens desktop applications with keyboard activation while keeping the launcher focused and usable', async () => {
+  it('auto-opens RESUME.PDF while keeping its desktop launcher focused and usable', async () => {
     const user = userEvent.setup()
     render(<App />)
-
-    const resumeLauncher = screen.getByRole('button', { name: 'Open RESUME.PDF' })
-    resumeLauncher.focus()
-    await user.keyboard('{Enter}')
 
     const resumeWindow = screen.getByLabelText('RESUME.PDF - WORDPAD window')
     expect(resumeWindow).toBeInTheDocument()
     await waitFor(() => expect(resumeWindow).toHaveFocus())
+
+    const resumeLauncher = screen.getByRole('button', { name: 'Open RESUME.PDF' })
+    resumeLauncher.focus()
+    await user.keyboard('{Enter}')
+    expect(screen.getByLabelText('RESUME.PDF - WORDPAD window')).toBeInTheDocument()
   })
 
   it('minimizes, restores, and closes a window through visible taskbar and window controls', async () => {
@@ -33,18 +34,19 @@ describe('desktop shell interactions', () => {
     render(<App />)
 
     const resumeLauncher = screen.getByRole('button', { name: 'Open RESUME.PDF' })
-    await user.dblClick(resumeLauncher)
+    const resumeWindow = screen.getByLabelText('RESUME.PDF - WORDPAD window')
 
     const taskbarButton = screen.getByRole('button', { name: 'RESUME.PDF - WORDPAD' })
-    await user.click(screen.getByRole('button', { name: 'Minimize' }))
+    await user.click(within(resumeWindow).getByRole('button', { name: 'Minimize' }))
 
     expect(screen.queryByLabelText('RESUME.PDF - WORDPAD window')).not.toBeInTheDocument()
     expect(taskbarButton).toHaveAttribute('aria-pressed', 'false')
 
     await user.click(taskbarButton)
-    expect(screen.getByLabelText('RESUME.PDF - WORDPAD window')).toBeInTheDocument()
+    const restoredResumeWindow = screen.getByLabelText('RESUME.PDF - WORDPAD window')
+    expect(restoredResumeWindow).toBeInTheDocument()
 
-    await user.click(screen.getByRole('button', { name: 'Close' }))
+    await user.click(within(restoredResumeWindow).getByRole('button', { name: 'Close' }))
     expect(screen.queryByLabelText('RESUME.PDF - WORDPAD window')).not.toBeInTheDocument()
     await waitFor(() => expect(resumeLauncher).toHaveFocus())
   })
@@ -57,19 +59,39 @@ describe('desktop shell interactions', () => {
     expect(screen.getByLabelText('MINESWEEPER.EXE window')).toBeInTheDocument()
     expect(screen.getByRole('status')).toHaveTextContent('READY: REVEAL A CELL TO START.')
 
-    await user.click(screen.getByRole('button', { name: 'Close' }))
     await user.click(screen.getByRole('button', { name: 'Start' }))
-    await user.click(screen.getByRole('button', { name: 'MINESWEEPER.EXE' }))
+    const startMenu = await screen.findByRole('navigation', { name: 'Start menu' })
+    await user.click(within(startMenu).getByRole('button', { name: 'MINESWEEPER.EXE' }))
     expect(screen.getByLabelText('MINESWEEPER.EXE window')).toBeInTheDocument()
   })
 
-  it('opens the Start menu by keyboard, restores focus on Escape, and launches its My Machine shortcut', async () => {
+  it('closes a focused window on Escape and dismisses the Start menu globally', async () => {
     const user = userEvent.setup()
     render(<App />)
 
+    const resumeWindow = screen.getByLabelText('RESUME.PDF - WORDPAD window')
+    await waitFor(() => expect(resumeWindow).toHaveFocus())
+    await user.keyboard('{Escape}')
+
+    expect(screen.queryByLabelText('RESUME.PDF - WORDPAD window')).not.toBeInTheDocument()
+
     const startButton = screen.getByRole('button', { name: 'Start' })
-    startButton.focus()
-    await user.keyboard('{Enter}')
+    await user.click(startButton)
+    expect(await screen.findByRole('navigation', { name: 'Start menu' })).toBeInTheDocument()
+
+    fireEvent.keyDown(window, { key: 'Escape' })
+    await waitFor(() => expect(screen.queryByRole('navigation', { name: 'Start menu' })).not.toBeInTheDocument())
+    await waitFor(() => expect(startButton).toHaveFocus())
+  })
+
+  it('opens the Start menu, restores focus on Escape, and launches its My Machine shortcut', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+
+    await waitFor(() => expect(screen.getByLabelText('RESUME.PDF - WORDPAD window')).toHaveFocus())
+
+    const startButton = screen.getByRole('button', { name: 'Start' })
+    await user.click(startButton)
 
     const startMenu = await screen.findByRole('navigation', { name: 'Start menu' })
     const myMachineShortcut = screen.getByRole('button', { name: 'MY MACHINE' })
@@ -97,8 +119,9 @@ it('switches between direct routes and desktop mode while restoring a meaningful
   expect(screen.getByRole('status')).toHaveTextContent('READY: REVEAL A CELL TO START.')
   await user.click(screen.getByRole('button', { name: 'Open desktop' }))
 
-  const desktop = screen.getByRole('main', { name: 'Desktop' })
-  await waitFor(() => expect(desktop).toHaveFocus())
+  expect(screen.getByRole('main', { name: 'Desktop' })).toBeInTheDocument()
+  const resumeWindow = screen.getByLabelText('RESUME.PDF - WORDPAD window')
+  await waitFor(() => expect(resumeWindow).toHaveFocus())
   expect(window.location.hash).toBe('')
 
   window.location.hash = '#/apps/about-me'

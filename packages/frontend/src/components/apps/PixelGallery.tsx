@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { PIXEL_OS_GALLERY } from '../../config/pixelosAssets'
+import { PIXEL_OS_ASSETS, PIXEL_OS_GALLERY } from '../../config/pixelosAssets'
 import styles from './PixelGallery.module.css'
 
 type GalleryItem = (typeof PIXEL_OS_GALLERY)[number]
@@ -38,6 +38,13 @@ export function PixelGallery() {
         </figure>
 
         <div className={styles.thumbnailPanel} aria-label="Gallery images">
+          <img
+            className={styles.peek}
+            src={PIXEL_OS_ASSETS.galleryPeek}
+            alt=""
+            aria-hidden="true"
+            draggable={false}
+          />
           <p className={styles.thumbnailHeading}>IMAGES</p>
           <div className={styles.thumbnailList} role="list">
             {PIXEL_OS_GALLERY.map((item) => {

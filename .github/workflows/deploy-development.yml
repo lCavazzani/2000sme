@@ -155,6 +155,35 @@ jobs:
           curl --fail --silent --show-error --retry 3 --retry-delay 3 https://2000sme-development.cavazzanileonardo.workers.dev/ | grep -q 'id="root"'
           curl --fail --silent --show-error --retry 3 --retry-delay 3 https://00sbackedn-development.cavazzanileonardo.workers.dev/api/health | grep -qx 'ok'
 
+      # A reachable root and a healthy backend previously passed while My Machine
+      # was broken: the frontend was calling an /api route its own Worker does
+      # not serve. These assertions cover the contract the application depends on.
+      - name: Verify the project catalog the desktop actually calls
+        run: |
+          catalog="$(curl --fail --silent --show-error --retry 3 --retry-delay 3 \
+            -H 'Accept: application/json' \
+            https://00sbackedn-development.cavazzanileonardo.workers.dev/api/projects)"
+          echo "$catalog" | jq -e 'has("projects") and (.projects | type == "array")' > /dev/null
+          echo "$catalog" | jq -e '(.projects | length) as $project_count | [.projects[]? | select((.slug|type=="string") and (.name|type=="string") and (.year|type=="number"))] | length == $project_count' > /dev/null
+          echo "Catalog exposes $(echo "$catalog" | jq '.projects | length') project(s)."
+          # The retired placeholders must never reappear in a published catalog.
+          if echo "$catalog" | jq -e '[.projects[]?.slug] | any(. == "project-alpha" or . == "project-beta")' > /dev/null; then
+            echo "::error::Retired placeholder projects are published in the development catalog."
+            exit 1
+          fi
+
+      - name: Verify the deployed frontend targets the backend origin
+        run: |
+          # The bundle must carry an absolute backend origin. A same-origin
+          # /api path silently degrades to the offline fallback once deployed.
+          bundle_url="https://2000sme-development.cavazzanileonardo.workers.dev$(
+            curl --fail --silent --show-error https://2000sme-development.cavazzanileonardo.workers.dev/ \
+              | grep -o '/assets/index-[A-Za-z0-9_-]*\.js' | head -1
+          )"
+          curl --fail --silent --show-error "$bundle_url" \
+            | grep -q '00sbackedn-development\.cavazzanileonardo\.workers\.dev' \
+            || { echo "::error::Development bundle does not reference the development backend origin."; exit 1; }
+
   development-evidence:
     name: Publish Development Evidence
     needs: development-smoke

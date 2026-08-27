@@ -7,7 +7,7 @@
   padding: 12px 12px calc(var(--pixelos-taskbar-height) + 12px);
   color: var(--pixelos-ink);
   background-color: var(--pixelos-void);
-  background-image: linear-gradient(rgb(18 11 34 / 14%), rgb(18 11 34 / 14%)), url('/pixelos/assets/dda42e57-923b-4342-b2b1-8ad755273c99.jpg');
+  background-image: linear-gradient(color-mix(in srgb, var(--pixelos-void) 14%, transparent), color-mix(in srgb, var(--pixelos-void) 14%, transparent)), url('/pixelos/wallpapers/pixelos-signal-ridge-wallpaper-640x360.png');
   background-position: center;
   background-size: cover;
   font-family: var(--pixelos-font);
@@ -20,30 +20,26 @@
   pointer-events: none;
   content: '';
   background-image:
-    repeating-linear-gradient(to bottom, rgb(0 0 0 / var(--pixelos-scanline-opacity)) 0 1px, transparent 1px 3px),
-    radial-gradient(ellipse at center, transparent 55%, rgb(9 5 18 / 55%) 100%);
+    repeating-linear-gradient(to bottom, color-mix(in srgb, var(--pixelos-edge) calc(var(--pixelos-scanline-opacity) * 100%), transparent) 0 1px, transparent 1px 3px),
+    radial-gradient(ellipse at center, transparent 55%, color-mix(in srgb, var(--pixelos-edge) 55%, transparent) 100%);
 }
 
 :root[data-os-theme='pixelos'][data-theme-effects='reduced'] .desktop::after {
-  background-image: radial-gradient(ellipse at center, transparent 55%, rgb(9 5 18 / 55%) 100%);
+  background-image: radial-gradient(ellipse at center, transparent 55%, color-mix(in srgb, var(--pixelos-edge) 55%, transparent) 100%);
 }
 
-.pixelos-desktop-sprite {
+.pixelos-desktop-nap {
   position: absolute;
   z-index: 0;
-  left: 24px;
-  bottom: calc(var(--pixelos-taskbar-height) + 18px);
-  width: 56px;
-  height: 56px;
-  object-fit: cover;
+  right: 18px;
+  bottom: calc(var(--pixelos-taskbar-height) + 16px);
+  width: 32px;
+  height: 32px;
   pointer-events: none;
   user-select: none;
   image-rendering: pixelated;
-  filter: drop-shadow(2px 2px 0 rgb(13 8 25 / 65%));
-}
-
-:root[data-os-theme='pixelos'][data-theme-effects='reduced'] .pixelos-desktop-sprite {
-  transform: translateY(0);
+  image-rendering: crisp-edges;
+  filter: drop-shadow(2px 2px 0 color-mix(in srgb, var(--pixelos-edge) 65%, transparent));
 }
 
 .desktopIcons {
@@ -65,8 +61,9 @@
   padding: 24px;
   color: var(--pixelos-ink);
   background:
-    linear-gradient(rgb(18 11 34 / 30%), rgb(18 11 34 / 72%)),
-    url('/pixelos/assets/dda42e57-923b-4342-b2b1-8ad755273c99.jpg') center / cover;
+    linear-gradient(color-mix(in srgb, var(--pixelos-void) 30%, transparent), color-mix(in srgb, var(--pixelos-void) 72%, transparent)),
+    url('/pixelos/wallpapers/pixelos-signal-ridge-wallpaper-640x360.png') center / cover,
+    var(--pixelos-void);
   font-family: var(--pixelos-font);
 }
 
@@ -87,7 +84,7 @@
 .directRouteBack:hover,
 .directRouteBack:focus-visible {
   color: var(--pixelos-edge);
-  background: var(--pixelos-magenta);
+  background: var(--pixelos-cyan);
 }
 
 .directRouteBack:focus-visible {
@@ -99,6 +96,12 @@
   margin-top: 0;
 }
 
+@media (max-width: 899px) {
+  .pixelos-desktop-nap {
+    display: none;
+  }
+}
+
 @media (max-width: 640px) {
   .desktop {
     min-height: 100dvh;
@@ -106,8 +109,7 @@
     padding: 0;
   }
 
-  .desktopIcons,
-  .pixelos-desktop-sprite {
+  .desktopIcons {
     display: none;
   }
 

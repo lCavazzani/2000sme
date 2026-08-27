@@ -2,7 +2,7 @@ PRAGMA foreign_keys = ON;
 
 -- This is intentional fixture data, not database history. Run it explicitly
 -- after migrations when a local or approved remote environment needs the
--- canonical three-project catalog.
+-- canonical project catalog.
 INSERT INTO projects (
     id,
     slug,
@@ -20,37 +20,11 @@ INSERT INTO projects (
         'sportifolio',
         'sportifolio',
         '00sportifolio',
-        'A Windows desktop-inspired personal portfolio.',
-        'Personal portfolio built as a Windows desktop simulation. Features draggable and resizable windows, Windows XP as the active default theme, a Cloudflare Workers API with D1, a rate-limited guestbook, and a pnpm monorepo with GitHub Actions CI/CD.',
+        'An interactive pixel-art desktop portfolio.',
+        'Personal portfolio built as PixelOS, an interactive pixel-art desktop environment. Features draggable and resizable windows, a registry-driven application shell, playable Minesweeper and NIGHTSHIFT games, a Cloudflare Workers API with D1, and a pnpm monorepo with GitHub Actions CI/CD.',
         2026,
         'published',
         0,
-        '/desktop-icons/my-computer.svg',
-        '2026-08-12T00:00:00Z',
-        '2026-08-12T00:00:00Z'
-    ),
-    (
-        'project-alpha',
-        'project-alpha',
-        'Project Alpha',
-        'A placeholder Node.js and PostgreSQL project showcase.',
-        'Replace with a real project description.',
-        2025,
-        'published',
-        1,
-        '/desktop-icons/my-computer.svg',
-        '2026-08-12T00:00:00Z',
-        '2026-08-12T00:00:00Z'
-    ),
-    (
-        'project-beta',
-        'project-beta',
-        'Project Beta',
-        'A placeholder Python and FastAPI project showcase.',
-        'Replace with a real project description.',
-        2024,
-        'published',
-        2,
         '/desktop-icons/my-computer.svg',
         '2026-08-12T00:00:00Z',
         '2026-08-12T00:00:00Z'
@@ -66,10 +40,23 @@ ON CONFLICT(id) DO UPDATE SET
     thumbnail_ref = excluded.thumbnail_ref,
     updated_at = excluded.updated_at;
 
+-- Retire the placeholder projects that earlier revisions of this seed inserted.
+-- Removing them from the INSERT above is not enough: a database seeded before
+-- that change still holds the rows, and the catalog query returns every
+-- published project. Child rows go first to respect the foreign keys.
+DELETE FROM project_technologies
+WHERE project_id IN ('project-alpha', 'project-beta');
+
+DELETE FROM project_links
+WHERE project_id IN ('project-alpha', 'project-beta');
+
+DELETE FROM projects
+WHERE id IN ('project-alpha', 'project-beta');
+
 -- Replace child records for the catalog fixtures so repeatable local seeds do
 -- not retain stale technology or link rows after the fixture changes.
 DELETE FROM project_technologies
-WHERE project_id IN ('sportifolio', 'project-alpha', 'project-beta');
+WHERE project_id = 'sportifolio';
 
 INSERT INTO project_technologies (project_id, technology, sort_order) VALUES
     ('sportifolio', 'React', 0),
@@ -78,21 +65,11 @@ INSERT INTO project_technologies (project_id, technology, sort_order) VALUES
     ('sportifolio', 'Hono', 3),
     ('sportifolio', 'D1', 4),
     ('sportifolio', 'Vite', 5),
-    ('sportifolio', 'pnpm', 6),
-    ('project-alpha', 'Node.js', 0),
-    ('project-alpha', 'TypeScript', 1),
-    ('project-alpha', 'PostgreSQL', 2),
-    ('project-alpha', 'Docker', 3),
-    ('project-beta', 'Python', 0),
-    ('project-beta', 'FastAPI', 1),
-    ('project-beta', 'Redis', 2),
-    ('project-beta', 'Terraform', 3);
+    ('sportifolio', 'pnpm', 6);
 
 DELETE FROM project_links
-WHERE project_id IN ('sportifolio', 'project-alpha', 'project-beta');
+WHERE project_id = 'sportifolio';
 
 INSERT INTO project_links (project_id, label, url, sort_order) VALUES
     ('sportifolio', 'GitHub', 'https://github.com/lCavazzani/2000sme', 0),
-    ('sportifolio', 'Live', 'https://2000sme.cavazzanileonardo.workers.dev', 1),
-    ('project-alpha', 'GitHub', 'https://github.com/lCavazzani', 0),
-    ('project-beta', 'GitHub', 'https://github.com/lCavazzani', 0);
+    ('sportifolio', 'Live', 'https://2000sme.cavazzanileonardo.workers.dev', 1);

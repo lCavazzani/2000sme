@@ -1,0 +1,266 @@
+.window {
+  display: grid;
+  gap: 8px;
+  min-height: 100%;
+  padding: 8px;
+  color: #eef2ff;
+  background: #302852;
+  font-family: "Pixelify Sans", "Courier New", monospace;
+}
+
+.header,
+.stateMessage,
+.hud,
+.actionRail,
+.guideRow,
+.impact,
+.help,
+.keyboardLegend,
+.touchDeck {
+  border: 2px solid #19142d;
+  box-shadow: inset 1px 1px #8774ad, inset -1px -1px #211b40;
+  background: #3a3158;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 8px;
+}
+
+.title {
+  margin: 0;
+  font-size: 0.92rem;
+  letter-spacing: 0.05em;
+}
+
+.status {
+  color: #4de3d0;
+  font-size: 0.78rem;
+}
+
+.stateMessage,
+.impact,
+.help,
+.keyboardLegend {
+  margin: 0;
+  padding: 6px 8px;
+  font-size: 0.72rem;
+  line-height: 1.45;
+}
+
+.stateMessage {
+  color: #eef2ff;
+}
+
+.impact {
+  border-color: #ffb454;
+  color: #ffcf96;
+}
+
+.impact[data-game-over='true'] {
+  border-color: #ffb454;
+  background: #4d3650;
+  color: #fff0d9;
+}
+
+.stage {
+  display: grid;
+  place-items: center;
+  min-width: 0;
+  overflow: auto;
+  border: 3px solid #19142d;
+  background: #211b40;
+}
+
+.canvas {
+  display: block;
+  width: min(100%, 640px);
+  height: auto;
+  aspect-ratio: 16 / 9;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  background: #574478;
+  outline-offset: -4px;
+}
+
+.canvas:focus-visible,
+.actionRail button:focus-visible,
+.touchDeck button:focus-visible,
+.guideRow button:focus-visible {
+  outline: 3px solid #4de3d0;
+  outline-offset: 2px;
+}
+
+.hud {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px;
+  margin: 0;
+  padding: 6px;
+  font-size: 0.7rem;
+}
+
+.hud div {
+  min-width: 0;
+  border: 1px solid #8774ad;
+  background: #52466d;
+  padding: 5px;
+}
+
+.hud dt {
+  color: #d5c8ef;
+}
+
+.hud dd {
+  margin: 2px 0 0;
+  overflow: hidden;
+  color: #eef2ff;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.actionRail {
+  display: grid;
+  grid-template-columns: minmax(132px, 2fr) minmax(88px, 1fr) minmax(72px, 1fr);
+  gap: 6px;
+  padding: 6px;
+}
+
+.actionRail button,
+.touchDeck button,
+.guideRow button {
+  min-height: 44px;
+  border: 2px solid #19142d;
+  box-shadow: inset 1px 1px #8774ad, inset -1px -1px #211b40;
+  color: #eef2ff;
+  font: inherit;
+  font-size: 0.72rem;
+  cursor: pointer;
+}
+
+.actionRail button:active,
+.touchDeck button:active,
+.guideRow button:active {
+  box-shadow: inset 2px 2px #211b40;
+  transform: translate(1px, 1px);
+}
+
+.actionRail button[disabled] {
+  cursor: not-allowed;
+  color: #aab4c8;
+  opacity: 0.65;
+}
+
+.primaryAction {
+  background: #4de3d0;
+  color: #19142d !important;
+}
+
+.pauseAction {
+  background: #c953a3;
+}
+
+.resetAction,
+.guideRow button {
+  background: #4f566f;
+}
+
+.keyboardLegend {
+  color: #d5c8ef;
+}
+
+.touchDeck {
+  display: none;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+  padding: 6px;
+}
+
+.touchCard {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+  color: #d5c8ef;
+  font-size: 0.68rem;
+}
+
+.touchCard > div {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 5px;
+}
+
+.touchCard button {
+  min-height: 52px;
+  background: #4f566f;
+}
+
+.guideRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px;
+  color: #aab4c8;
+  font-size: 0.68rem;
+}
+
+.guideRow span {
+  text-align: right;
+}
+
+.help {
+  color: #d5c8ef;
+}
+
+@media (pointer: coarse), (max-width: 559px) {
+  .touchDeck {
+    display: grid;
+  }
+
+  .keyboardLegend {
+    display: none;
+  }
+}
+
+@media (max-width: 560px) {
+  .window {
+    padding: 5px;
+    gap: 5px;
+  }
+
+  .header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .actionRail {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .hud {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .guideRow {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .guideRow span {
+    text-align: left;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .canvas {
+    scroll-behavior: auto;
+  }
+}
+
+html[data-theme-effects='reduced'] .impact {
+  box-shadow: none;
+}
